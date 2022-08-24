@@ -1,10 +1,10 @@
 ---
 title: "ReadingData"
 author: "Dieter"
-output:
-  html_document:
+output: 
+  github_document:
+    html_preview: true
     toc: true
-    theme: cosmo
 date: '2022-08-24'
 ---
 
