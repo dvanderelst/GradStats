@@ -1,0 +1,124 @@
+---
+title: "FilteringData"
+author: "Dieter"
+date: '2022-08-24'
+output:
+  html_document:
+    toc: true
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## dplyr
+
+dplyr uses two functions to select columns and filter rows: `select()` and `filter()`.
+
+```{r}
+library(tidyverse)
+library(readxl)
+```
+
+Let's read in some data and make sure that the variable name adhere to R's expectations.
+
+```{r}
+data <- read_excel("data/transit-data.xlsx", sheet = 'transport data', skip=1)
+colnames(data) <- make.names(colnames(data))
+```
+
+## Selecting columns
+
+Selecting columns is very straightforward.
+
+```{r}
+subset <- select(data, date, sender.latitude)
+head(subset)
+```
+
+You can also unselect columns
+
+```{r}
+colnames(data)
+subset <- select(data, -number.of.items)
+colnames(subset)
+
+```
+
+## Filtering on criteria
+
+```{r}
+subset <- filter(data, sender.latitude < 50)
+head(subset)
+```
+
+You can run filters in succession for more complex filtering
+
+```{r}
+subset <- filter(data, sender.latitude < 50)
+subset <- filter(subset, sender.latitude > 32)
+subset <- filter(subset, sender.longitude > 0)
+subset <- select(subset,  sender.latitude, sender.longitude)
+summary(subset)
+```
+
+You can string queries together using `&`, `|`, and others. See `Logical Operators` in the R documentation for details.
+
+```{r}
+hist(data$sender.longitude, breaks=25)
+subset <- filter(data, sender.longitude < -50 | sender.longitude > 100)
+hist(subset$sender.longitude,breaks=25)
+```
+
+Let's use the NOT operator to filter out one of the locations.
+
+```{r}
+unique(data$sender.location)
+subset <- filter(data, sender.location != 'USA, Cincinnati (OH)')
+unique(subset$sender.location)
+```
+
+One handy trick is to select using a list of values.
+
+```{r}
+selected_locations <-c('USA, Brownfield (TX)', 'USA, Rochester (NY)', 'USA, Wellington (KS)')
+subset <- filter(data, sender.location %in% selected_locations)
+unique(subset$sender.location)
+```
+
+## Exercises
+
+### Exercise: Titanic Data
+
+Read in the data and perform the following operations:
+
+-   Count the number of male survivors that were older than 25.
+-   How many first class passengers where female?
+-   How many female passengers survived?
+
+### Exercise: Car data
+
+Read in the data and perform the following operations:
+
+The data file contains variables describing a number of cars.
+
+-   Select all cars with at least 25 mpg in the city.
+-   Select all BMW's
+-   Are there any Large cars with more than 25 mpg in the city?
+-   Which cars use over 50% more fuel on the city than they do in the highway?
+-   Which cars have an action radius of over 400 miles on the highway?
+
+### Exercise: Film data
+
+Use the following data file: `films.dat` (in the data folder). This file lists the title, year of release, length in minutes, number of cast members listed, rating, and number of lines
+of description are recorded for a simple random sample of 100 movies.
+
+-   Write code to select all films from 1980 to 1990 (including both 1980 and 1990)
+
+-   Select all films with a rating of 1
+
+-   Write a short script that allows selecting all movies that were made in the five years before a given date. The script starts by assigning a value (year) to a variable. The script selects all movies made in the 5 years preceding the year assigned to the variable and prints the selected data to the screen. The earliest film in the data was made in 1924. Therefore, if the year assigned to the variable is before 1930, the script should print the
+    message `No movies found`.
+
+-   Write code that adds a new variable `ratio` to the data. This variable is obtained by dividing the number of actors (`Cast`) by the length of the movie (`Length`). Next, select the movies for which the ratio Cast/Length is at least 0.1. Print the selected movies to the screen.

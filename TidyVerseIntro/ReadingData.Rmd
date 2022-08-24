@@ -1,0 +1,190 @@
+---
+title: "ReadingData"
+author: "Dieter"
+output:
+  html_document:
+    toc: true
+    theme: cosmo
+date: '2022-08-24'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Reading data from excel using readxl
+
+Excel spreadsheet are often used and easy ways to store data.
+
+```{r}
+library(tidyverse)
+library(readxl)
+```
+
+Explore the data in `transit-data.xlsx`. Note that (1) Data does not start in cells A1, (2) Data contains different date formats, and (3) the data contain weird characters.
+
+Read the first sheet of data:
+
+```{r}
+data <-read_excel("data/transit-data.xlsx")
+```
+
+Look at the help for the read_excel function:
+
+```{r}
+?read_excel
+```
+
+Let's specify the data range we want to read.
+
+```{r}
+info <-read_excel("data/transit-data.xlsx", sheet = 'info', range = 'B1:C7')
+info <-read_excel("data/transit-data.xlsx", sheet = 'info', range = cell_cols('B:C'))
+```
+
+Let's now read the data Data in the second sheet:
+
+```{r}
+more_data <- read_excel("data/transit-data.xlsx", sheet = 'transport data')
+```
+
+We need to skip the first line of the data.
+
+```{r}
+more_data <- read_excel("data/transit-data.xlsx", sheet = 'transport data', skip=1)
+```
+
+The column names are human readable but not very handy for coding. **Indeed, in general, only dots and underscores are allowed in variable names.** There is a quick way to solve this.
+
+```{r}
+colnames(more_data) <- make.names(colnames(more_data))
+```
+
+## Reading data from a flat text file
+
+R has functions for reading in flat text files. However, the functions provided by tidyverse are more powerful.
+
+```{r}
+data <- read_csv('data/pakistan_intellectual_capital.csv', n_max=10)
+```
+
+## Tibbles
+
+Reading in data using tidyverse functions generates tibbles
+
+```{r}
+print(class(data))
+```
+
+Convert to an old school data frame.
+
+```{r}
+old_school<-as.data.frame(data)
+```
+
+## Exploring data
+
+After reading in the data, it's a good idea to explore the data. Use either the environment tab in Rstudio or use functions that give you some info about your data.
+
+```{r}
+head(data)
+```
+
+```{r}
+tail(data)
+```
+
+Get a quick summary
+
+```{r}
+summary(data)
+```
+
+The function glimpse gives you also a quick overview:
+
+```{r}
+glimpse(data)
+```
+
+And what about this beautiful exploratory tool?
+
+```{r}
+library(skimr)
+skim(data)
+
+```
+
+## Selecting variables
+
+A simple way to get variables from a tibble is using the `$` operator.
+
+```{r}
+my_variable <- data$Year
+summary(my_variable)
+```
+
+However, this does not work if your variables names have names with a space (or other weird characters). This does work, however,
+
+```{r}
+my_variable <- data['Terminal Degree']
+```
+
+## Creating new variables
+
+Often, you will want to create new variables based on existing ones to make subsequent processing easier.
+
+```{r}
+data['very_simple'] <- 1
+data['very_simple']
+```
+
+However, we can do more interesting things.
+
+```{r}
+data['has_phd'] <- data['Terminal Degree'] == 'PhD'
+data['has_phd']
+```
+
+We can calculate new variables.
+
+```{r}
+data['years_since_graduation'] <- 2022 - data$Year
+```
+
+## Exercises
+
+### Exercise 1
+
+-   Read in the cars.txt file
+
+-   Print the first lines of the data
+
+-   Print the column names
+
+-   Calculate the difference in mpg on the highway and the city, add this difference as a new variable to the data.
+
+### Exercise 2
+
+Download the `wages1833.csv` data file (from the data folder) and save it to your computer. This file contains data on the wages of Lancashire cotton factory workers in 1833. For each age category, the file lists the following:
+
+-   `age`: age in years
+
+-   `mnum:` number of male workers of the corresponding age
+
+-   `mwage`: average wage of male workers of the corresponding age
+
+-   `fnum`: number of female workers of the corresponding age
+
+-   `fwage`: average wage of female workers of the corresponding age
+
+More info on the data can be found in this paper: *Boot, H.M. 1995. How Skilled Were the Lancashire Cotton Factory Workers in 1833? Economic History Review 48: 283-303.*
+
+Write a script that does the following:
+
+-   Reads in the data
+
+-   Adds a new variable that lists the difference between the number of male and female workers
+
+-   Adds a new variable `diff_pct` that gives the difference in average wage between the male and female workers expressed as a percentage of the female wage.
+
+    $$diff_pct = 100 \times \frac{mwage - fwage}{fwage}$$
