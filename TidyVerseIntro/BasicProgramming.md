@@ -1,0 +1,246 @@
+Basic Programming
+================
+Dieter
+
+-   <a href="#basics-of-programming-variables-and-functions"
+    id="toc-basics-of-programming-variables-and-functions">Basics of
+    programming: variables and functions</a>
+-   <a href="#basic-operations-r-as-a-calculator"
+    id="toc-basic-operations-r-as-a-calculator">Basic operations: R as a
+    calculator</a>
+-   <a href="#logical-operations" id="toc-logical-operations">Logical
+    operations</a>
+-   <a href="#storing-data-in-variables"
+    id="toc-storing-data-in-variables">Storing data in variables</a>
+    -   <a href="#assigning-data-to-a-variable"
+        id="toc-assigning-data-to-a-variable">Assigning data to a variable</a>
+    -   <a href="#note-on-naming-variables"
+        id="toc-note-on-naming-variables">Note on naming variables</a>
+    -   <a href="#the-vector" id="toc-the-vector">The vector</a>
+-   <a href="#a-trick" id="toc-a-trick">A trick</a>
+-   <a href="#functions" id="toc-functions">Functions</a>
+
+## Basics of programming: variables and functions
+
+Programming is basically (1) storing data, (2) performing operations on
+this data.
+
+We will store data in so-called variables. We use functions to perform
+operations on the data.
+
+## Basic operations: R as a calculator
+
+R can perform the classic operations.
+
+``` r
+1 / 200 * 30
+```
+
+    ## [1] 0.15
+
+``` r
+(59 + 73 + 2) / 3
+```
+
+    ## [1] 44.66667
+
+``` r
+sin(pi / 2)
+```
+
+    ## [1] 1
+
+## Logical operations
+
+``` r
+5 > 6
+```
+
+    ## [1] FALSE
+
+``` r
+5 + 1 == 6 #NOTICE: I am using == to check equality!
+```
+
+    ## [1] TRUE
+
+``` r
+1234 != 1234
+```
+
+    ## [1] FALSE
+
+## Storing data in variables
+
+### Assigning data to a variable
+
+R use `<-` to make assignments. This is a pain to type. You *could* use
+`=` but it will cause confusion later on.
+
+``` r
+my_variable <- 5
+```
+
+Variables (also called values) come in many types (or classes). The very
+basic ones are the following:
+
+``` r
+my_logical <- TRUE
+my_character <- 'this is just a piece of text'
+my_numeric <- 1.23455
+```
+
+These are very simple data types. We will often used much more complex
+ones when working with actual data.
+
+``` r
+Name <- c("Jon", "Bill", "Maria", "Ben", "Tina")
+Age <- c(23, 41, 32, 58, 26)
+my_data_frame <- data.frame(Name, Age)
+```
+
+R studio shows `values` and `data` separately in the Environment window.
+However, this is just a visualization used by R studio. **You can use
+this window to inspect variables!**
+
+### Note on naming variables
+
+Try to use descriptive names for variables. And try to stick to a naming
+convention that works for you - preferably one that makes your code easy
+to read.
+
+``` r
+i_like_snake_case <- 'snake_case'
+otherPeopleUseCamelCase <- 'CamelCase'
+some.people.use.periods <- 'periods.are.allowed'
+And_aFew.People_RENOUNCEconvention <- 'Madness, Madness, I tell you!'
+```
+
+From R for Data Science:
+
+*There's an implied contract between you and R: it will do the tedious
+computation for you, but in return, you must be completely precise in
+your instructions. Typos matter. Case matters.*
+
+Also, it is important that you use names that are not keywords or
+functions in R. For example, the following is a bad idea:
+
+``` r
+#length <- 15 ## THIS IS A BAD IDEA
+```
+
+### The vector
+
+R is another basic variable in R. It’s the simplest type of variable
+that actually allows you to store something recognizable as ‘data’. We
+will spend some time on vectors as they are a good place to start to
+work with relatively simple data. Also, understanding how to work with
+vectors makes working with more complex data easier. Much of the
+operations you can do on vectors, which are 1D, can also be done on 2D
+data frames.
+
+#### Creating a vector manually
+
+``` r
+a_vector <- c(1, 5, 4, 9, 0)
+another_one <- c(1, 5.4, TRUE, "hello")
+```
+
+#### Creating a vector using the `:` operator
+
+``` r
+x <- 1:7
+y <- 2:-2
+```
+
+#### Using `seq` to make a vector
+
+``` r
+step_size <- seq(1, 10, by=0.25)
+length_specified <- seq(1, 10, length.out = 20)
+```
+
+#### Indexing vectors
+
+Every item in a vector has an index. Vector indices in R start from 1,
+unlike most programming languages where index start from 0.
+
+``` r
+my_longer_vector <- c(1, 2, 'three', '4', 'V', 6, 7, 8)
+```
+
+You can use the `[]` to select (multiple) elements from a vector.
+
+``` r
+my_single_element <- my_longer_vector[5]
+the_start <- my_longer_vector[1:3]
+my_part_of_vector <- my_longer_vector[c(1, 2, 5)] # I'm using a vector to select parts of a vector. Life is funny.
+```
+
+You can also use `[]` to overwrite a part of a vector
+
+``` r
+my_longer_vector[1:3] <- c('replace', 'this', 'now')
+```
+
+#### Logical vectors
+
+``` r
+vector1 <- c(1,5,6,7,2,3,5,4,6,8,1,9,0,1)
+binary_vector <- vector1 > 5
+binary_vector
+```
+
+    ##  [1] FALSE FALSE  TRUE  TRUE FALSE FALSE FALSE FALSE  TRUE  TRUE FALSE  TRUE
+    ## [13] FALSE FALSE
+
+``` r
+some_other_vector <- seq(from = 0, to = 100, length.out = length(vector1))
+selected <- some_other_vector[binary_vector]
+selected
+```
+
+    ## [1] 15.38462 23.07692 61.53846 69.23077 84.61538
+
+## A trick
+
+Before we go on, I want to share a simple trick. Using a IDE like
+Rstudio makes life easier (or at least it should). One of the benefits
+of the IDE is tab-completion.
+
+\[DEMO GOES HERE\]
+
+## Functions
+
+Now we know how to store data, we can start manipulating the data using
+functions.
+
+Functions take 0 or more inputs (also called arguments), perform some
+operation (i.e., the function of the function), and return some output.
+This output can be complex and consist of multiple parts. This are
+generic ways in which functions are used:
+
+    output <- function_name(arg1 = val1, arg2 = val2, ...)
+    output <- function_name(val1, val2, ...)
+
+We’ve already encountered a function:
+
+``` r
+output<-seq(from = 1, to= 123, by = 0.123)
+```
+
+How do we know which arguments a function can take? Using the help:
+
+``` r
+?seq
+```
+
+Some very simple functions that might be usefull.
+
+``` r
+a <- max(output)
+b <- mean(output)
+c <- min(output)
+d <- ceiling(output)
+e <- sd(output)
+```
