@@ -19,6 +19,17 @@ Dieter
     -   <a href="#the-vector" id="toc-the-vector">The vector</a>
 -   <a href="#a-trick" id="toc-a-trick">A trick</a>
 -   <a href="#functions" id="toc-functions">Functions</a>
+-   <a href="#flow-control-in-r" id="toc-flow-control-in-r">Flow control in
+    R</a>
+    -   <a href="#the-if-statement" id="toc-the-if-statement">The
+        <code>if</code> statement</a>
+    -   <a href="#the-for-loop" id="toc-the-for-loop">The <code>for</code>
+        loop</a>
+    -   <a href="#the-while-loop" id="toc-the-while-loop">The <code>while</code>
+        loop</a>
+-   <a href="#exercises" id="toc-exercises">Exercises</a>
+-   <a href="#note-on-vector-preallocation"
+    id="toc-note-on-vector-preallocation">Note on vector preallocation</a>
 
 ## Basics of programming: variables and functions
 
@@ -118,7 +129,7 @@ And_aFew.People_RENOUNCEconvention <- 'Madness, Madness, I tell you!'
 
 From R for Data Science:
 
-*There's an implied contract between you and R: it will do the tedious
+*There’s an implied contract between you and R: it will do the tedious
 computation for you, but in return, you must be completely precise in
 your instructions. Typos matter. Case matters.*
 
@@ -244,3 +255,232 @@ c <- min(output)
 d <- ceiling(output)
 e <- sd(output)
 ```
+
+Here is a function which returns more complex data. At this point,
+you’re not suposed to know what this funtion does (it fits a regression
+line). The point is that it returns complex data with multiple fields.
+
+``` r
+x <- runif(100)
+y <- 10 + 5 * x + rnorm(100)
+result <- lm(y ~ x)
+print(result)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = y ~ x)
+    ## 
+    ## Coefficients:
+    ## (Intercept)            x  
+    ##      10.087        5.144
+
+## Flow control in R
+
+You could write all R scripts as a serial statements of functions.
+However, to fully exploit the power of programming, you would need to
+learn about flow control. Flow control refers to (1) executing bits of
+code depending on a condition, and (2) iteratively executing pieces of
+code.
+
+This is a short script which does one thing after another.
+
+``` r
+data <- read.csv('data/wages1833.csv')
+data$average <- ((data$mnum * data$mwage) + (data$fnum * data$fwage)) / (data$mnum + data$fnum)
+model <- lm(data$average ~ data$age)
+result <- summary(model)
+plot(data$age, data$average )
+```
+
+![](BasicProgramming_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
+
+### The `if` statement
+
+This is the basic anatomy of an if statement
+
+    if (expression) {
+       #statement to execute if condition is true
+    }
+
+Example:
+
+``` r
+my_number <-12
+
+if (my_number < 20){
+  x <- sprintf('%i is less than 20', my_number)
+  print(x)
+}
+```
+
+    ## [1] "12 is less than 20"
+
+There is also an if-else variant of this,
+
+``` r
+a  <- -5
+ 
+# condition
+if(a > 0)
+{
+    print("Positive Number")
+}else{
+    print("negative number")
+}
+```
+
+    ## [1] "negative number"
+
+Rewriting the previous one on 1 line (maybe that makes it easier to
+read?)
+
+``` r
+a  <- -5
+ 
+# condition
+if(a > 0){print("Positive Number")}else{print("negative number")}
+```
+
+    ## [1] "negative number"
+
+### The `for` loop
+
+The `for` loop iterates over a sequence.
+
+``` r
+my_vector <- runif(5)
+for (x in my_vector) {
+  y <- x * 3
+  print(y)
+}
+```
+
+    ## [1] 0.09918015
+    ## [1] 0.1389057
+    ## [1] 0.4378347
+    ## [1] 0.5579053
+    ## [1] 2.390737
+
+Just to drive the point home, another example:
+
+``` r
+fruits <- list("apple", "banana", "cherry")
+for (x in fruits) {
+  print(x)
+} 
+```
+
+    ## [1] "apple"
+    ## [1] "banana"
+    ## [1] "cherry"
+
+One very common use of the `for` loop is to iterate a bit of code
+exactly n times.
+
+``` r
+number_of_time_i_want_to_repeat_this <-10
+for (x in 1:10) {
+  print('This is being repeated!')
+} 
+```
+
+    ## [1] "This is being repeated!"
+    ## [1] "This is being repeated!"
+    ## [1] "This is being repeated!"
+    ## [1] "This is being repeated!"
+    ## [1] "This is being repeated!"
+    ## [1] "This is being repeated!"
+    ## [1] "This is being repeated!"
+    ## [1] "This is being repeated!"
+    ## [1] "This is being repeated!"
+    ## [1] "This is being repeated!"
+
+You can use a `break` statement to break the loop at any point.
+
+``` r
+number_of_time_i_want_to_repeat_this <-10
+for (x in 1:10) {
+  print('This is being repeated!')
+  if (x > 7){
+    print('I quit!')
+    break
+  }
+} 
+```
+
+    ## [1] "This is being repeated!"
+    ## [1] "This is being repeated!"
+    ## [1] "This is being repeated!"
+    ## [1] "This is being repeated!"
+    ## [1] "This is being repeated!"
+    ## [1] "This is being repeated!"
+    ## [1] "This is being repeated!"
+    ## [1] "This is being repeated!"
+    ## [1] "I quit!"
+
+### The `while` loop
+
+The while repeats a piece of code if something is true and as long as it
+is true.
+
+``` r
+i <- 1
+while (i < 6) {
+  print(i)
+  i <- i + 1
+} 
+```
+
+    ## [1] 1
+    ## [1] 2
+    ## [1] 3
+    ## [1] 4
+    ## [1] 5
+
+## Exercises
+
+-   Write a for loop that iterates over the numbers 1 to 7 and prints
+    the cube of each number using print().
+-   Write a while loop that prints out standard random normal numbers
+    (use `rnorm()`) but stops (breaks) if you get a number bigger than
+    1.
+-   Using a for loop simulate the flip a coin twenty times, keeping
+    track of the individual outcomes (1 = heads, 0 = tails) in a vector.
+-   Use a while loop to investigate the number of terms required before
+    the series $1 \times 2 \times 3 \times ,,,$ reaches above 10
+    million.
+
+## Note on vector preallocation
+
+This piece of code build a vector by appending numbers to the end of it.
+
+``` r
+repeats <- 10000
+startTime <- Sys.time()
+my_vector <- c()
+for (i in 0:repeats){
+  x <- runif(1)
+  vector <- append(vector, x)
+}
+endTime <- Sys.time()
+print(sprintf('Duration: %.2f', endTime - startTime))
+```
+
+    ## [1] "Duration: 0.46"
+
+This piece of code preallocates a vector and is more efficient.
+
+``` r
+repeats <- 10000
+startTime <- Sys.time()
+my_vector <- numeric(repeats)
+for (i in 0:repeats){
+  x <- runif(1)
+  vector[i] <- x
+  }
+endTime <- Sys.time()
+print(sprintf('Duration: %.2f', endTime - startTime))
+```
+
+    ## [1] "Duration: 0.02"
