@@ -10,11 +10,17 @@ Dieter
     id="toc-reading-data-from-a-flat-text-file">Reading data from a flat
     text file</a>
 -   <a href="#tibbles" id="toc-tibbles">Tibbles</a>
+-   <a href="#some-interesting-options-when-using-read_csv"
+    id="toc-some-interesting-options-when-using-read_csv">Some interesting
+    options when using <code>read_csv()</code></a>
 -   <a href="#exploring-data" id="toc-exploring-data">Exploring data</a>
 -   <a href="#selecting-variables" id="toc-selecting-variables">Selecting
     variables</a>
 -   <a href="#creating-new-variables"
     id="toc-creating-new-variables">Creating new variables</a>
+-   <a href="#creating-new-variables-using-mutate"
+    id="toc-creating-new-variables-using-mutate">Creating new variables
+    using <code>mutate</code></a>
 -   <a href="#exercises" id="toc-exercises">Exercises</a>
     -   <a href="#exercise-1" id="toc-exercise-1">Exercise 1</a>
     -   <a href="#exercise-2" id="toc-exercise-2">Exercise 2</a>
@@ -31,7 +37,7 @@ library(tidyverse)
     ## ✔ ggplot2 3.3.6     ✔ purrr   0.3.4
     ## ✔ tibble  3.1.8     ✔ dplyr   1.0.9
     ## ✔ tidyr   1.2.0     ✔ stringr 1.4.0
-    ## ✔ readr   2.1.2     ✔ forcats 0.5.1
+    ## ✔ readr   2.1.2     ✔ forcats 0.5.2
     ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
@@ -93,7 +99,10 @@ colnames(more_data) <- make.names(colnames(more_data))
 ## Reading data from a flat text file
 
 R has functions for reading in flat text files. However, the functions
-provided by tidyverse are more powerful.
+provided by tidyverse are more powerful. When reading in data, R reports
+on the column types. Information about the different types and their
+labels can be found here: [Column
+Types](https://tibble.tidyverse.org/articles/types.html)
 
 ``` r
 data <- read_csv('data/pakistan_intellectual_capital.csv', n_max=10)
@@ -125,11 +134,105 @@ Convert to an old school data frame.
 old_school<-as.data.frame(data)
 ```
 
+## Some interesting options when using `read_csv()`
+
+If data has no column names, use `col_names = FALSE`
+
+``` r
+read_csv("1,2,3\n4,5,6", col_names = FALSE)
+```
+
+    ## Rows: 2 Columns: 3
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## dbl (3): X1, X2, X3
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+    ## # A tibble: 2 × 3
+    ##      X1    X2    X3
+    ##   <dbl> <dbl> <dbl>
+    ## 1     1     2     3
+    ## 2     4     5     6
+
+You can also directly set the column names in this case.
+
+``` r
+read_csv("1,2,3\n4,5,6", col_names = c("x", "y", "z"))
+```
+
+    ## Rows: 2 Columns: 3
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## dbl (3): x, y, z
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+    ## # A tibble: 2 × 3
+    ##       x     y     z
+    ##   <dbl> <dbl> <dbl>
+    ## 1     1     2     3
+    ## 2     4     5     6
+
+Another option that commonly needs tweaking is `na`: this specifies the
+value (or values) that are used to represent missing values in your
+file:
+
+``` r
+read_csv("a,b,c\n1,2,.", na = ".")
+```
+
+    ## Rows: 1 Columns: 3
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## dbl (2): a, b
+    ## lgl (1): c
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+    ## # A tibble: 1 × 3
+    ##       a     b c    
+    ##   <dbl> <dbl> <lgl>
+    ## 1     1     2 NA
+
+You can read data directly from a URL as well.
+
+``` r
+url<-'https://raw.githubusercontent.com/dvanderelst-python-class/python-class/fall2022/10_Pandas_Statistics/data/pizzasize.csv'
+data <- read_csv(url)
+```
+
+    ## Rows: 250 Columns: 5
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## chr (3): Store, CrustDescription, Topping
+    ## dbl (2): ID, Diameter
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
 ## Exploring data
 
 After reading in the data, it’s a good idea to explore the data. Use
 either the environment tab in Rstudio or use functions that give you
 some info about your data.
+
+``` r
+data <- read_csv('data/pakistan_intellectual_capital.csv', n_max=10)
+```
+
+    ## New names:
+    ## Rows: 10 Columns: 13
+    ## ── Column specification
+    ## ──────────────────────────────────────────────────────── Delimiter: "," chr
+    ## (9): Teacher Name, University Currently Teaching, Department, Province U... dbl
+    ## (3): ...1, S#, Year lgl (1): Other Information
+    ## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+    ## Specify the column types or set `show_col_types = FALSE` to quiet this message.
+    ## • `` -> `...1`
 
 ``` r
 head(data)
@@ -150,6 +253,7 @@ head(data)
     ## #   ²​`University Currently Teaching`, ³​Department,
     ## #   ⁴​`Province University Located`, ⁵​Designation, ⁶​`Terminal Degree`,
     ## #   ⁷​`Graduated from`
+    ## # ℹ Use `colnames()` to see all variable names
 
 ``` r
 tail(data)
@@ -170,6 +274,7 @@ tail(data)
     ## #   ²​`University Currently Teaching`, ³​Department,
     ## #   ⁴​`Province University Located`, ⁵​Designation, ⁶​`Terminal Degree`,
     ## #   ⁷​`Graduated from`
+    ## # ℹ Use `colnames()` to see all variable names
 
 Get a quick summary
 
@@ -352,6 +457,70 @@ We can calculate new variables.
 data['years_since_graduation'] <- 2022 - data$Year
 ```
 
+## Creating new variables using `mutate`
+
+The function `mutate` is the `Tidyverse`-approach to creating new
+variables. Let’s use the pizza data for this demo.
+
+``` r
+data <- read_csv(url)
+```
+
+    ## Rows: 250 Columns: 5
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## chr (3): Store, CrustDescription, Topping
+    ## dbl (2): ID, Diameter
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+Let’s create a new column giving the surface area of each column.
+
+``` r
+data <- mutate(data, area = pi * (Diameter/2)^2)
+data
+```
+
+    ## # A tibble: 250 × 6
+    ##       ID Store     CrustDescription Topping       Diameter  area
+    ##    <dbl> <chr>     <chr>            <chr>            <dbl> <dbl>
+    ##  1     1 Dominos   ThinNCrispy      Supreme           29.4  679.
+    ##  2     2 Dominos   ThinNCrispy      BBQMeatlovers     29.6  690.
+    ##  3     3 Dominos   DeepPan          Hawaiian          27.1  575.
+    ##  4     4 Dominos   ThinNCrispy      Supreme           27.4  592.
+    ##  5     5 Dominos   ClassicCrust     Hawaiian          26.6  555.
+    ##  6     6 Dominos   DeepPan          BBQMeatlovers     27.2  579.
+    ##  7     7 EagleBoys MidCrust         SuperSupremo      29.2  667.
+    ##  8     8 EagleBoys DeepPan          Hawaiian          28.8  651.
+    ##  9     9 EagleBoys ThinCrust        BBQMeatlovers     30.0  709.
+    ## 10    10 EagleBoys DeepPan          BBQMeatlovers     29.4  678.
+    ## # … with 240 more rows
+    ## # ℹ Use `print(n = ...)` to see more rows
+
+For fun: `transmute` only keeps the new variable.
+
+``` r
+data <- transmute(data, area = pi * (Diameter/2)^2)
+data
+```
+
+    ## # A tibble: 250 × 1
+    ##     area
+    ##    <dbl>
+    ##  1  679.
+    ##  2  690.
+    ##  3  575.
+    ##  4  592.
+    ##  5  555.
+    ##  6  579.
+    ##  7  667.
+    ##  8  651.
+    ##  9  709.
+    ## 10  678.
+    ## # … with 240 more rows
+    ## # ℹ Use `print(n = ...)` to see more rows
+
 ## Exercises
 
 ### Exercise 1
@@ -397,4 +566,4 @@ Write a script that does the following:
     wage between the male and female workers expressed as a percentage
     of the female wage.
 
-    $$diff_pct = 100 \times \frac{mwage - fwage}{fwage}$$
+    ![diff_pct = 100 \times \frac{mwage - fwage}{fwage}](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;diff_pct%20%3D%20100%20%5Ctimes%20%5Cfrac%7Bmwage%20-%20fwage%7D%7Bfwage%7D "diff_pct = 100 \times \frac{mwage - fwage}{fwage}")

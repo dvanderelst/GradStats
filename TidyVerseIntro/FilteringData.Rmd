@@ -87,6 +87,34 @@ subset <- filter(data, sender.location %in% selected_locations)
 unique(subset$sender.location)
 ```
 
+## Ordering rows
+
+You can use arrange to order the rows.
+
+```{r}
+subset1 <-select(data, sender.location, sender.latitude)
+subset1 <-arrange(subset1, sender.latitude)
+head(subset1, n = 15)
+```
+
+Arranging in descending order? No problem.
+
+
+```{r}
+subset1 <-select(data, sender.location, sender.latitude)
+subset1 <-arrange(subset1, desc(sender.latitude))
+head(subset1, n = 15)
+```
+
+Arranging based on multiple columns.
+
+```{r}
+subset1 <-select(data, sender.location, sender.latitude)
+subset1 <-mutate(subset1, rounded = round(sender.latitude))
+subset1 <-arrange(subset1, desc(rounded), sender.location)
+head(subset1, n = 15)
+```
+
 ## Exercises
 
 ### Exercise: Titanic Data

@@ -62,7 +62,7 @@ colnames(more_data) <- make.names(colnames(more_data))
 
 ## Reading data from a flat text file
 
-R has functions for reading in flat text files. However, the functions provided by tidyverse are more powerful.
+R has functions for reading in flat text files. However, the functions provided by tidyverse are more powerful. When reading in data, R reports on the column types. Information about the different types and their labels can be found here: [Column Types](https://tibble.tidyverse.org/articles/types.html)
 
 ```{r}
 data <- read_csv('data/pakistan_intellectual_capital.csv', n_max=10)
@@ -82,11 +82,40 @@ Convert to an old school data frame.
 old_school<-as.data.frame(data)
 ```
 
+## Some interesting options when using `read_csv()`
+
+If data has no column names, use `col_names = FALSE`
+
+```{r}
+read_csv("1,2,3\n4,5,6", col_names = FALSE)
+```
+
+You can also directly set the column names in this case.
+
+```{r}
+read_csv("1,2,3\n4,5,6", col_names = c("x", "y", "z"))
+```
+
+Another option that commonly needs tweaking is `na`: this specifies the value (or values) that are used to represent missing values in your file:
+
+```{r}
+read_csv("a,b,c\n1,2,.", na = ".")
+```
+
+You can read data directly from a URL as well.
+
+```{r}
+url<-'https://raw.githubusercontent.com/dvanderelst-python-class/python-class/fall2022/10_Pandas_Statistics/data/pizzasize.csv'
+data <- read_csv(url)
+```
+
+
 ## Exploring data
 
 After reading in the data, it's a good idea to explore the data. Use either the environment tab in Rstudio or use functions that give you some info about your data.
 
 ```{r}
+data <- read_csv('data/pakistan_intellectual_capital.csv', n_max=10)
 head(data)
 ```
 
@@ -150,6 +179,31 @@ We can calculate new variables.
 ```{r}
 data['years_since_graduation'] <- 2022 - data$Year
 ```
+
+## Creating new variables using `mutate`
+
+The function `mutate` is the `Tidyverse`-approach to creating new variables. Let's use the pizza data for this demo.
+
+```{r}
+data <- read_csv(url)
+```
+
+Let's create a new column giving the surface area of each column.
+
+```{r}
+data <- mutate(data, area = pi * (Diameter/2)^2)
+data
+```
+
+For fun: `transmute` only keeps the new variable.
+
+```{r}
+data <- transmute(data, area = pi * (Diameter/2)^2)
+data
+```
+
+
+
 
 ## Exercises
 

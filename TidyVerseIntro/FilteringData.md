@@ -8,6 +8,7 @@ Dieter
     columns</a>
 -   <a href="#filtering-on-criteria"
     id="toc-filtering-on-criteria">Filtering on criteria</a>
+-   <a href="#ordering-rows" id="toc-ordering-rows">Ordering rows</a>
 -   <a href="#exercises" id="toc-exercises">Exercises</a>
     -   <a href="#exercise-titanic-data"
         id="toc-exercise-titanic-data">Exercise: Titanic Data</a>
@@ -29,7 +30,7 @@ library(tidyverse)
     ## ✔ ggplot2 3.3.6     ✔ purrr   0.3.4
     ## ✔ tibble  3.1.8     ✔ dplyr   1.0.9
     ## ✔ tidyr   1.2.0     ✔ stringr 1.4.0
-    ## ✔ readr   2.1.2     ✔ forcats 0.5.1
+    ## ✔ readr   2.1.2     ✔ forcats 0.5.2
     ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
@@ -425,6 +426,90 @@ unique(subset$sender.location)
 ```
 
     ## [1] "USA, Wellington (KS)" "USA, Rochester (NY)"  "USA, Brownfield (TX)"
+
+## Ordering rows
+
+You can use arrange to order the rows.
+
+``` r
+subset1 <-select(data, sender.location, sender.latitude)
+subset1 <-arrange(subset1, sender.latitude)
+head(subset1, n = 15)
+```
+
+    ## # A tibble: 15 × 2
+    ##    sender.location    sender.latitude
+    ##    <chr>                        <dbl>
+    ##  1 AUS, Golden Valley           -41.6
+    ##  2 AUS, Golden Valley           -41.6
+    ##  3 AUS, Golden Valley           -41.6
+    ##  4 AUS, Golden Valley           -41.6
+    ##  5 AUS, Golden Valley           -41.6
+    ##  6 AUS, Golden Valley           -41.6
+    ##  7 AUS, Melbourne               -37.8
+    ##  8 AUS, Melbourne               -37.8
+    ##  9 AUS, Moolyelle               -36.8
+    ## 10 AUS, Moolyelle               -36.8
+    ## 11 AUS, Sydney                  -33.9
+    ## 12 AUS, Sydney                  -33.9
+    ## 13 AUS, Sydney                  -33.9
+    ## 14 AUS, Waverly                 -31.9
+    ## 15 AUS, Waverly                 -31.9
+
+Arranging in descending order? No problem.
+
+``` r
+subset1 <-select(data, sender.location, sender.latitude)
+subset1 <-arrange(subset1, desc(sender.latitude))
+head(subset1, n = 15)
+```
+
+    ## # A tibble: 15 × 2
+    ##    sender.location               sender.latitude
+    ##    <chr>                                   <dbl>
+    ##  1 DEU, Glasin                              53.9
+    ##  2 DEU, Glasin                              53.9
+    ##  3 DEU, Glasin                              53.9
+    ##  4 DEU, Hamburg                             53.6
+    ##  5 DEU, Wilhelmshaven                       53.5
+    ##  6 DEU, Wilhelmshaven                       53.5
+    ##  7 DEU, Wilhelmshaven                       53.5
+    ##  8 DEU, Bremen                              53.1
+    ##  9 DEU, Bremen                              53.1
+    ## 10 DEU, Bremen                              53.1
+    ## 11 DEU, Bremen                              53.1
+    ## 12 DEU, Berlin                              52.5
+    ## 13 CAN, Dodsland (ON)                       51.8
+    ## 14 CAN, Dodsland (ON)                       51.8
+    ## 15 GBR, London (Schiff Sorrento)            51.5
+
+Arranging based on multiple columns.
+
+``` r
+subset1 <-select(data, sender.location, sender.latitude)
+subset1 <-mutate(subset1, rounded = round(sender.latitude))
+subset1 <-arrange(subset1, desc(rounded), sender.location)
+head(subset1, n = 15)
+```
+
+    ## # A tibble: 15 × 3
+    ##    sender.location               sender.latitude rounded
+    ##    <chr>                                   <dbl>   <dbl>
+    ##  1 DEU, Glasin                              53.9      54
+    ##  2 DEU, Glasin                              53.9      54
+    ##  3 DEU, Glasin                              53.9      54
+    ##  4 DEU, Hamburg                             53.6      54
+    ##  5 DEU, Wilhelmshaven                       53.5      54
+    ##  6 DEU, Wilhelmshaven                       53.5      54
+    ##  7 DEU, Wilhelmshaven                       53.5      54
+    ##  8 DEU, Berlin                              52.5      53
+    ##  9 DEU, Bremen                              53.1      53
+    ## 10 DEU, Bremen                              53.1      53
+    ## 11 DEU, Bremen                              53.1      53
+    ## 12 DEU, Bremen                              53.1      53
+    ## 13 CAN, Dodsland (ON)                       51.8      52
+    ## 14 CAN, Dodsland (ON)                       51.8      52
+    ## 15 GBR, London (Schiff Sorrento)            51.5      52
 
 ## Exercises
 
