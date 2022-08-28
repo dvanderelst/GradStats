@@ -1,18 +1,20 @@
 ReadingData
 ================
 Dieter
-2022-08-24
 
 -   <a href="#reading-data-from-excel-using-readxl"
     id="toc-reading-data-from-excel-using-readxl">Reading data from excel
     using readxl</a>
--   <a href="#reading-data-from-a-flat-text-file"
-    id="toc-reading-data-from-a-flat-text-file">Reading data from a flat
-    text file</a>
+-   <a href="#reading-data-from-a-flat-comma-seperated-text-file"
+    id="toc-reading-data-from-a-flat-comma-seperated-text-file">Reading data
+    from a flat comma seperated text file</a>
 -   <a href="#tibbles" id="toc-tibbles">Tibbles</a>
 -   <a href="#some-interesting-options-when-using-read_csv"
     id="toc-some-interesting-options-when-using-read_csv">Some interesting
     options when using <code>read_csv()</code></a>
+-   <a href="#reading-files-not-seperated-by-commas"
+    id="toc-reading-files-not-seperated-by-commas">Reading files not
+    seperated by commas</a>
 -   <a href="#exploring-data" id="toc-exploring-data">Exploring data</a>
 -   <a href="#selecting-variables" id="toc-selecting-variables">Selecting
     variables</a>
@@ -96,7 +98,7 @@ names.** There is a quick way to solve this.
 colnames(more_data) <- make.names(colnames(more_data))
 ```
 
-## Reading data from a flat text file
+## Reading data from a flat comma seperated text file
 
 R has functions for reading in flat text files. However, the functions
 provided by tidyverse are more powerful. When reading in data, R reports
@@ -120,7 +122,9 @@ data <- read_csv('data/pakistan_intellectual_capital.csv', n_max=10)
 
 ## Tibbles
 
-Reading in data using tidyverse functions generates tibbles
+Reading in data using tidyverse functions generates tibbles, instead of
+R’s traditional `data.frame`. These are a newer version of the classic
+data frame with features tweaked to make life a bit easier.
 
 ``` r
 print(class(data))
@@ -213,6 +217,16 @@ data <- read_csv(url)
     ## 
     ## ℹ Use `spec()` to retrieve the full column specification for this data.
     ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+## Reading files not seperated by commas
+
+`read_csv()` expects comma separated field. For data separated by other
+characters use these:
+
+-   tab separated: `read_tsv()`
+-   all others: `read_delim()`, specifying the `delim` argument.
+-   `read_csv2()` uses `;` for the field separator and `,` for the
+    decimal point. This format is common in some European countries.
 
 ## Exploring data
 

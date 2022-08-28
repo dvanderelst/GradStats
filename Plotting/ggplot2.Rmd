@@ -1,0 +1,116 @@
+---
+title: "ggplot2"
+author: "Dieter"
+date: '2022-08-26'
+output:
+  github_document:
+    html_preview: true
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Installing the gapminder package
+
+We will use the `gapminder` package to get public health data. This data comes from the excellent [gapminder website](https://www.gapminder.org/). This package provides a `gapminder` tibble that contains the following variables:
+
++ country	
++ continent	
++ year	
++ lifeExp	life
++ pop
++ gdpPercap
+
+Loading the package.
+
+```{r}
+library(tidyverse)
+library(gapminder)
+gap_data <- gapminder #So I can see the data in the environment tab
+```
+
+## A first simple example
+
+```{r}
+subset <- filter(gap_data, country == 'Algeria')
+ggplot(subset) + aes(x=year, y=pop) + geom_point()
+```
+```{r}
+subset <- filter(gap_data, country == 'Algeria')
+ggplot(subset) + aes(x=year, y=pop) + geom_col() #Do not use geom_bar as that counts the data
+```
+We could use `geom_bar()` but we have to override the default counting behavior.
+
+```{r}
+subset <- filter(gap_data, country == 'Algeria')
+ggplot(subset) + aes(x=year, y=pop) + geom_bar(stat= 'identity') 
+```
+
+```{r}
+grp <- group_by(gap_data, country)
+latest <- slice(grp, which.max(year))
+grp <- group_by(latest, continent)
+summary_data <- summarize(grp, sm = sum(pop) / 1000000000, mn = mean(pop))
+p <- ggplot(summary_data) + aes(x = continent, y = sm) + geom_col()
+p
+ggsave('saved.pdf', p)
+```
+## Exploring some data
+
+### Distributions
+
+Read in some body data.
+
+```{r}
+data <- read_csv('data/body.csv')
+```
+Create a simple histogram
+
+```{r}
+ggplot(data) + aes(x = Hip, y=..density..) + geom_histogram() + geom_density(col='red')
+```
+
+Boxplots are also very nice tools to get a quick view of your data. Here, we overlay the raw data in red.
+
+```{r}
+ggplot(data) + aes(x = factor(Gender), y = Forearm) + geom_boxplot() + geom_jitter(width=0.1, height = 0, alpha = 0.25, col='red')
+```
+### Scatter plots
+
+```{r}
+ggplot(data) + aes(x = Hip, y = Forearm) + geom_point() + geom_smooth(method = "loess") +  geom_smooth(method = "lm", col='red')
+```
+
+## More aesthetics
+
+Map variables on shapes and colors.
+
+```{r}
+#ggplot(data) + aes(x= Thigh, y=Waist, shape = Gender) + geom_point() # Does not work
+#ggplot(data) + aes(x= Thigh, y=Waist, shape = as.factor(Gender), color= Gender) + geom_point() # Does work - but notice the output
+ggplot(data) + aes(x= Thigh, y=Waist, shape = as.factor(Gender), color= as.factor(Gender)) + geom_point() # Does work - but notice the output
+```
+Another example using the gapminder data
+
+```{r}
+grp <- group_by(gap_data,year,continent)
+mns <- summarise(grp, mn = sum(pop) / 1000000000)
+ggplot(mns) + aes(x= year, y = mn, color = continent) + geom_point()
+```
+```{r}
+subset <- filter(gap_data, country == 'Angola')
+ggplot(subset) + aes(x= year, y = pop, size = gdpPercap) + geom_point()
+```
+## Small multiples: multiple panels
+
+```{r}
+grp <- group_by(gap_data, year, continent)
+mns <- summarise(grp, mn = mean(lifeExp))
+ggplot(mns) + aes(x = year, y=mn) + geom_point() + facet_grid(.~continent) 
+```
+```{r}
+ggplot(mns) + aes(x = year, y=mn) + geom_point() + facet_wrap(~continent) + geom_smooth(method ='lm', color='gray', se=FALSE)
+```
+

@@ -59,7 +59,7 @@ The column names are human readable but not very handy for coding. **Indeed, in 
 colnames(more_data) <- make.names(colnames(more_data))
 ```
 
-## Reading data from a flat text file
+## Reading data from a flat comma seperated text file
 
 R has functions for reading in flat text files. However, the functions provided by tidyverse are more powerful. When reading in data, R reports on the column types. Information about the different types and their labels can be found here: [Column Types](https://tibble.tidyverse.org/articles/types.html)
 
@@ -108,6 +108,13 @@ url<-'https://raw.githubusercontent.com/dvanderelst-python-class/python-class/fa
 data <- read_csv(url)
 ```
 
+## Reading files not seperated by commas
+
+`read_csv()` expects comma separated field. For data separated by other characters use these:
+
++ tab separated: `read_tsv()`
++ all others: `read_delim()`, specifying the `delim` argument.
++ `read_csv2()` uses `;` for the field separator and `,` for the decimal point. This format is common in some European countries.
 
 ## Exploring data
 
