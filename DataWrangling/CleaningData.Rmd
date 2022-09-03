@@ -1,0 +1,300 @@
+---
+title: "Cleaning Data"
+author: "Dieter"
+output: 
+  github_document:
+    html_preview: true
+    toc: true
+---
+
+## Loading the tidyverse
+
+```{r}
+library(tidyverse)
+```
+
+## Some simple operations
+
+### Opening large text files
+
+One of the most simple things you can do is inspect your data using a text editor. When text files are large, it's a good idea to get an editor that can handle large files. I suggest [Sublime Text Editor](https://www.sublimetext.com/). This editor can handle much larger files than you can open (as text) in Rstudio. Keep the file open while you're cleaning it!
+
+### Detecting outliers
+
+Outliers (as errors) can be most easily identified using graphs. However, some textual output might be useful as well.
+
+Let's read in some data (see codebook.txt for info about the variables).
+
+```{r}
+depression_data <- read_tsv('data/raw_depression.csv')
+```
+
+People have clearly made errors when entering their ages:
+
+```{r}
+summary(depression_data$age)
+```
+
+The histogram looks weird because of the very few, very high ages. We *could* try to fix these by assuming, for example, that `1998` is the birthyear and not the age. We will do this later.
+
+```{r}
+hist(depression_data$age)
+```
+
+```{r}
+dim(depression_data)
+filtered_depression_data <- filter(depression_data, age < 120)
+dim(filtered_depression_data)
+hist(filtered_depression_data$age, breaks=100)
+```
+
+Here is another visualization.
+
+```{r}
+par(mfcol=c(1,2))
+boxplot(depression_data$age)
+boxplot(filtered_depression_data$age)
+```
+
+Here is another problem with the data...
+
+```{r}
+hist(filtered_depression_data$familysize, breaks=100)
+summary(filtered_depression_data$familysize)
+```
+
+Categorical data can also be messy. People entered their majors as free text. And this is the result:
+
+```{r}
+library(janitor)
+result <- tabyl(depression_data$major)
+head(result, 50)
+```
+
+### Missing data
+
+R encodes missing values as `NA`. Missing values are contagious: performing calculations on data that contains missing values often leads to an `NA` result. Some functions are robust against missing values (they simply ignore them). However, when a result comes back as `NA` it's often because the data contained missing values in the first place.
+
+```{r}
+some_data <- c(1,2,3,4, NA)
+mean(some_data)
+max(some_data)
+```
+
+Tips from the field:
+
+-   When reading in a file, it's a good idea to know how missing values are encoded so you can tell R which values to interpret as missing.
+-   Sometime people will use absurd values to indicate missing data. For example, they might enter -1 or 99999 when an age value is missing. These are then read by R as numbers and your calculations end up being nonsense. One way to catch this it by looking for outliers!
+
+### Seperating a column
+
+```{r}
+patient_data <-read_tsv('data/inpatient.tsv')
+colnames(patient_data) <- make.names(colnames(patient_data))
+head(patient_data, 5)
+```
+
+```{r}
+result <- tabyl(patient_data$Hospital.Referral.Region.Description)
+head(result, 5)
+```
+
+Let's separate this column into two columns.
+
+```{r}
+test <- separate(patient_data, Hospital.Referral.Region.Description, into=c('state', 'city'), sep='-')
+```
+
+This resulted in some warnings in certain rows. Let's look at some of those rows.
+
+```{r}
+patient_data$Hospital.Referral.Region.Description[710]
+patient_data$Hospital.Referral.Region.Description[711]
+patient_data$Hospital.Referral.Region.Description[1930]
+```
+
+```{r}
+test <- separate(patient_data, Hospital.Referral.Region.Description, into=c('state', 'city'), sep=' - ', remove = FALSE)
+```
+
+No warnings anymore! Note, you can use regular expression for the `sep` argument: [see here.](https://cran.r-project.org/web/packages/stringr/vignettes/regular-expressions.html)
+
+### Combining columns
+
+The opposite operation!
+
+```{r}
+test <- unite(test, 'combined', c(Provider.Id, Provider.Name), sep='_+_', remove = FALSE)
+head(test$combined, 3)
+```
+
+### Strings using `stringr`
+
+It does happen that you need to clean textual data. The `stringr` package has a bunch of functions to make your life easier (but not easy). I will run through some examples but do have a look at the [cheatsheet](https://evoldyn.gitlab.io/evomics-2018/ref-sheets/R_strings.pdf) as well.
+
+Remember, this data?
+
+```{r}
+depression_data <- read_tsv('data/raw_depression.csv')
+```
+
+We have to load `stringr` separately.
+
+```{r}
+library(stringr)
+```
+
+Let's convert the majors to lower case. Notice that strings that are not coner
+
+```{r}
+head(depression_data$major, 10)
+depression_data$major <- str_to_lower(depression_data$major)
+head(depression_data$major, 10)
+```
+
+Let's try to find biology majors
+
+```{r}
+depression_data$bio <- str_detect(depression_data$major, 'bio')
+bio_students <- filter(depression_data, bio)
+```
+
+That matched also biomedical and biochemistry students. Let's detect those using a regex (See <https://regex101.com/> for a regex construction tool).
+
+```{r}
+depression_data$other <- !str_detect(depression_data$major, 'chem|med|phys|tech')
+```
+
+Let's combine our columns
+
+```{r}
+depression_data <- mutate(depression_data, selection = other * bio)
+bio_students <- filter(depression_data, selection==1)
+```
+
+## Example: Social Security Applications
+
+I got this example from [here](https://www.linkedin.com/learning-login/share?account=2133849&forceAccount=false&redirect=https%3A%2F%2Fwww.linkedin.com%2Flearning%2Fdata-wrangling-in-r-14135737%3Ftrk%3Dshare_ent_url%26shareId%3D%252BDp0PBL0TaS6XMBZDGEN2w%253D%253D). This data set tracks how many people apply for SS through the website (internet) and the total applications (including applications through mail).
+
+**Take some time to think how you would convert this data to a tidy data set.**
+
+```{r}
+ss <- read_csv('data/ssadisability.csv')
+glimpse(ss)
+colnames(ss)
+```
+
+### A reminder on `pivot_longer()`
+
+![](images/pivot_longer_new.png)
+
+### Using `pivot_longer()`
+
+```{r}
+longer_format <- pivot_longer(ss, cols=Oct_Total:Sept_Total, names_to = 'period_source', values_to = 'Count')
+```
+
+This is better. But not perfect yet.
+
+```{r}
+count
+```
+
+### Using `separate()`
+
+Let's split the `period_source` column.
+
+```{r}
+splitted <- separate(longer_format, period_source, into=c('Month', 'Source'), sep='_')
+```
+
+### Creating an `Other` column
+
+I'd like to create a column listing the difference between `Internet` and `Total`. I'll do this by first creating a wider format.
+
+![](images/pivot_wider_new.png)
+
+```{r}
+wider <- pivot_wider(splitted, names_from = 'Source', values_from = 'Count')
+head(wider)
+wider<-mutate(wider, Other = Total - Internet)
+head(wider)
+```
+
+Now we can go back to the long format.
+
+```{r}
+long_again <- select(wider, -Total)
+long_again <- pivot_longer(long_again, cols = c(Internet, Other), names_to = 'Source', values_to = 'Count') 
+```
+
+### Convert `Fiscal_Year` to year
+
+```{r}
+numbers <- str_extract(long_again$Fiscal_Year, '[0-9]{2}')
+numbers <- 2000 + as.integer(numbers)
+long_again <- add_column(long_again, Year = numbers)
+long_again <- select(long_again, -Fiscal_Year)
+```
+
+### Create a date variable
+
+```{r}
+library(lubridate)
+long_again$date <- paste('01', long_again$Month, long_again$Year)
+long_again$date<-dmy(long_again$date)
+```
+
+### Plots
+
+Let's create some plots.
+
+
+```{r}
+data_2012 <- filter(long_again, Year == 2012)
+ggplot(data_2012) + aes(x=date, y = Count, group=Source, color=Source) + geom_line()
+```
+
+
+```{r}
+ggplot(long_again) + aes(x=Month, y = Count, group=Source, color=Source) + geom_line() + facet_grid(~Year)
+```
+
+## Example: Coal data
+
+Have a look at the data in an editor: the first 2 lines can be skipped. Missing values are given by `--`.
+
+```{r}
+coal_data <- read_csv('data/coal.csv', skip=2, na = "--")
+head(coal_data)
+```
+
+**Take some time to think how you would convert this data to a tidy data set.**
+
+### Change the first variable name
+
+```{r}
+existing_names <- colnames(coal_data)
+existing_names[1] <- 'country'
+colnames(coal_data) <- existing_names
+```
+
+### Convert to a long data format
+
+![](images/pivot_longer_new.png)
+
+```{r}
+long_format <- pivot_longer(coal_data, names_to = 'year', values_to = 'coal_use', cols = '1980':'2009')
+```
+
+### Separate regions and countries
+
+```{r}
+regions <- c("North America", "Central & South America", "Antarctica", "Europe", "Eurasia", "Middle East", "Africa", "Asia & Oceania", "World")
+long_format <- mutate(long_format, is_region =long_format$country %in% regions)
+region_data <- filter(long_format, is_region)
+country_data <- filter(long_format, !is_region)
+region_data <- select(region_data, -is_region)
+country_data <- select(country_data, -is_region)
+```
+

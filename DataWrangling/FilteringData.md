@@ -1,7 +1,6 @@
 Filtering Data
 ================
 Dieter
-2022-08-24
 
 -   <a href="#dplyr" id="toc-dplyr">dplyr</a>
 -   <a href="#selecting-columns" id="toc-selecting-columns">Selecting

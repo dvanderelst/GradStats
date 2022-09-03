@@ -47,7 +47,7 @@ library(tidyverse)
     ## ✔ ggplot2 3.3.6     ✔ purrr   0.3.4
     ## ✔ tibble  3.1.8     ✔ dplyr   1.0.9
     ## ✔ tidyr   1.2.0     ✔ stringr 1.4.0
-    ## ✔ readr   2.1.2     ✔ forcats 0.5.2
+    ## ✔ readr   2.1.2     ✔ forcats 0.5.1
     ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
@@ -283,10 +283,8 @@ summary(model_full)
 
 Let’s now explicitly compare the base and the full model. This results
 in the same F-value! So, we could run the omnibus test by comparing the
-base model,
-![y_i = \bar{x}\_i](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;y_i%20%3D%20%5Cbar%7Bx%7D_i "y_i = \bar{x}_i"),
-with the full model. But this is done implicitly by R when fitting the
-full model.
+base model, $y_i = \bar{x}_i$, with the full model. But this is done
+implicitly by R when fitting the full model.
 
 ``` r
 anova(model_base, model_full)
@@ -431,11 +429,8 @@ anova(simple_model, complex_model)
 ### What if the models only differ by one variable
 
 In this case, the p-value associated with the newly introduced variable
-is equal to the p value of the anova comparison. In fact the
-![F](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;F "F")
-value is equal to
-![t^2](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;t%5E2 "t^2")
-value.
+is equal to the p value of the anova comparison. In fact the $F$ value
+is equal to $t^2$ value.
 
 ``` r
 simple_model <- lm(state_data$Murder ~ state_data$Illiteracy)

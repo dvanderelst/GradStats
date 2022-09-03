@@ -39,11 +39,15 @@ Dieter
     plots</a>
     -   <a href="#adding-points-or-lines" id="toc-adding-points-or-lines">Adding
         points or lines</a>
+    -   <a href="#a-limitation-of-r" id="toc-a-limitation-of-r">A limitation of
+        R</a>
+    -   <a href="#more-bling" id="toc-more-bling">More bling</a>
+-   <a href="#adding-legends" id="toc-adding-legends">Adding legends</a>
 
 ## Notes
 
 The base plotting system in R is somewhat dated (we’ll run into some
-limits below). But it is still a powerfull way of creating plots
+limits below). But it is still a powerful way of creating plots
 programmatically.
 
 ## Read in some data
@@ -259,8 +263,9 @@ points(c(18, 20, 22), c(22, 23, 24), type='b', col='red2')
 points(c(18, 20, 22), c(23, 24, 25), col='blue2')
 ```
 
-![](base_plotting_files/figure-gfm/unnamed-chunk-14-1.png)<!-- --> \###
-A limitation of R
+![](base_plotting_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+
+### A limitation of R
 
 This does cuts the range of the plot to the range of the first plotted
 data!
@@ -294,8 +299,9 @@ plot(females$Height, females$Weight, pch=15, main='Some graph', col=my_blue, xli
 points(males$Height, males$Weight, pch=15, main='Some graph', col=my_red)
 ```
 
-![](base_plotting_files/figure-gfm/unnamed-chunk-16-1.png)<!-- --> \###
-More bling
+![](base_plotting_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+
+### More bling
 
 ``` r
 my_blue <- adjustcolor( "navyblue", alpha.f = 0.25)
@@ -319,8 +325,9 @@ text(x=160, y=100, labels='A label', col="green2", font=3, family='serif')
 arrows(x0=190, y0=100, x1=170,y1=60, length = 0.1, lwd=4, col=my_orange)
 ```
 
-![](base_plotting_files/figure-gfm/unnamed-chunk-17-1.png)<!-- --> \##
-Adding legends
+![](base_plotting_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+
+# Adding legends
 
 Adding legends can be done using the `legend()`. These are the main
 arguments to the function:

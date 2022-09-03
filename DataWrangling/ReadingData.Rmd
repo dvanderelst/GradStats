@@ -1,5 +1,5 @@
 ---
-title: "ReadingData"
+title: "Reading Data"
 author: "Dieter"
 output: 
   github_document:

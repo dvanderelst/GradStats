@@ -103,6 +103,7 @@ ggplot(mns) + aes(x= year, y = mn, color = continent) + geom_point()
 subset <- filter(gap_data, country == 'Angola')
 ggplot(subset) + aes(x= year, y = pop, size = gdpPercap) + geom_point()
 ```
+
 ## Small multiples: multiple panels
 
 ```{r}
