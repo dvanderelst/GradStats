@@ -1,0 +1,64 @@
+---
+title: "Network Analysis"
+author: "Dieter"
+date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
+output:
+  github_document:
+    html_preview: true
+    toc: true
+
+---
+
+## Loading the required packages
+
+```{r}
+library(sna)
+library(igraph)
+```
+
+## Loading some data and create a gaph
+
+```{r}
+network_data <- read.delim('data/undirected.txt', header = FALSE, sep = " ")
+graph1 <- graph_from_data_frame(network_data, directed = FALSE)
+plot(graph1)
+```
+
+Also, notice the following functions:
+
++ `graph_from_adjacency_matrix()`
++ `graph_from_adj_list()`
+
+## Create sample graphs
+
+### Some simple functions
+
+See: graph_from_literal(), make_chordal_ring(), make_empty_graph(), make_full_citation_graph(), make_full_graph(), make_graph(), make_lattice(), make_ring(), make_star(), make_tree()
+
+
+```{r}
+graph2 <- make_star(n=15, mode='in')
+plot(graph2)
+```
+
+### Random graphs
+
+These are often used to research the properties of graphs. See `sample_*` functions.
+
+```{r}
+sw <- sample_islands(3, 10, 5/10, 1)
+plot(sw)
+```
+
+## Analyzing network properties
+
+
+```{r}
+sw <- sample_islands(3, 10, 5/10, 1)
+degree(sw)
+betweenness(sw)
+edge_density(sw)
+```
+
+
+

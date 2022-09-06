@@ -1,6 +1,7 @@
 Cleaning Data
 ================
 Dieter
+Last Updated: 03, September, 2022 at 15:08
 
 -   <a href="#loading-the-tidyverse" id="toc-loading-the-tidyverse">Loading
     the tidyverse</a>
@@ -519,7 +520,7 @@ count
     ## {
     ##     UseMethod("count")
     ## }
-    ## <bytecode: 0x55b802aaef38>
+    ## <bytecode: 0x55b002165268>
     ## <environment: namespace:dplyr>
 
 ### Using `separate()`

@@ -1,6 +1,6 @@
 Basic Programming
 ================
-Dieter
+Last Updated: 03, September, 2022 at 15:31
 
 -   <a href="#basics-of-programming-variables-and-functions"
     id="toc-basics-of-programming-variables-and-functions">Basics of
@@ -273,7 +273,7 @@ print(result)
     ## 
     ## Coefficients:
     ## (Intercept)            x  
-    ##       9.892        4.979
+    ##      10.285        4.555
 
 ## Flow control in R
 
@@ -356,11 +356,11 @@ for (x in my_vector) {
 }
 ```
 
-    ## [1] 1.417945
-    ## [1] 0.4917786
-    ## [1] 0.09863444
-    ## [1] 0.7380623
-    ## [1] 2.931022
+    ## [1] 0.7050276
+    ## [1] 2.101707
+    ## [1] 0.4559092
+    ## [1] 0.1409621
+    ## [1] 0.7993773
 
 Just to drive the point home, another example:
 
@@ -468,7 +468,7 @@ endTime <- Sys.time()
 print(sprintf('Duration: %.2f', endTime - startTime))
 ```
 
-    ## [1] "Duration: 0.68"
+    ## [1] "Duration: 0.59"
 
 This piece of code preallocates a vector and is more efficient.
 
@@ -484,4 +484,4 @@ endTime <- Sys.time()
 print(sprintf('Duration: %.2f', endTime - startTime))
 ```
 
-    ## [1] "Duration: 0.04"
+    ## [1] "Duration: 0.03"

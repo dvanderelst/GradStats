@@ -1,7 +1,11 @@
 ---
 title: "Cleaning Data"
 author: "Dieter"
-output: rmdformats::readthedown
+date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
+output:
+  rmdformats::readthedown:
+    highlight: kate
+    
 ---
 
 ## Loading the tidyverse
