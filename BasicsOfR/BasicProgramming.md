@@ -1,6 +1,6 @@
 Basic Programming
 ================
-Last Updated: 03, September, 2022 at 15:31
+Last Updated: 20, September, 2022 at 08:32
 
 -   <a href="#basics-of-programming-variables-and-functions"
     id="toc-basics-of-programming-variables-and-functions">Basics of
@@ -27,6 +27,8 @@ Last Updated: 03, September, 2022 at 15:31
         loop</a>
     -   <a href="#the-while-loop" id="toc-the-while-loop">The <code>while</code>
         loop</a>
+    -   <a href="#the-break-keyword" id="toc-the-break-keyword">The
+        <code>break</code> keyword</a>
 -   <a href="#exercises" id="toc-exercises">Exercises</a>
 -   <a href="#note-on-vector-preallocation"
     id="toc-note-on-vector-preallocation">Note on vector preallocation</a>
@@ -80,6 +82,8 @@ sin(pi / 2)
 ```
 
     ## [1] FALSE
+
+![](images/2022-09-20_08-29.png)
 
 ## Storing data in variables
 
@@ -273,7 +277,7 @@ print(result)
     ## 
     ## Coefficients:
     ## (Intercept)            x  
-    ##      10.285        4.555
+    ##       9.772        5.287
 
 ## Flow control in R
 
@@ -316,6 +320,8 @@ if (my_number < 20){
 
     ## [1] "12 is less than 20"
 
+#### The `if else` statement
+
 There is also an if-else variant of this,
 
 ``` r
@@ -344,6 +350,23 @@ if(a > 0){print("Positive Number")}else{print("negative number")}
 
     ## [1] "negative number"
 
+#### The `else if` statement
+
+``` r
+a <- 200
+b <- 33
+
+if (b > a) {
+  print("b is greater than a")
+} else if (a == b) {
+  print("a and b are equal")
+} else {
+  print("a is greater than b")
+} 
+```
+
+    ## [1] "a is greater than b"
+
 ### The `for` loop
 
 The `for` loop iterates over a sequence.
@@ -356,11 +379,11 @@ for (x in my_vector) {
 }
 ```
 
-    ## [1] 0.7050276
-    ## [1] 2.101707
-    ## [1] 0.4559092
-    ## [1] 0.1409621
-    ## [1] 0.7993773
+    ## [1] 2.794788
+    ## [1] 0.3871386
+    ## [1] 2.720856
+    ## [1] 2.999996
+    ## [1] 2.880962
 
 Just to drive the point home, another example:
 
@@ -438,10 +461,29 @@ while (i < 6) {
     ## [1] 4
     ## [1] 5
 
+### The `break` keyword
+
+You can use `break` to exit a loop at any time
+
+``` r
+i <- 1
+while (i < 100000) {
+  print(i)
+  i <- i + 1
+  if (i > 5){break}
+} 
+```
+
+    ## [1] 1
+    ## [1] 2
+    ## [1] 3
+    ## [1] 4
+    ## [1] 5
+
 ## Exercises
 
 -   Write a for loop that iterates over the numbers 1 to 7 and prints
-    the cube of each number using print().
+    the cube of each number using `print()`.
 -   Write a while loop that prints out standard random normal numbers
     (use `rnorm()`) but stops (breaks) if you get a number bigger than
     1.
@@ -449,7 +491,7 @@ while (i < 6) {
     track of the individual outcomes (1 = heads, 0 = tails) in a vector.
 -   Use a while loop to investigate the number of terms required before
     the series
-    ![1 \times 2 \times 3 \times ,,,](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;1%20%5Ctimes%202%20%5Ctimes%203%20%5Ctimes%20%2C%2C%2C "1 \times 2 \times 3 \times ,,,")
+    ![1 \times 2 \times 3 \times ,\ldots](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;1%20%5Ctimes%202%20%5Ctimes%203%20%5Ctimes%20%2C%5Cldots "1 \times 2 \times 3 \times ,\ldots")
     reaches above 10 million.
 
 ## Note on vector preallocation
@@ -468,7 +510,7 @@ endTime <- Sys.time()
 print(sprintf('Duration: %.2f', endTime - startTime))
 ```
 
-    ## [1] "Duration: 0.59"
+    ## [1] "Duration: 0.35"
 
 This piece of code preallocates a vector and is more efficient.
 
@@ -484,4 +526,4 @@ endTime <- Sys.time()
 print(sprintf('Duration: %.2f', endTime - startTime))
 ```
 
-    ## [1] "Duration: 0.03"
+    ## [1] "Duration: 0.02"

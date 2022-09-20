@@ -3,7 +3,7 @@ rm(list = ls())
 if(!is.null(dev.list())) dev.off()
 
 
-library(latex2exp)
+
 library(MASS)
 
 
