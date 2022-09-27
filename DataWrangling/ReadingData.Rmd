@@ -1,7 +1,7 @@
 ---
 title: "Reading Data"
-author: "Dieter"
-output: 
+date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
+output:
   github_document:
     html_preview: true
     toc: true
@@ -11,16 +11,20 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Reading data from excel using readxl
-
-Excel spreadsheet are often used and easy ways to store data.
-
 ```{r}
 library(tidyverse)
 library(readxl)
 ```
+## Reading data from excel using readxl
 
-Explore the data in `transit-data.xlsx`. Note that (1) Data does not start in cells A1, (2) Data contains different date formats, and (3) the data contain weird characters.
+Excel spreadsheet are often used and easy ways to store data.
+
+Explore the data in `transit-data.xlsx`. (Please note the organization of my project folder.)
+
+![](images/2022-09-27_08-38.png)library(tidyverse)
+
+
+Note that (1) Data does not start in cell A1, (2) Data contains different date formats, and (3) the data contain weird characters.
 
 Read the first sheet of data:
 
@@ -63,13 +67,15 @@ colnames(more_data) <- make.names(colnames(more_data))
 
 R has functions for reading in flat text files. However, the functions provided by tidyverse are more powerful. When reading in data, R reports on the column types. Information about the different types and their labels can be found here: [Column Types](https://tibble.tidyverse.org/articles/types.html)
 
+*Note: The default report on the column types is a bit disorganized in this view. It will look better in your console.*
+
 ```{r}
 data <- read_csv('data/pakistan_intellectual_capital.csv', n_max=10)
 ```
 
 ## Tibbles
 
-Reading in data using tidyverse functions generates tibbles, instead of R’s traditional `data.frame`. These are a newer version of the classic data frame with features tweaked to make life a bit easier.
+Reading in data using tidyverse functions generates tibbles, instead of R's traditional `data.frame`. These are a newer version of the classic data frame with features tweaked to make life a bit easier.
 
 ```{r}
 print(class(data))
@@ -83,6 +89,8 @@ old_school<-as.data.frame(data)
 
 ## Some interesting options when using `read_csv()`
 
+### No column names? No problem!
+
 If data has no column names, use `col_names = FALSE`
 
 ```{r}
@@ -95,16 +103,20 @@ You can also directly set the column names in this case.
 read_csv("1,2,3\n4,5,6", col_names = c("x", "y", "z"))
 ```
 
+### Specifying missing data
+
 Another option that commonly needs tweaking is `na`: this specifies the value (or values) that are used to represent missing values in your file:
 
 ```{r}
 read_csv("a,b,c\n1,2,.", na = ".")
 ```
 
+### Reading from URL
+
 You can read data directly from a URL as well.
 
 ```{r}
-url<-'https://raw.githubusercontent.com/dvanderelst-python-class/python-class/fall2022/10_Pandas_Statistics/data/pizzasize.csv'
+url<-'https://raw.githubusercontent.com/dvanderelst-python-class/python-class/fall2022/11_Pandas_Statistics/data/pizzasize.csv'
 data <- read_csv(url)
 ```
 
@@ -112,9 +124,9 @@ data <- read_csv(url)
 
 `read_csv()` expects comma separated field. For data separated by other characters use these:
 
-+ tab separated: `read_tsv()`
-+ all others: `read_delim()`, specifying the `delim` argument.
-+ `read_csv2()` uses `;` for the field separator and `,` for the decimal point. This format is common in some European countries.
+-   tab separated: `read_tsv()`
+-   all others: `read_delim()`, specifying the `delim` argument.
+-   `read_csv2()` uses `;` for the field separator and `,` for the decimal point. This format is common in some European countries.
 
 ## Exploring data
 
@@ -207,9 +219,6 @@ For fun: `transmute` only keeps the new variable.
 data <- transmute(data, area = pi * (Diameter/2)^2)
 data
 ```
-
-
-
 
 ## Exercises
 

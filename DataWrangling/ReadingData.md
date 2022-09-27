@@ -1,6 +1,6 @@
-ReadingData
+Reading Data
 ================
-Dieter
+Last Updated: 27, September, 2022 at 08:46
 
 -   <a href="#reading-data-from-excel-using-readxl"
     id="toc-reading-data-from-excel-using-readxl">Reading data from excel
@@ -12,6 +12,12 @@ Dieter
 -   <a href="#some-interesting-options-when-using-read_csv"
     id="toc-some-interesting-options-when-using-read_csv">Some interesting
     options when using <code>read_csv()</code></a>
+    -   <a href="#no-column-names-no-problem"
+        id="toc-no-column-names-no-problem">No column names? No problem!</a>
+    -   <a href="#specifying-missing-data"
+        id="toc-specifying-missing-data">Specifying missing data</a>
+    -   <a href="#reading-from-url" id="toc-reading-from-url">Reading from
+        URL</a>
 -   <a href="#reading-files-not-seperated-by-commas"
     id="toc-reading-files-not-seperated-by-commas">Reading files not
     seperated by commas</a>
@@ -26,10 +32,6 @@ Dieter
 -   <a href="#exercises" id="toc-exercises">Exercises</a>
     -   <a href="#exercise-1" id="toc-exercise-1">Exercise 1</a>
     -   <a href="#exercise-2" id="toc-exercise-2">Exercise 2</a>
-
-## Reading data from excel using readxl
-
-Excel spreadsheet are often used and easy ways to store data.
 
 ``` r
 library(tidyverse)
@@ -48,9 +50,17 @@ library(tidyverse)
 library(readxl)
 ```
 
-Explore the data in `transit-data.xlsx`. Note that (1) Data does not
-start in cells A1, (2) Data contains different date formats, and (3) the
-data contain weird characters.
+## Reading data from excel using readxl
+
+Excel spreadsheet are often used and easy ways to store data.
+
+Explore the data in `transit-data.xlsx`. (Please note the organization
+of my project folder.)
+
+![](images/2022-09-27_08-38.png)library(tidyverse)
+
+Note that (1) Data does not start in cell A1, (2) Data contains
+different date formats, and (3) the data contain weird characters.
 
 Read the first sheet of data:
 
@@ -106,6 +116,9 @@ on the column types. Information about the different types and their
 labels can be found here: [Column
 Types](https://tibble.tidyverse.org/articles/types.html)
 
+*Note: The default report on the column types is a bit disorganized in
+this view. It will look better in your console.*
+
 ``` r
 data <- read_csv('data/pakistan_intellectual_capital.csv', n_max=10)
 ```
@@ -139,6 +152,8 @@ old_school<-as.data.frame(data)
 ```
 
 ## Some interesting options when using `read_csv()`
+
+### No column names? No problem!
 
 If data has no column names, use `col_names = FALSE`
 
@@ -180,6 +195,8 @@ read_csv("1,2,3\n4,5,6", col_names = c("x", "y", "z"))
     ## 1     1     2     3
     ## 2     4     5     6
 
+### Specifying missing data
+
 Another option that commonly needs tweaking is `na`: this specifies the
 value (or values) that are used to represent missing values in your
 file:
@@ -202,10 +219,12 @@ read_csv("a,b,c\n1,2,.", na = ".")
     ##   <dbl> <dbl> <lgl>
     ## 1     1     2 NA
 
+### Reading from URL
+
 You can read data directly from a URL as well.
 
 ``` r
-url<-'https://raw.githubusercontent.com/dvanderelst-python-class/python-class/fall2022/10_Pandas_Statistics/data/pizzasize.csv'
+url<-'https://raw.githubusercontent.com/dvanderelst-python-class/python-class/fall2022/11_Pandas_Statistics/data/pizzasize.csv'
 data <- read_csv(url)
 ```
 
