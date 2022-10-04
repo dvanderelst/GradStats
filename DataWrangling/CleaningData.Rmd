@@ -1,11 +1,10 @@
 ---
 title: "Cleaning Data"
-author: "Dieter"
 date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
 output:
-  rmdformats::readthedown:
-    highlight: kate
-    
+  github_document:
+    html_preview: true
+    toc: true
 ---
 
 ## Loading the tidyverse
@@ -87,7 +86,7 @@ Tips from the field:
 -   When reading in a file, it's a good idea to know how missing values are encoded so you can tell R which values to interpret as missing.
 -   Sometime people will use absurd values to indicate missing data. For example, they might enter -1 or 99999 when an age value is missing. These are then read by R as numbers and your calculations end up being nonsense. One way to catch this it by looking for outliers!
 
-### Seperating a column
+### Separating a column
 
 ```{r}
 patient_data <-read_tsv('data/inpatient.tsv')
@@ -172,6 +171,111 @@ Let's combine our columns
 depression_data <- mutate(depression_data, selection = other * bio)
 bio_students <- filter(depression_data, selection==1)
 ```
+
+## Reorganizing data
+
+
+### Loading some data
+
+```{r}
+car_data <- read_delim('data/cars.txt', delim = ' ')
+```
+
+### Grouping and summarizing data
+
+The `group_by()` function takes a tibble and returns the same tibble, but with some extra information so that any subsequent function acts on each unique combination defined in the `group_by()`.
+
+```{r}
+grouped <- group_by(car_data, type, make)
+```
+
+If you inspect the `grouped` tibble it seems the same as the `car_data` tibble. However, it has stored the grouping we asked for.
+
+```{r}
+groups(grouped)
+```
+
+Now, you can use the `summarize()` function to get summary data for each subgroup
+
+```{r}
+summaries <- summarise(grouped, mean.length = mean(length))
+summaries
+```
+
+You can ask for more than one summary statistic.
+
+```{r}
+summaries <- summarise(grouped, mean.length = mean(length), max.length = max(length), std_rpm = sd(rpm))
+summaries
+```
+
+### Converting to wide format
+
+The result can be reshaped into a wide format. While this format is often not suited for plotting or analysis, it might make it easier to look at the data. Here is a quick visual:
+
+![](images/pivot_wider_new.png)
+
+```{r}
+wide <- pivot_wider(summaries, id_cols = make, names_from  = type, values_from = mean.length)
+head(wide)
+```
+
+### Further processing
+
+Keep in mind that, as the result of `summarize()` is a tibble, you can use the data selection methods we saw earlier.
+
+```{r}
+subset <- filter(summaries, make ==  'Ford')
+head(subset)
+```
+
+### Note on dropping non-existing levels
+
+By default, the `group_by()` function drops non-existing combinations of grouping variables.
+
+```{r}
+grouped1 <- group_by(car_data, type, make)
+c1<-count(grouped1)
+summaries1 <- summarise(grouped, mean.length = mean(length))
+dim(summaries1)
+```
+
+However, this behavior can be changed using the `.drop = FALSE` argument (and converting the variables to factors)
+
+```{r}
+grouped2 <- group_by(car_data, as.factor(type), as.factor(make), .drop=FALSE)
+c2<-count(grouped2)
+summaries2 <- summarise(grouped2, mean.length = mean(length))
+summaries2 <- complete(summaries2)
+dim(summaries2)
+```
+
+### Making data longer (melting data)
+
+Here is a quick graphic:
+
+![](images/pivot_longer_new.png)
+
+Let's look at some data:
+
+```{r}
+head(relig_income, 5)
+```
+
+This data is in a wider format. But we can easily melt it to a long format.
+
+```{r}
+new <- pivot_longer(relig_income, cols = !religion)
+head(new, 5)
+```
+
+You can specify names for the new columns while melting.
+
+```{r}
+new <- pivot_longer(relig_income, !religion, names_to = "income", values_to = "count")
+head(new, 5)
+```
+
 
 ## Example: Social Security Applications
 

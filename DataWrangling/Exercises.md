@@ -1,10 +1,12 @@
 Exercises
 ================
-Dieter
+Last Updated: 04, October, 2022 at 08:28
 
 -   <a href="#part-1" id="toc-part-1">Part 1</a>
 
 ## Part 1
+
+Use the following data for this part:
 
 ``` r
 library(gapminder)

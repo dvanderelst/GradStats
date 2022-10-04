@@ -1,12 +1,10 @@
 ---
 title: "Exercises"
-author: "Dieter"
-always_allow_html: true
+date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
 output:
   github_document:
     html_preview: true
     toc: true
-    toc_depth: 4
 ---
 
 ## Part 1

@@ -1,6 +1,6 @@
 Filtering Data
 ================
-Dieter
+Last Updated: 04, October, 2022 at 08:36
 
 -   <a href="#dplyr" id="toc-dplyr">dplyr</a>
 -   <a href="#selecting-columns" id="toc-selecting-columns">Selecting

@@ -1,6 +1,6 @@
 Reading Data
 ================
-Last Updated: 27, September, 2022 at 08:46
+Last Updated: 04, October, 2022 at 08:29
 
 -   <a href="#reading-data-from-excel-using-readxl"
     id="toc-reading-data-from-excel-using-readxl">Reading data from excel

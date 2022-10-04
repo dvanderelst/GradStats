@@ -15,6 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(readxl)
 ```
+
 ## Reading data from excel using readxl
 
 Excel spreadsheet are often used and easy ways to store data.
@@ -22,7 +23,6 @@ Excel spreadsheet are often used and easy ways to store data.
 Explore the data in `transit-data.xlsx`. (Please note the organization of my project folder.)
 
 ![](images/2022-09-27_08-38.png)library(tidyverse)
-
 
 Note that (1) Data does not start in cell A1, (2) Data contains different date formats, and (3) the data contain weird characters.
 
