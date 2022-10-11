@@ -1,7 +1,6 @@
 Base Plotting
 ================
-Dieter
-2022-08-26
+Last Updated: 11, October, 2022 at 08:51
 
 -   <a href="#notes" id="toc-notes">Notes</a>
 -   <a href="#read-in-some-data" id="toc-read-in-some-data">Read in some
@@ -13,6 +12,9 @@ Dieter
     -   <a href="#line-plot" id="toc-line-plot">Line plot</a>
     -   <a href="#setting-colors-and-markers"
         id="toc-setting-colors-and-markers">Setting colors and markers</a>
+    -   <a href="#handy-dandy-adding-an-alpha-channel-to-a-color"
+        id="toc-handy-dandy-adding-an-alpha-channel-to-a-color">Handy Dandy:
+        adding an alpha channel to a color</a>
 -   <a href="#basic-plot-type-histogram"
     id="toc-basic-plot-type-histogram">Basic plot type: histogram</a>
 -   <a href="#basic-plot-type-barchart"
@@ -21,19 +23,8 @@ Dieter
     id="toc-basic-plot-type-boxplot">Basic plot type: boxplot</a>
     -   <a href="#setting-plot-parameters"
         id="toc-setting-plot-parameters">Setting plot parameters</a>
-        -   <a href="#setting-the-inner-and-the-outer-margins"
-            id="toc-setting-the-inner-and-the-outer-margins">Setting the inner and
-            the outer margins</a>
-        -   <a href="#plotting-subplots" id="toc-plotting-subplots">Plotting
-            subplots</a>
     -   <a href="#changing-text-and-font"
         id="toc-changing-text-and-font">Changing text and font</a>
-        -   <a href="#adding-labels" id="toc-adding-labels">Adding labels</a>
-        -   <a href="#chaning-the-font-face" id="toc-chaning-the-font-face">Chaning
-            the font face</a>
-        -   <a href="#scaling-text-sizes" id="toc-scaling-text-sizes">Scaling text
-            sizes</a>
-        -   <a href="#example" id="toc-example">Example</a>
 -   <a href="#adding-stuff-to-existing-plots"
     id="toc-adding-stuff-to-existing-plots">Adding stuff to existing
     plots</a>
@@ -80,7 +71,7 @@ head(body_data)
     ## 6 36.1  23.5  16.9  21   74.8  181.5      1
 
 ``` r
-dev.off() # Make sure all graphic parameters are reset
+try(dev.off()) # Make sure all graphic parameters are reset
 ```
 
     ## null device 
@@ -126,8 +117,9 @@ y <- runif(10) * x
 plot(x, y, type= 'b', pch=15, col ='red2')
 ```
 
-![](base_plotting_files/figure-gfm/unnamed-chunk-4-1.png)<!-- --> R also
-knows about hex colors.
+![](base_plotting_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+
+R also knows about hex colors.
 
 ``` r
 x <- 1:10
@@ -135,8 +127,9 @@ y <- runif(10) * x
 plot(x, y, type= 'b', pch=15, col ='#47B04E')
 ```
 
-![](base_plotting_files/figure-gfm/unnamed-chunk-5-1.png)<!-- --> \###
-Handy Dandy: adding an alpha channel to a color
+![](base_plotting_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+
+### Handy Dandy: adding an alpha channel to a color
 
 ``` r
 my_red <- adjustcolor( "red2", alpha.f = 0.25)
@@ -213,7 +206,7 @@ hist(body_data$Biiliac, freq = FALSE, main ='A normalized histogram')
 ![](base_plotting_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
 ``` r
-dev.off() # Make sure all graphic parameters are reset
+try(dev.off())  # Make sure all graphic parameters are reset
 ```
 
     ## null device 
@@ -227,7 +220,7 @@ dev.off() # Make sure all graphic parameters are reset
 2.  subtitle: `sub =`
 3.  title: `main =`
 
-#### Chaning the font face
+#### Changing the font face
 
 font face: `font =`
 
@@ -281,9 +274,10 @@ plot(females$Height, females$Weight, pch=15, main='Some graph', col=my_blue)
 points(males$Height, males$Weight, pch=15, main='Some graph', col=my_red)
 ```
 
-![](base_plotting_files/figure-gfm/unnamed-chunk-15-1.png)<!-- --> This
-solves the problem. But it’s a bit dissapointing that R does not update
-the axes of the plots.
+![](base_plotting_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+
+This solves the problem. But it’s a bit dissapointing that R does not
+update the axes of the plots.
 
 ``` r
 my_blue <- adjustcolor( "navyblue", alpha.f = 0.25)

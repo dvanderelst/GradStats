@@ -121,7 +121,7 @@ head(subset1, n = 15)
 Read in the data and perform the following operations:
 
 -   Count the number of male survivors that were older than 25.
--   How many first class passengers where female?
+-   How many first class passengers were female?
 -   How many female passengers survived?
 
 ### Exercise: Car data

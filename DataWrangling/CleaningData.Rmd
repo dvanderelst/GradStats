@@ -209,17 +209,6 @@ summaries <- summarise(grouped, mean.length = mean(length), max.length = max(len
 summaries
 ```
 
-### Converting to wide format
-
-The result can be reshaped into a wide format. While this format is often not suited for plotting or analysis, it might make it easier to look at the data. Here is a quick visual:
-
-![](images/pivot_wider_new.png)
-
-```{r}
-wide <- pivot_wider(summaries, id_cols = make, names_from  = type, values_from = mean.length)
-head(wide)
-```
-
 ### Further processing
 
 Keep in mind that, as the result of `summarize()` is a tibble, you can use the data selection methods we saw earlier.
@@ -250,6 +239,19 @@ summaries2 <- complete(summaries2)
 dim(summaries2)
 ```
 
+
+### Converting to wide format
+
+The result can be reshaped into a wide format. While this format is often not suited for plotting or analysis, it might make it easier to look at the data. Here is a quick visual:
+
+![](images/pivot_wider_new.png)
+
+```{r}
+wide <- pivot_wider(summaries, id_cols = make, names_from  = type, values_from = mean.length)
+head(wide)
+```
+
+
 ### Making data longer (melting data)
 
 Here is a quick graphic:
@@ -275,6 +277,55 @@ You can specify names for the new columns while melting.
 new <- pivot_longer(relig_income, !religion, names_to = "income", values_to = "count")
 head(new, 5)
 ```
+
+## Merging data
+
+Here, we will use National Health and Nutrition Examination Survey data. This is the [data source](https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?BeginYear=2017). See [here](https://wwwn.cdc.gov/Nchs/Nnyfs/Y_DEMO.htm) for more information about the demographic variables. 
+
+These data are split into multiple files (based on topic). If we need variables from different files, we can merge the different data subsets.
+
+### Reading in the data
+
+The data is in SAS Transport File Format. Therefore, we will use the `haven` library to read it in.
+
+```{r}
+library(haven)
+demographics <- read_xpt('data/DEMO_J.XPT')
+income <- read_xpt('data/INQ_J.XPT')
+drugs <- read_xpt('data/DUQ_J.XPT')
+```
+
+There are many variables in each file. To keep things manageable, let's select some variables (we've seen how to do this before).
+
+```{r}
+drug_habits <- select(drugs, SEQN, DUQ200:DUQ280)
+age<-select(demographics, SEQN, RIDAGEYR, RIDAGEMN)
+finance <- select(income, SEQN, INDFMMPC,INDFMMPI, INQ300, IND235)
+```
+
+### Merging the data
+
+```{r}
+merged <- full_join(age, drug_habits, by='SEQN')
+merged <- full_join(merged, finance, by='SEQN')
+dim(merged)
+```
+
+
+## Exercise: Global Health Data
+
+Use the following data for this exercise:
+
+```{r}
+library(gapminder)
+gap_data <- gapminder
+```
+
++ Filter the data for the Americas in 2007. Retain only the `lifeExp` variable and deselect all other variables.
++ Create the variable `gdp`, defined as the product of `pop`  and `gdpPercap`.
++ Identify the observation (combination of county, continent, and year) with lowest gdp per person.
++ Identify all observations with above average life expectancy, stratified for each continent.
++ Compute the mean life expectancy for each year per continent.
 
 
 ## Example: Social Security Applications

@@ -1,6 +1,6 @@
 Cleaning Data
 ================
-Last Updated: 04, October, 2022 at 08:35
+Last Updated: 11, October, 2022 at 08:47
 
 -   <a href="#loading-the-tidyverse" id="toc-loading-the-tidyverse">Loading
     the tidyverse</a>
@@ -23,16 +23,23 @@ Last Updated: 04, October, 2022 at 08:35
         data</a>
     -   <a href="#grouping-and-summarizing-data"
         id="toc-grouping-and-summarizing-data">Grouping and summarizing data</a>
-    -   <a href="#converting-to-wide-format"
-        id="toc-converting-to-wide-format">Converting to wide format</a>
     -   <a href="#further-processing" id="toc-further-processing">Further
         processing</a>
     -   <a href="#note-on-dropping-non-existing-levels"
         id="toc-note-on-dropping-non-existing-levels">Note on dropping
         non-existing levels</a>
+    -   <a href="#converting-to-wide-format"
+        id="toc-converting-to-wide-format">Converting to wide format</a>
     -   <a href="#making-data-longer-melting-data"
         id="toc-making-data-longer-melting-data">Making data longer (melting
         data)</a>
+-   <a href="#merging-data" id="toc-merging-data">Merging data</a>
+    -   <a href="#reading-in-the-data" id="toc-reading-in-the-data">Reading in
+        the data</a>
+    -   <a href="#merging-the-data" id="toc-merging-the-data">Merging the
+        data</a>
+-   <a href="#exercise-global-health-data"
+    id="toc-exercise-global-health-data">Exercise: Global Health Data</a>
 -   <a href="#example-social-security-applications"
     id="toc-example-social-security-applications">Example: Social Security
     Applications</a>
@@ -549,29 +556,6 @@ summaries
     ## # … with 71 more rows
     ## # ℹ Use `print(n = ...)` to see more rows
 
-### Converting to wide format
-
-The result can be reshaped into a wide format. While this format is
-often not suited for plotting or analysis, it might make it easier to
-look at the data. Here is a quick visual:
-
-![](images/pivot_wider_new.png)
-
-``` r
-wide <- pivot_wider(summaries, id_cols = make, names_from  = type, values_from = mean.length)
-head(wide)
-```
-
-    ## # A tibble: 6 × 7
-    ##   make      Compact Large Midsize Small Sporty   Van
-    ##   <chr>       <dbl> <dbl>   <dbl> <dbl>  <dbl> <dbl>
-    ## 1 Audi          180    NA     193    NA    NA     NA
-    ## 2 Chevrolet     183   214     198    NA   186    186
-    ## 3 Chrysler      183   203      NA    NA    NA     NA
-    ## 4 Dodge         181    NA     192   173   180    175
-    ## 5 Ford          177   212     192   156   180.   176
-    ## 6 Honda         185    NA      NA   173   175     NA
-
 ### Further processing
 
 Keep in mind that, as the result of `summarize()` is a tibble, you can
@@ -632,6 +616,29 @@ dim(summaries2)
 
     ## [1] 192   3
 
+### Converting to wide format
+
+The result can be reshaped into a wide format. While this format is
+often not suited for plotting or analysis, it might make it easier to
+look at the data. Here is a quick visual:
+
+![](images/pivot_wider_new.png)
+
+``` r
+wide <- pivot_wider(summaries, id_cols = make, names_from  = type, values_from = mean.length)
+head(wide)
+```
+
+    ## # A tibble: 6 × 7
+    ##   make      Compact Large Midsize Small Sporty   Van
+    ##   <chr>       <dbl> <dbl>   <dbl> <dbl>  <dbl> <dbl>
+    ## 1 Audi          180    NA     193    NA    NA     NA
+    ## 2 Chevrolet     183   214     198    NA   186    186
+    ## 3 Chrysler      183   203      NA    NA    NA     NA
+    ## 4 Dodge         181    NA     192   173   180    175
+    ## 5 Ford          177   212     192   156   180.   176
+    ## 6 Honda         185    NA      NA   173   175     NA
+
 ### Making data longer (melting data)
 
 Here is a quick graphic:
@@ -689,6 +696,67 @@ head(new, 5)
     ## 3 Agnostic $20-30k    60
     ## 4 Agnostic $30-40k    81
     ## 5 Agnostic $40-50k    76
+
+## Merging data
+
+Here, we will use National Health and Nutrition Examination Survey data.
+This is the [data
+source](https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?BeginYear=2017).
+See [here](https://wwwn.cdc.gov/Nchs/Nnyfs/Y_DEMO.htm) for more
+information about the demographic variables.
+
+These data are split into multiple files (based on topic). If we need
+variables from different files, we can merge the different data subsets.
+
+### Reading in the data
+
+The data is in SAS Transport File Format. Therefore, we will use the
+`haven` library to read it in.
+
+``` r
+library(haven)
+demographics <- read_xpt('data/DEMO_J.XPT')
+income <- read_xpt('data/INQ_J.XPT')
+drugs <- read_xpt('data/DUQ_J.XPT')
+```
+
+There are many variables in each file. To keep things manageable, let’s
+select some variables (we’ve seen how to do this before).
+
+``` r
+drug_habits <- select(drugs, SEQN, DUQ200:DUQ280)
+age<-select(demographics, SEQN, RIDAGEYR, RIDAGEMN)
+finance <- select(income, SEQN, INDFMMPC,INDFMMPI, INQ300, IND235)
+```
+
+### Merging the data
+
+``` r
+merged <- full_join(age, drug_habits, by='SEQN')
+merged <- full_join(merged, finance, by='SEQN')
+dim(merged)
+```
+
+    ## [1] 9254   25
+
+## Exercise: Global Health Data
+
+Use the following data for this exercise:
+
+``` r
+library(gapminder)
+gap_data <- gapminder
+```
+
+-   Filter the data for the Americas in 2007. Retain only the `lifeExp`
+    variable and deselect all other variables.
+-   Create the variable `gdp`, defined as the product of `pop` and
+    `gdpPercap`.
+-   Identify the observation (combination of county, continent, and
+    year) with lowest gdp per person.
+-   Identify all observations with above average life expectancy,
+    stratified for each continent.
+-   Compute the mean life expectancy for each year per continent.
 
 ## Example: Social Security Applications
 
@@ -777,7 +845,7 @@ count
     ## {
     ##     UseMethod("count")
     ## }
-    ## <bytecode: 0x55567abb48c8>
+    ## <bytecode: 0x5635bc718b58>
     ## <environment: namespace:dplyr>
 
 ### Using `separate()`
@@ -868,7 +936,7 @@ data_2012 <- filter(long_again, Year == 2012)
 ggplot(data_2012) + aes(x=date, y = Count, group=Source, color=Source) + geom_line()
 ```
 
-![](CleaningData_files/figure-gfm/unnamed-chunk-42-1.png)<!-- -->
+![](CleaningData_files/figure-gfm/unnamed-chunk-46-1.png)<!-- -->
 
 ``` r
 ggplot(long_again) + aes(x=Month, y = Count, group=Source, color=Source) + geom_line() + facet_grid(~Year)
@@ -876,7 +944,7 @@ ggplot(long_again) + aes(x=Month, y = Count, group=Source, color=Source) + geom_
 
     ## Warning: Removed 2 row(s) containing missing values (geom_path).
 
-![](CleaningData_files/figure-gfm/unnamed-chunk-43-1.png)<!-- -->
+![](CleaningData_files/figure-gfm/unnamed-chunk-47-1.png)<!-- -->
 
 ## Example: Coal data
 
