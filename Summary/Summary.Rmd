@@ -1,0 +1,243 @@
+---
+title: "Summary"
+date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
+output:
+  github_document:
+    html_preview: true
+    toc: true
+    toc_depth: 5
+  pdf_document:
+    highlight: zenburn
+    toc: true
+    toc_depth: 5
+knit: (function(inputFile, encoding) {
+  rmarkdown::render(inputFile, encoding = encoding, output_format = "all") })
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Resource: cheat Sheets
+
+This page features a large number of cheat sheets on different topics: [Cheat Sheets](https://www.rstudio.com/resources/cheatsheets/)
+
+## R Basics
+
+### The `if` statement: example
+
+```{r}
+my_number <-12
+
+if (my_number < 20){
+  x <- sprintf('%i is less than 20', my_number)
+  print(x)
+}
+```
+
+### The `for` loop: example
+
+```{r}
+my_vector <- runif(5)
+for (x in my_vector) {
+  y <- x * 3
+  print(y)
+}
+```
+
+One very common use of the `for` loop is to iterate a bit of code exactly n times.
+
+```{r}
+number_of_time_i_want_to_repeat_this <-10
+for (x in 1:10) {
+  print('This is being repeated!')
+} 
+```
+
+### The `while` loop: example
+
+```{r}
+i <- 1
+while (i < 6) {
+  print(i)
+  i <- i + 1
+} 
+```
+
+## Reading data
+
+### Reading data from excel using readxl
+
+```{r}
+library(tidyverse)
+library(readxl)
+# Reading the first sheet
+data <-read_excel("data/transit-data.xlsx")
+# Reading a specific range from a specific sheet
+data <-read_excel("data/transit-data.xlsx", sheet = 'info', range = 'B1:C7')
+```
+
+## Reading data from text files
+
+### Reading comma separated files
+
+```{r}
+data <- read_csv('data/pakistan_intellectual_capital.csv')
+```
+
+### Reading tab separated files
+
+```{r}
+data <- read_tsv('data/films.dat')
+```
+
+### Reading files seperated by specific charactor
+
+```{r}
+# The columns of this file are separated by a space.
+data <- read_delim('data/wages1833bis.csv', delim = ' ')
+```
+
+## Some interesting options when using `read_csv()`, `read_tsv()`, or `read_delim()`
+
+### No column names?
+
+If data has no column names, use `col_names = FALSE`
+
+```{r}
+read_csv("1,2,3\n4,5,6", col_names = FALSE)
+```
+
+You can also directly set the column names in this case.
+
+```{r}
+read_csv("1,2,3\n4,5,6", col_names = c("x", "y", "z"))
+```
+
+### Specifying missing data
+
+## Data cleaning and data operations
+
+Another option that commonly needs tweaking is `na`: this specifies the value (or values) that are used to represent missing values in your file:
+
+```{r}
+read_csv("a,b,c\n1,2,.", na = ".")
+```
+
+### Renaming variables to R acceptable format
+
+Human readable names are very handy for coding. **Indeed, in general, only dots and underscores are allowed in variable names.** There is a quick way to solve this.
+
+```{r}
+data <-read_excel("data/transit-data.xlsx", sheet='transport data', skip = 1)
+colnames(data)
+colnames(data) <- make.names(colnames(data))
+colnames(data)
+```
+
+### Creating new variables using `mutate()`
+
+```{r}
+data <- read_csv('data/pizzasize.csv')
+data <- mutate(data, surface = 3.14 * (Diameter/2)^2)
+```
+
+### Selecting columns using `select()`
+
+```{r}
+data <- read_excel("data/transit-data.xlsx", sheet = 'transport data', skip=1)
+colnames(data) <- make.names(colnames(data))
+subset <- select(data, date, sender.latitude)
+head(subset)
+```
+
+### Filtering using `filter()`
+
+```{r}
+subset <- filter(data, sender.latitude < 50)
+subset <- filter(subset, sender.latitude > 32)
+subset <- filter(subset, sender.longitude > 0)
+subset <- select(subset,  sender.latitude, sender.longitude)
+summary(subset)
+```
+
+### Splitting and uniting variable values using `separate()` and `unite()`
+
+```{r}
+patient_data <-read_tsv('data/inpatient.tsv')
+colnames(patient_data) <- make.names(colnames(patient_data))
+# Split a column into two columns, based on a character
+test1 <- separate(patient_data, Hospital.Referral.Region.Description, into=c('state', 'city'), sep='-')
+# Join two columns
+test2 <- unite(patient_data, 'combined', c(Provider.Id, Provider.Name), sep='_+_', remove = FALSE)
+
+```
+
+### String manipulation using the `stringr` library
+
+It does happen that you need to clean textual data. The `stringr` package has a bunch of functions to make your life easier (but not easy). I will run through some examples but do have a look at the [cheatsheet](https://evoldyn.gitlab.io/evomics-2018/ref-sheets/R_strings.pdf) as well.
+
+### Grouping and summarizing data using `group_by()` and `summarize()`
+
+The `group_by()` function takes a tibble and returns the same tibble, but with some extra information so that any subsequent function can act on each unique combination defined in the `group_by()`.
+
+```{r}
+car_data <- read_delim('data/cars.txt', delim = ' ')
+grouped <- group_by(car_data, type, make)
+summaries <- summarise(grouped, mean.length = mean(length))
+summaries
+```
+
+You can ask for more than one summary statistic.
+
+```{r}
+summaries <- summarise(grouped, mean.length = mean(length), max.length = max(length), std_rpm = sd(rpm))
+summaries
+```
+
+### Converting to wide format using `pivot_wider()`
+
+The result can be reshaped into a wide format. While this format is often not suited for plotting or analysis, it might make it easier to look at the data. Here is a quick visual:
+
+![](images/pivot_wider_new.png)
+
+```{r}
+car_data <- read_delim('data/cars.txt', delim = ' ')
+grouped <- group_by(car_data, type, make)
+summaries <- summarise(grouped, mean.length = mean(length))
+
+wide <- pivot_wider(summaries, id_cols = make, names_from  = type, values_from = mean.length)
+head(wide)
+```
+
+### Making data longer (melting data) using `pivot_longer()`
+
+Here is a quick graphic:
+
+![](images/pivot_longer_new.png)
+
+Let's look at some data:
+
+```{r}
+head(relig_income, 5)
+```
+
+This data is in a wider format. But we can easily melt it to a long format.
+
+```{r}
+new <- pivot_longer(relig_income, cols = !religion)
+head(new, 5)
+```
+
+You can specify names for the new columns while melting.
+
+```{r}
+new <- pivot_longer(relig_income, !religion, names_to = "income", values_to = "count")
+head(new, 5)
+```
+
+### Merging data using the `_join()` functions
+
+The different merge operations are illustrated in the image below. The various operations differ in the way they handle rows missing in the left or right tibble. In the image below, the merge is done by the variable `ID`.
+
+![](images/join.png)

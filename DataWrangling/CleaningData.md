@@ -1,6 +1,6 @@
 Cleaning Data
 ================
-Last Updated: 11, October, 2022 at 08:47
+Last Updated: 13, October, 2022 at 09:06
 
 -   <a href="#loading-the-tidyverse" id="toc-loading-the-tidyverse">Loading
     the tidyverse</a>
@@ -69,6 +69,12 @@ Last Updated: 11, October, 2022 at 08:47
     -   <a href="#separate-regions-and-countries"
         id="toc-separate-regions-and-countries">Separate regions and
         countries</a>
+-   <a href="#further-exercises" id="toc-further-exercises">Further
+    exercises</a>
+    -   <a href="#voice-onset-data" id="toc-voice-onset-data">Voice-onset
+        data</a>
+    -   <a href="#airline-safety-data" id="toc-airline-safety-data">Airline
+        safety data</a>
 
 ## Loading the tidyverse
 
@@ -739,6 +745,13 @@ dim(merged)
 
     ## [1] 9254   25
 
+Other related operations are illustrated in the image below. The various
+operations differ in the way they handle rows missing in the left or
+right tibble. In the image below, the merge is done by the variable
+`ID`.
+
+![](images/join.png)
+
 ## Exercise: Global Health Data
 
 Use the following data for this exercise:
@@ -845,7 +858,7 @@ count
     ## {
     ##     UseMethod("count")
     ## }
-    ## <bytecode: 0x5635bc718b58>
+    ## <bytecode: 0x55a02a558ae8>
     ## <environment: namespace:dplyr>
 
 ### Using `separate()`
@@ -948,8 +961,8 @@ ggplot(long_again) + aes(x=Month, y = Count, group=Source, color=Source) + geom_
 
 ## Example: Coal data
 
-Have a look at the data in an editor: the first 2 lines can be skipped.
-Missing values are given by `--`.
+Have a look at the data in an editor: + The first 2 lines can be
+skipped. + Missing values are given by `--`.
 
 ``` r
 coal_data <- read_csv('data/coal.csv', skip=2, na = "--")
@@ -1008,9 +1021,44 @@ long_format <- pivot_longer(coal_data, names_to = 'year', values_to = 'coal_use'
 
 ``` r
 regions <- c("North America", "Central & South America", "Antarctica", "Europe", "Eurasia", "Middle East", "Africa", "Asia & Oceania", "World")
+
 long_format <- mutate(long_format, is_region =long_format$country %in% regions)
+
 region_data <- filter(long_format, is_region)
 country_data <- filter(long_format, !is_region)
+
+# Remove the 'is_region' column from both tibbles
 region_data <- select(region_data, -is_region)
 country_data <- select(country_data, -is_region)
 ```
+
+## Further exercises
+
+I have provided two data sets for some quick exercises:
+
+### Voice-onset data
+
+These data were taken from
+[here](https://www.jvcasillas.com/untidydata/). This is a voice-onset
+time data set. Includes coronal stop data from English and Spanish
+monolinguals, as well as English/Spanish bilinguals. In these data, the
+`participant` variable denotes the participant’s number and whether they
+are monolingual (Spanish or English) or bilingual.
+
+**Try to reformat the data such that it features (1) a column with the
+participant’s number (0-9) and (2) a column indicating whether the
+participant is a Spanish speaker, English Speaker or Bilingual.**
+
+### Airline safety data
+
+I took these data from
+[here](https://github.com/fivethirtyeight/data/blob/master/airline-safety/airline-safety.csv).
+This is data on airline safety from 1985-1999 and 2000-2014. As you can
+see in the data, the column names can be considered as variables
+indicating the period and the specific statistic for the period (number
+of incidents and fatalities).
+
+**Try rearranging the data to contain a column `period` listing either
+1985-1999 or 2000-2014. The data should contain four further columns:
+`avail_seat_km_per_week`, `incidents`, `fatal_accidents` and
+`fatalities`.**

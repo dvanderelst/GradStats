@@ -174,7 +174,6 @@ bio_students <- filter(depression_data, selection==1)
 
 ## Reorganizing data
 
-
 ### Loading some data
 
 ```{r}
@@ -239,7 +238,6 @@ summaries2 <- complete(summaries2)
 dim(summaries2)
 ```
 
-
 ### Converting to wide format
 
 The result can be reshaped into a wide format. While this format is often not suited for plotting or analysis, it might make it easier to look at the data. Here is a quick visual:
@@ -250,7 +248,6 @@ The result can be reshaped into a wide format. While this format is often not su
 wide <- pivot_wider(summaries, id_cols = make, names_from  = type, values_from = mean.length)
 head(wide)
 ```
-
 
 ### Making data longer (melting data)
 
@@ -280,7 +277,7 @@ head(new, 5)
 
 ## Merging data
 
-Here, we will use National Health and Nutrition Examination Survey data. This is the [data source](https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?BeginYear=2017). See [here](https://wwwn.cdc.gov/Nchs/Nnyfs/Y_DEMO.htm) for more information about the demographic variables. 
+Here, we will use National Health and Nutrition Examination Survey data. This is the [data source](https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?BeginYear=2017). See [here](https://wwwn.cdc.gov/Nchs/Nnyfs/Y_DEMO.htm) for more information about the demographic variables.
 
 These data are split into multiple files (based on topic). If we need variables from different files, we can merge the different data subsets.
 
@@ -311,6 +308,9 @@ merged <- full_join(merged, finance, by='SEQN')
 dim(merged)
 ```
 
+Other related operations are illustrated in the image below. The various operations differ in the way they handle rows missing in the left or right tibble. In the image below, the merge is done by the variable `ID`.
+
+![](images/join.png)
 
 ## Exercise: Global Health Data
 
@@ -321,12 +321,11 @@ library(gapminder)
 gap_data <- gapminder
 ```
 
-+ Filter the data for the Americas in 2007. Retain only the `lifeExp` variable and deselect all other variables.
-+ Create the variable `gdp`, defined as the product of `pop`  and `gdpPercap`.
-+ Identify the observation (combination of county, continent, and year) with lowest gdp per person.
-+ Identify all observations with above average life expectancy, stratified for each continent.
-+ Compute the mean life expectancy for each year per continent.
-
+-   Filter the data for the Americas in 2007. Retain only the `lifeExp` variable and deselect all other variables.
+-   Create the variable `gdp`, defined as the product of `pop` and `gdpPercap`.
+-   Identify the observation (combination of county, continent, and year) with lowest gdp per person.
+-   Identify all observations with above average life expectancy, stratified for each continent.
+-   Compute the mean life expectancy for each year per continent.
 
 ## Example: Social Security Applications
 
@@ -405,12 +404,10 @@ long_again$date<-dmy(long_again$date)
 
 Let's create some plots.
 
-
 ```{r}
 data_2012 <- filter(long_again, Year == 2012)
 ggplot(data_2012) + aes(x=date, y = Count, group=Source, color=Source) + geom_line()
 ```
-
 
 ```{r}
 ggplot(long_again) + aes(x=Month, y = Count, group=Source, color=Source) + geom_line() + facet_grid(~Year)
@@ -418,7 +415,7 @@ ggplot(long_again) + aes(x=Month, y = Count, group=Source, color=Source) + geom_
 
 ## Example: Coal data
 
-Have a look at the data in an editor: the first 2 lines can be skipped. Missing values are given by `--`.
+Have a look at the data in an editor: + The first 2 lines can be skipped. + Missing values are given by `--`.
 
 ```{r}
 coal_data <- read_csv('data/coal.csv', skip=2, na = "--")
@@ -447,10 +444,34 @@ long_format <- pivot_longer(coal_data, names_to = 'year', values_to = 'coal_use'
 
 ```{r}
 regions <- c("North America", "Central & South America", "Antarctica", "Europe", "Eurasia", "Middle East", "Africa", "Asia & Oceania", "World")
+
 long_format <- mutate(long_format, is_region =long_format$country %in% regions)
+
 region_data <- filter(long_format, is_region)
 country_data <- filter(long_format, !is_region)
+
+# Remove the 'is_region' column from both tibbles
 region_data <- select(region_data, -is_region)
 country_data <- select(country_data, -is_region)
 ```
+
+## Further exercises
+
+I have provided two data sets for some quick exercises:
+
+### Voice-onset data
+
+These data were taken from [here](https://www.jvcasillas.com/untidydata/). This is a voice-onset time data set. Includes coronal stop data from English and Spanish monolinguals, as well as English/Spanish bilinguals. In these data, the `participant` variable denotes the participant's number and whether they are monolingual (Spanish or English) or bilingual.
+
+**Try to reformat the data such that it features (1) a column with the participant's number (0-9) and (2) a column indicating whether the participant is a Spanish speaker, English Speaker or Bilingual.**
+
+### Airline safety data
+
+I took these data from [here](https://github.com/fivethirtyeight/data/blob/master/airline-safety/airline-safety.csv). This is data on airline safety from 1985-1999 and 2000-2014. As you can see in the data, the column names can be considered as variables indicating the period and the specific statistic for the period (number of incidents and fatalities).
+
+**Try rearranging the data to contain a column `period` listing either 1985-1999 or 2000-2014. The data should contain four further columns: `avail_seat_km_per_week`, `incidents`, `fatal_accidents` and `fatalities`.**
+
+
+
+
 

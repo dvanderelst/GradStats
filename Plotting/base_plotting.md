@@ -1,6 +1,6 @@
 Base Plotting
 ================
-Last Updated: 11, October, 2022 at 08:51
+Last Updated: 13, October, 2022 at 09:35
 
 -   <a href="#notes" id="toc-notes">Notes</a>
 -   <a href="#read-in-some-data" id="toc-read-in-some-data">Read in some

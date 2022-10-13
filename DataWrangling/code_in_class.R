@@ -23,3 +23,22 @@ filter_data <- filter(Titanic, Sex == 'female' & PClass =='1st')
 depression_data <- read_tsv('data/raw_depression.csv')
 
 suspected <- filter(depression_data, age > 120)
+
+
+library(tidyverse)
+library(haven)
+demographics <- read_xpt('data/DEMO_J.XPT')
+income <- read_xpt('data/INQ_J.XPT')
+drugs <- read_xpt('data/DUQ_J.XPT')
+
+drug_habits <- select(drugs, SEQN, DUQ200:DUQ280)
+age<-select(demographics, SEQN, RIDAGEYR, RIDAGEMN)
+finance <- select(income, SEQN, INDFMMPC,INDFMMPI, INQ300, IND235)
+
+
+merged <- full_join(age, drug_habits, by='SEQN')
+merged <- full_join(merged, finance, by='SEQN')
+dim(merged)
+
+merged1 <- full_join(age, drug_habits, by='SEQN')
+merged2 <- right_join(age, drug_habits, by='SEQN')
