@@ -1,6 +1,6 @@
 Base Plotting
 ================
-Last Updated: 13, October, 2022 at 09:35
+Last Updated: 13, October, 2022 at 09:49
 
 -   <a href="#notes" id="toc-notes">Notes</a>
 -   <a href="#read-in-some-data" id="toc-read-in-some-data">Read in some
@@ -34,6 +34,7 @@ Last Updated: 13, October, 2022 at 09:35
         R</a>
     -   <a href="#more-bling" id="toc-more-bling">More bling</a>
 -   <a href="#adding-legends" id="toc-adding-legends">Adding legends</a>
+-   <a href="#exercises" id="toc-exercises">Exercises</a>
 
 ## Notes
 
@@ -43,32 +44,53 @@ programmatically.
 
 ## Read in some data
 
+This is the data
+[source](http://jse.amstat.org/v11n2/datasets.heinz.html).
+
 ``` r
-body_data <- read.csv('data/body.csv')
+library(tidyverse)
+```
+
+    ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
+    ## ✔ ggplot2 3.3.6     ✔ purrr   0.3.4
+    ## ✔ tibble  3.1.8     ✔ dplyr   1.0.9
+    ## ✔ tidyr   1.2.0     ✔ stringr 1.4.0
+    ## ✔ readr   2.1.2     ✔ forcats 0.5.2
+    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ✖ dplyr::filter() masks stats::filter()
+    ## ✖ dplyr::lag()    masks stats::lag()
+
+``` r
+body_data <- read_csv('data/body.csv')
+```
+
+    ## Rows: 507 Columns: 25
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## dbl (25): Biacromial, Biiliac, Bitrochanteric, ChestDepth, ChestDia, ElbowDi...
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+``` r
 head(body_data)
 ```
 
-    ##   Biacromial Biiliac Bitrochanteric ChestDepth ChestDia ElbowDia WristDia
-    ## 1       42.9    26.0           31.5       17.7     28.0     13.1     10.4
-    ## 2       43.7    28.5           33.5       16.9     30.8     14.0     11.8
-    ## 3       40.1    28.2           33.3       20.9     31.7     13.9     10.9
-    ## 4       44.3    29.9           34.0       18.4     28.2     13.9     11.2
-    ## 5       42.5    29.9           34.0       21.5     29.4     15.2     11.6
-    ## 6       43.3    27.0           31.5       19.6     31.3     14.0     11.5
-    ##   KneeDia AnkleDia Shoulder Chest Waist Navel  Hip Thigh Bicep Forearm Knee
-    ## 1    18.8     14.1    106.2  89.5  71.5  74.5 93.5  51.5  32.5    26.0 34.5
-    ## 2    20.6     15.1    110.5  97.0  79.0  86.5 94.8  51.5  34.4    28.0 36.5
-    ## 3    19.7     14.1    115.1  97.5  83.2  82.9 95.0  57.3  33.4    28.8 37.0
-    ## 4    20.9     15.0    104.5  97.0  77.8  78.8 94.0  53.0  31.0    26.2 37.0
-    ## 5    20.7     14.9    107.5  97.5  80.0  82.5 98.5  55.4  32.0    28.4 37.7
-    ## 6    18.8     13.9    119.8  99.9  82.5  80.1 95.3  57.5  33.0    28.0 36.6
-    ##   Calf Ankle Wrist Age Weight Height Gender
-    ## 1 36.5  23.5  16.5  21   65.6  174.0      1
-    ## 2 37.5  24.5  17.0  23   71.8  175.3      1
-    ## 3 37.3  21.9  16.9  28   80.7  193.5      1
-    ## 4 34.8  23.0  16.6  23   72.6  186.5      1
-    ## 5 38.6  24.4  18.0  22   78.8  187.2      1
-    ## 6 36.1  23.5  16.9  21   74.8  181.5      1
+    ## # A tibble: 6 × 25
+    ##   Biacromial Biiliac Bitrochan…¹ Chest…² Chest…³ Elbow…⁴ Wrist…⁵ KneeDia Ankle…⁶
+    ##        <dbl>   <dbl>       <dbl>   <dbl>   <dbl>   <dbl>   <dbl>   <dbl>   <dbl>
+    ## 1       42.9    26          31.5    17.7    28      13.1    10.4    18.8    14.1
+    ## 2       43.7    28.5        33.5    16.9    30.8    14      11.8    20.6    15.1
+    ## 3       40.1    28.2        33.3    20.9    31.7    13.9    10.9    19.7    14.1
+    ## 4       44.3    29.9        34      18.4    28.2    13.9    11.2    20.9    15  
+    ## 5       42.5    29.9        34      21.5    29.4    15.2    11.6    20.7    14.9
+    ## 6       43.3    27          31.5    19.6    31.3    14      11.5    18.8    13.9
+    ## # … with 16 more variables: Shoulder <dbl>, Chest <dbl>, Waist <dbl>,
+    ## #   Navel <dbl>, Hip <dbl>, Thigh <dbl>, Bicep <dbl>, Forearm <dbl>,
+    ## #   Knee <dbl>, Calf <dbl>, Ankle <dbl>, Wrist <dbl>, Age <dbl>, Weight <dbl>,
+    ## #   Height <dbl>, Gender <dbl>, and abbreviated variable names ¹​Bitrochanteric,
+    ## #   ²​ChestDepth, ³​ChestDia, ⁴​ElbowDia, ⁵​WristDia, ⁶​AnkleDia
+    ## # ℹ Use `colnames()` to see all variable names
 
 ``` r
 try(dev.off()) # Make sure all graphic parameters are reset
@@ -355,3 +377,30 @@ legend('bottomright', c('Women', 'Men'), col = c(my_red, my_blue), pch=15)
 ```
 
 ![](base_plotting_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+
+# Exercises
+
+Use these data:
+
+``` r
+body_data <- read_csv('data/body.csv')
+```
+
+    ## Rows: 507 Columns: 25
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## dbl (25): Biacromial, Biiliac, Bitrochanteric, ChestDepth, ChestDia, ElbowDi...
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+-   Create a histogram of people’s height, split out by gender. Overlay
+    the histogram for women and men (use an alpha setting to make both
+    of them visible). Make sure the histogram shows all data and is not
+    cut off.
+
+-   Plot a bar chart of people’s height. Use 10-year age bins on the
+    x-axis.
+
+-   Create a cumulative histogram of people’s height (or any other
+    variable).

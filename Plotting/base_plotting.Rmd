@@ -13,8 +13,11 @@ The base plotting system in R is somewhat dated (we'll run into some limits belo
 
 ## Read in some data
 
+This is the data [source](http://jse.amstat.org/v11n2/datasets.heinz.html).
+
 ```{r}
-body_data <- read.csv('data/body.csv')
+library(tidyverse)
+body_data <- read_csv('data/body.csv')
 head(body_data)
 try(dev.off()) # Make sure all graphic parameters are reset
 ```
@@ -53,7 +56,6 @@ x <- 1:10
 y <- runif(10) * x
 plot(x, y, type= 'b', pch=15, col ='#47B04E')
 ```
-
 
 ### Handy Dandy: adding an alpha channel to a color
 
@@ -249,3 +251,16 @@ points(males$Height, males$Weight, pch=15, main='Some graph', col=my_red)
 # Add the legend - notice: we have to set the colors and markers for the legend manually
 legend('bottomright', c('Women', 'Men'), col = c(my_red, my_blue), pch=15)
 ```
+
+# Exercises
+
+Use these data:
+
+```{r}
+body_data <- read_csv('data/body.csv')
+```
++ Create a histogram of people's height, split out by gender. Overlay the histogram for women and men (use an alpha setting to make both of them visible). Make sure the histogram shows all data and is not cut off.
+
++ Plot a bar chart of people's height. Use 10-year age bins on the x-axis.
+
++ Create a cumulative histogram of people's height (or any other variable).
