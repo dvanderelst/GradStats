@@ -1,6 +1,6 @@
 Base Plotting
 ================
-Last Updated: 13, October, 2022 at 09:49
+Last Updated: 18, October, 2022 at 09:42
 
 -   <a href="#notes" id="toc-notes">Notes</a>
 -   <a href="#read-in-some-data" id="toc-read-in-some-data">Read in some
@@ -35,6 +35,7 @@ Last Updated: 13, October, 2022 at 09:49
     -   <a href="#more-bling" id="toc-more-bling">More bling</a>
 -   <a href="#adding-legends" id="toc-adding-legends">Adding legends</a>
 -   <a href="#exercises" id="toc-exercises">Exercises</a>
+    -   <a href="#more-exercises" id="toc-more-exercises">More exercises</a>
 
 ## Notes
 
@@ -404,3 +405,15 @@ body_data <- read_csv('data/body.csv')
 
 -   Create a cumulative histogram of people’s height (or any other
     variable).
+
+## More exercises
+
+The internet is full of exercises on plotting in R (using the base
+plotting system). Here are two selected resources:
+
+<https://www.bioinformatics.babraham.ac.uk/training/Core_R_Plotting/Core%20R%20Plotting%20Exercises.pdf>
+
+This one uses the cars data we have already used in the course (I’ved
+added it to the data folder):
+
+<https://www.r-exercises.com/2016/09/23/advanced-base-graphics-exercises/>

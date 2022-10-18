@@ -259,8 +259,19 @@ Use these data:
 ```{r}
 body_data <- read_csv('data/body.csv')
 ```
-+ Create a histogram of people's height, split out by gender. Overlay the histogram for women and men (use an alpha setting to make both of them visible). Make sure the histogram shows all data and is not cut off.
 
-+ Plot a bar chart of people's height. Use 10-year age bins on the x-axis.
+-   Create a histogram of people's height, split out by gender. Overlay the histogram for women and men (use an alpha setting to make both of them visible). Make sure the histogram shows all data and is not cut off.
 
-+ Create a cumulative histogram of people's height (or any other variable).
+-   Plot a bar chart of people's height. Use 10-year age bins on the x-axis.
+
+-   Create a cumulative histogram of people's height (or any other variable).
+
+## More exercises
+
+The internet is full of exercises on plotting in R (using the base plotting system). Here are two selected resources:
+
+<https://www.bioinformatics.babraham.ac.uk/training/Core_R_Plotting/Core%20R%20Plotting%20Exercises.pdf>
+
+This one uses the cars data we have already used in the course (I'ved added it to the data folder):
+
+<https://www.r-exercises.com/2016/09/23/advanced-base-graphics-exercises/>
