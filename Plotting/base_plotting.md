@@ -1,6 +1,6 @@
 Base Plotting
 ================
-Last Updated: 18, October, 2022 at 09:42
+Last Updated: 18, October, 2022 at 11:21
 
 -   <a href="#notes" id="toc-notes">Notes</a>
 -   <a href="#read-in-some-data" id="toc-read-in-some-data">Read in some
@@ -235,6 +235,10 @@ try(dev.off())  # Make sure all graphic parameters are reset
     ## null device 
     ##           1
 
+-   mfrow and mfcol plot orders:
+
+<https://r-charts.com/base-r/combining-plots/>
+
 ### Changing text and font
 
 #### Adding labels
@@ -374,7 +378,7 @@ plot(females$Height, females$Weight, pch=15, main='Some graph', col=my_blue, xli
 points(males$Height, males$Weight, pch=15, main='Some graph', col=my_red)
 
 # Add the legend - notice: we have to set the colors and markers for the legend manually
-legend('bottomright', c('Women', 'Men'), col = c(my_red, my_blue), pch=15)
+legend('bottomright', c('Men', 'Women'), col = c(my_red, my_blue), pch=15)
 ```
 
 ![](base_plotting_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->

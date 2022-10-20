@@ -1,0 +1,37 @@
+---
+title: "Correlation"
+date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
+output:
+  github_document:
+    html_preview: true
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Correlation
+
+```{r}
+library(tidyverse)
+data <- read_csv('data/body.csv')
+```
+```{r}
+cor.test(data$ChestDepth, data$ElbowDia)
+plot(data$ChestDepth, data$ElbowDia)
+```
+
+```{r}
+data <- read_csv('data/vik_table_9_2.csv')
+cor.test(data$X1, data$Y)
+plot(data$X1, data$Y)
+```
+
+```{r}
+x <-runif(100)
+y <-runif(100)
+cor.test(x, y)
+plot(x, y)
+```
+
