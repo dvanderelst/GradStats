@@ -24,8 +24,26 @@ plot(data$ChestDepth, data$ElbowDia)
 
 ```{r}
 data <- read_csv('data/vik_table_9_2.csv')
-cor.test(data$X1, data$Y)
+result <- cor.test(data$X1, data$Y)
 plot(data$X1, data$Y)
+
+result
+
+# Note that the confidence interval is not symmetric around the
+# estimated correlation value
+
+estimate <- result$estimate
+lower <- result$conf.int[1]
+upper <- result$conf.int[2]
+
+values <- c(lower, estimate, upper)
+delta1 <- estimate - lower
+delta2 <- estimate - upper
+deltas <- c(delta1, delta2)
+
+values
+deltas
+
 ```
 
 ```{r}
@@ -33,5 +51,27 @@ x <-runif(100)
 y <-runif(100)
 cor.test(x, y)
 plot(x, y)
+```
+```{r}
+library(faux)
+data <- rnorm_multi(n= 10, vars = 2, r=0.80)
+result <- cor.test(data$X1, data$X2)
+
+result
+
+# Note that the confidence interval is not symmetric around the
+# estimated correlation value
+
+estimate <- result$estimate
+lower <- result$conf.int[1]
+upper <- result$conf.int[2]
+
+values <- c(lower, estimate, upper)
+delta1 <- estimate - lower
+delta2 <- estimate - upper
+deltas <- c(delta1, delta2)
+
+values
+deltas
 ```
 

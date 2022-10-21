@@ -1,6 +1,6 @@
 Correlation
 ================
-Last Updated: 20, October, 2022 at 08:53
+Last Updated: 21, October, 2022 at 08:58
 
 -   <a href="#correlation" id="toc-correlation">Correlation</a>
 
@@ -66,7 +66,14 @@ data <- read_csv('data/vik_table_9_2.csv')
     ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
 ``` r
-cor.test(data$X1, data$Y)
+result <- cor.test(data$X1, data$Y)
+plot(data$X1, data$Y)
+```
+
+![](Correlation_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+
+``` r
+result
 ```
 
     ## 
@@ -82,10 +89,30 @@ cor.test(data$X1, data$Y)
     ## -0.8971007
 
 ``` r
-plot(data$X1, data$Y)
+# Note that the confidence interval is not symmetric around the
+# estimated correlation value
+
+estimate <- result$estimate
+lower <- result$conf.int[1]
+upper <- result$conf.int[2]
+
+values <- c(lower, estimate, upper)
+delta1 <- estimate - lower
+delta2 <- estimate - upper
+deltas <- c(delta1, delta2)
+
+values
 ```
 
-![](Correlation_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+    ##                   cor            
+    ## -0.9710564 -0.8971007 -0.6661805
+
+``` r
+deltas
+```
+
+    ##         cor         cor 
+    ##  0.07395562 -0.23092019
 
 ``` r
 x <-runif(100)
@@ -97,16 +124,79 @@ cor.test(x, y)
     ##  Pearson's product-moment correlation
     ## 
     ## data:  x and y
-    ## t = -0.15971, df = 98, p-value = 0.8734
+    ## t = -0.092134, df = 98, p-value = 0.9268
     ## alternative hypothesis: true correlation is not equal to 0
     ## 95 percent confidence interval:
-    ##  -0.2118781  0.1808598
+    ##  -0.2053493  0.1874542
     ## sample estimates:
-    ##         cor 
-    ## -0.01613134
+    ##          cor 
+    ## -0.009306574
 
 ``` r
 plot(x, y)
 ```
 
 ![](Correlation_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+
+``` r
+library(faux)
+```
+
+    ## 
+    ## ************
+    ## Welcome to faux. For support and examples visit:
+    ## https://debruine.github.io/faux/
+    ## - Get and set global package options with: faux_options()
+    ## ************
+
+    ## 
+    ## Attaching package: 'faux'
+
+    ## The following object is masked from 'package:purrr':
+    ## 
+    ##     %||%
+
+``` r
+data <- rnorm_multi(n= 10, vars = 2, r=0.80)
+result <- cor.test(data$X1, data$X2)
+
+result
+```
+
+    ## 
+    ##  Pearson's product-moment correlation
+    ## 
+    ## data:  data$X1 and data$X2
+    ## t = 4.544, df = 8, p-value = 0.001889
+    ## alternative hypothesis: true correlation is not equal to 0
+    ## 95 percent confidence interval:
+    ##  0.4712267 0.9635468
+    ## sample estimates:
+    ##       cor 
+    ## 0.8489672
+
+``` r
+# Note that the confidence interval is not symmetric around the
+# estimated correlation value
+
+estimate <- result$estimate
+lower <- result$conf.int[1]
+upper <- result$conf.int[2]
+
+values <- c(lower, estimate, upper)
+delta1 <- estimate - lower
+delta2 <- estimate - upper
+deltas <- c(delta1, delta2)
+
+values
+```
+
+    ##                 cor           
+    ## 0.4712267 0.8489672 0.9635468
+
+``` r
+deltas
+```
+
+    ##        cor        cor 
+    ##  0.3777405 -0.1145796
