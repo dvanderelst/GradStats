@@ -93,3 +93,15 @@ plot(vik_data$X1, vik_data$Y)
 abline(result, col='red')
 ```
 
+# Third example
+
+Notice how the t-test for the parameter for `x` gives the same results as the t-test for the correlation test.
+
+```{r}
+x <- rnorm(100)
+y <- rnorm(100)
+result <- lm(y ~ x)
+summary(result)
+cor.test(x,y)
+```
+

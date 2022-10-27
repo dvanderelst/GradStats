@@ -1,9 +1,9 @@
 Simple Regression
 ================
-Last Updated: 27, October, 2022 at 09:31
+Last Updated: 27, October, 2022 at 09:35
 
--   <a href="#function-we-will-use" id="toc-function-we-will-use">Function
-    we will use</a>
+-   <a href="#functions-we-will-use"
+    id="toc-functions-we-will-use">Functions we will use</a>
 -   <a href="#read-data" id="toc-read-data">Read Data</a>
 -   <a href="#run-simple-regression-model"
     id="toc-run-simple-regression-model">Run simple regression model</a>
@@ -13,8 +13,9 @@ Last Updated: 27, October, 2022 at 09:31
     id="toc-get-the-predicted-values">Get the predicted values</a>
 -   <a href="#easier-regression-line" id="toc-easier-regression-line">Easier
     regression line</a>
+-   <a href="#third-example" id="toc-third-example">Third example</a>
 
-# Function we will use
+# Functions we will use
 
 -   `lm`, to fit a linear model
 -   `summary`, to get the results from a linear model
@@ -201,3 +202,48 @@ abline(result, col='red')
 ```
 
 ![](SimpleRegression_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+
+# Third example
+
+Notice how the t-test for the parameter for `x` gives the same results
+as the t-test for the correlation test.
+
+``` r
+x <- rnorm(100)
+y <- rnorm(100)
+result <- lm(y ~ x)
+summary(result)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = y ~ x)
+    ## 
+    ## Residuals:
+    ##      Min       1Q   Median       3Q      Max 
+    ## -2.47238 -0.71800 -0.07184  0.65160  2.89162 
+    ## 
+    ## Coefficients:
+    ##             Estimate Std. Error t value Pr(>|t|)
+    ## (Intercept)  0.08979    0.09972   0.900    0.370
+    ## x            0.09225    0.10271   0.898    0.371
+    ## 
+    ## Residual standard error: 0.9972 on 98 degrees of freedom
+    ## Multiple R-squared:  0.008165,   Adjusted R-squared:  -0.001955 
+    ## F-statistic: 0.8068 on 1 and 98 DF,  p-value: 0.3713
+
+``` r
+cor.test(x,y)
+```
+
+    ## 
+    ##  Pearson's product-moment correlation
+    ## 
+    ## data:  x and y
+    ## t = 0.89821, df = 98, p-value = 0.3713
+    ## alternative hypothesis: true correlation is not equal to 0
+    ## 95 percent confidence interval:
+    ##  -0.1079726  0.2817788
+    ## sample estimates:
+    ##        cor 
+    ## 0.09036189
