@@ -1,0 +1,95 @@
+---
+title: "Simple Regression"
+date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
+output:
+  github_document:
+    html_preview: true
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Functions we will use
+
++ `lm`, to fit a linear model
++ `summary`, to get the results from a linear model
++ `anova`, to get more results from a linear model
++ `predict`, to predict new values
++ `abline`, to plot a regression line
+
+
+# Read Data
+
+```{r}
+library(tidyverse)
+data <- read_csv('data/body.csv')
+```
+
+# Run simple regression model
+
+```{r}
+plot(data$Biiliac,data$Height)
+```
+
+
+```{r}
+# Note: this syntax makes the predict function work
+result <- lm(Height ~ Biiliac, data = data)
+# This does not work with the predict function: result <- lm(data$Height ~ data$Biiliac)
+summary(result)
+```
+
+If we wish to know how the F-value was calculate we can ask for the anova table.
+
+```{r}
+anova(result)
+```
+# Compare with correlation
+
+```{r}
+correlation <- cor.test(data$Height, data$Biiliac)
+correlation
+correlation$estimate^2
+```
+
+# Get the predicted values
+
+```{r}
+fitted <- fitted.values(result)
+plot(data$Biiliac,data$Height)
+points(data$Biiliac, fitted, col='red')
+```
+
+More general prediction:
+
+```{r}
+
+new_indepent_values <- c(10,15, 20, 25, 30, 35, 40)
+new_data <- data.frame(Biiliac = new_indepent_values)
+
+predicted <- predict(result, newdata=new_data)
+
+plot(new_indepent_values,predicted, col='green', cex=2, pch=16)
+points(data$Biiliac, fitted, col='red')
+points(data$Biiliac, data$Height, col='black')
+
+```
+# Second example
+
+```{r}
+vik_data <- read_csv('data/vik_table_9_2.csv')
+```
+```{r}
+plot(vik_data$X1, vik_data$Y)
+result <- lm(Y ~ X1, data=vik_data)
+summary(result)
+```
+# Easier regression line
+
+```{r}
+plot(vik_data$X1, vik_data$Y)
+abline(result, col='red')
+```
+
