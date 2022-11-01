@@ -15,6 +15,8 @@ Dieter
     id="toc-intro-to-the-multiple-linear-regression">Intro to the multiple
     linear regression</a>
     -   <a href="#a-first-example" id="toc-a-first-example">A first example</a>
+    -   <a href="#confidence-intervals" id="toc-confidence-intervals">Confidence
+        intervals</a>
     -   <a href="#manual-calculation-of-the-f-value-1"
         id="toc-manual-calculation-of-the-f-value-1">Manual calculation of the F
         value</a>
@@ -34,7 +36,7 @@ Dieter
         id="toc-what-if-the-models-only-differ-by-one-variable">What if the
         models only differ by one variable</a>
     -   <a href="#step" id="toc-step">Step</a>
-    -   <a href="#using-the-body-data" id="toc-using-the-body-data">USing the
+    -   <a href="#using-the-body-data" id="toc-using-the-body-data">Using the
         body data</a>
 
 ## Read in some data
@@ -47,7 +49,7 @@ library(tidyverse)
     ## ✔ ggplot2 3.3.6     ✔ purrr   0.3.4
     ## ✔ tibble  3.1.8     ✔ dplyr   1.0.9
     ## ✔ tidyr   1.2.0     ✔ stringr 1.4.0
-    ## ✔ readr   2.1.2     ✔ forcats 0.5.1
+    ## ✔ readr   2.1.2     ✔ forcats 0.5.2
     ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
@@ -60,18 +62,6 @@ body_data <-read_csv('data/body.csv')
     ## ── Column specification ────────────────────────────────────────────────────────
     ## Delimiter: ","
     ## dbl (25): Biacromial, Biiliac, Bitrochanteric, ChestDepth, ChestDia, ElbowDi...
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-
-``` r
-vik_data <-read_tsv('data/vik_table_9_2.csv')
-```
-
-    ## Rows: 12 Columns: 4
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: "\t"
-    ## dbl (4): Person, Y, X1, X2
     ## 
     ## ℹ Use `spec()` to retrieve the full column specification for this data.
     ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
@@ -154,6 +144,18 @@ Regression, ANOVA, and the General Linear Model, 2013.*). This allows
 double checking the calculating provided in this book.
 
 ``` r
+vik_data <-read_csv('data/vik_table_9_2.csv')
+```
+
+    ## Rows: 12 Columns: 4
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## dbl (4): Person, Y, X1, X2
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+``` r
 head(vik_data)
 ```
 
@@ -192,6 +194,17 @@ summary(model)
     ## Multiple R-squared:  0.8182, Adjusted R-squared:  0.7777 
     ## F-statistic: 20.25 on 2 and 9 DF,  p-value: 0.0004663
 
+### Confidence intervals
+
+``` r
+confint(model)
+```
+
+    ##                  2.5 %     97.5 %
+    ## (Intercept)  5.7663394 12.6364198
+    ## vik_data$X1 -1.0435258 -0.3734124
+    ## vik_data$X2 -0.2153328  0.4571416
+
 ### Manual calculation of the F value
 
 ``` r
@@ -225,21 +238,21 @@ manual_f
 ### Visuzalizing the fitted model
 
 ``` r
-#library(plotly)
-#library(pracma)
-#coeffs <- model$coefficient
-#xi <- seq(min(vik_data$X1), max(vik_data$X1), length.out=100)
-#yi <- seq(min(vik_data$X2), max(vik_data$X2), length.out=100)
-#grid <- meshgrid(xi,yi)
-#xi <- grid[[1]]
-#yi <- grid[[2]]
-#
-#
-#zi <- coeffs[1] + coeffs[2] * xi + coeffs[3] * yi 
-#
-#my_plot <- plot_ly(vik_data, x = ~X1,  y = ~X2, z = ~Y, type = "scatter3d", mode = "markers")
-#my_plot <- add_trace(p = my_plot, z = zi, x = xi, y = yi, type = "surface")
-#my_plot
+# library(plotly)
+# library(pracma)
+# coeffs <- model$coefficient
+# xi <- seq(min(vik_data$X1), max(vik_data$X1), length.out=100)
+# yi <- seq(min(vik_data$X2), max(vik_data$X2), length.out=100)
+# grid <- meshgrid(xi,yi)
+# xi <- grid[[1]]
+# yi <- grid[[2]]
+# 
+# 
+# zi <- coeffs[1] + coeffs[2] * xi + coeffs[3] * yi
+# 
+# my_plot <- plot_ly(vik_data, x = ~X1,  y = ~X2, z = ~Y, type = "scatter3d", mode = "markers")
+# my_plot <- add_trace(p = my_plot, z = zi, x = xi, y = yi, type = "surface")
+# my_plot
 ```
 
 ### Manually running the omnibus test
@@ -283,8 +296,10 @@ summary(model_full)
 
 Let’s now explicitly compare the base and the full model. This results
 in the same F-value! So, we could run the omnibus test by comparing the
-base model, $y_i = \bar{x}_i$, with the full model. But this is done
-implicitly by R when fitting the full model.
+base model,
+![y_i = \bar{x}\_i](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;y_i%20%3D%20%5Cbar%7Bx%7D_i "y_i = \bar{x}_i"),
+with the full model. But this is done implicitly by R when fitting the
+full model.
 
 ``` r
 anova(model_base, model_full)
@@ -429,8 +444,11 @@ anova(simple_model, complex_model)
 ### What if the models only differ by one variable
 
 In this case, the p-value associated with the newly introduced variable
-is equal to the p value of the anova comparison. In fact the $F$ value
-is equal to $t^2$ value.
+is equal to the p value of the anova comparison. In fact the
+![F](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;F "F")
+value is equal to
+![t^2](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;t%5E2 "t^2")
+value.
 
 ``` r
 simple_model <- lm(state_data$Murder ~ state_data$Illiteracy)
@@ -535,7 +553,7 @@ stepAIC(full, direction="backward", trace = TRUE)
     ## (Intercept)   Population   Illiteracy     Life.Exp        Frost         Area  
     ##   1.202e+02    1.780e-04    1.173e+00   -1.608e+00   -1.373e-02    6.804e-06
 
-### USing the body data
+### Using the body data
 
 ``` r
 library(MASS)

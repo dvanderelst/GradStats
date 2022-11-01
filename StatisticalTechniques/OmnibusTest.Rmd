@@ -1,0 +1,37 @@
+---
+title: "Omnibus Test"
+date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
+output:
+  github_document:
+    html_preview: true
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Data
+
+```{r}
+library(tidyverse)
+body_data <- read_csv('data/body.csv')
+colnames(body_data)
+```
+
+## Default method
+
+```{r}
+result <- lm(Weight ~ Height + Age, data = body_data)
+summary(result)
+```
+## Run the simple model explicitly 
+
+```{r}
+mean_dependent <- mean(body_data$Weight)
+body_data <- mutate(body_data, dummy = mean_dependent)
+base_model <- lm(Weight ~ dummy, data = body_data)
+full_model <- lm(Weight ~ Height + Age, data = body_data)
+anova(base_model, full_model)
+```
+

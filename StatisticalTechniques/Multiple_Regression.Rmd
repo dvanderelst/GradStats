@@ -17,7 +17,6 @@ output:
 ```{r}
 library(tidyverse)
 body_data <-read_csv('data/body.csv')
-vik_data <-read_tsv('data/vik_table_9_2.csv')
 ```
 ## Revisit the simple linear model
 
@@ -54,6 +53,7 @@ manual_f
 Here I use data provided by Vik 2013 (*Table 9.2 in Vik, Peter. Regression, ANOVA, and the General Linear Model, 2013.*). This allows double checking the calculating provided in this book.
 
 ```{r}
+vik_data <-read_csv('data/vik_table_9_2.csv')
 head(vik_data)
 ```
 
@@ -62,6 +62,14 @@ head(vik_data)
 model <- lm(vik_data$Y ~ vik_data$X1 + vik_data$X2)
 summary(model)
 ```
+
+### Confidence intervals
+
+```{r}
+confint(model)
+```
+
+
 ### Manual calculation of the F value
 
 ```{r}
@@ -83,21 +91,21 @@ manual_f
 ### Visuzalizing the fitted model
 
 ```{r}
-#library(plotly)
-#library(pracma)
-#coeffs <- model$coefficient
-#xi <- seq(min(vik_data$X1), max(vik_data$X1), length.out=100)
-#yi <- seq(min(vik_data$X2), max(vik_data$X2), length.out=100)
-#grid <- meshgrid(xi,yi)
-#xi <- grid[[1]]
-#yi <- grid[[2]]
-#
-#
-#zi <- coeffs[1] + coeffs[2] * xi + coeffs[3] * yi 
-#
-#my_plot <- plot_ly(vik_data, x = ~X1,  y = ~X2, z = ~Y, type = "scatter3d", mode = "markers")
-#my_plot <- add_trace(p = my_plot, z = zi, x = xi, y = yi, type = "surface")
-#my_plot
+# library(plotly)
+# library(pracma)
+# coeffs <- model$coefficient
+# xi <- seq(min(vik_data$X1), max(vik_data$X1), length.out=100)
+# yi <- seq(min(vik_data$X2), max(vik_data$X2), length.out=100)
+# grid <- meshgrid(xi,yi)
+# xi <- grid[[1]]
+# yi <- grid[[2]]
+# 
+# 
+# zi <- coeffs[1] + coeffs[2] * xi + coeffs[3] * yi
+# 
+# my_plot <- plot_ly(vik_data, x = ~X1,  y = ~X2, z = ~Y, type = "scatter3d", mode = "markers")
+# my_plot <- add_trace(p = my_plot, z = zi, x = xi, y = yi, type = "surface")
+# my_plot
 ```
 
 ### Manually running the omnibus test
@@ -193,7 +201,7 @@ full=lm(Murder~.,data=state_data)
 stepAIC(full, direction="backward", trace = TRUE)
 ```
 
-### USing the body data
+### Using the body data
 
 
 ```{r}

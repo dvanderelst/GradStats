@@ -1,0 +1,128 @@
+---
+title: "Assumptions"
+date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
+output:
+  github_document:
+    html_preview: true
+    toc: true
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Read some data
+
+```{r}
+library(tidyverse)
+body_data <-read_csv('data/body.csv')
+vik_data <-read_csv('data/vik_table_9_2.csv')
+```
+
+# Assumption 1: Linearity of model
+
+## Example 1
+
+```{r}
+model <- lm(Y ~ X1, data = vik_data)
+plot(fitted(model), resid(model))
+```
+```{r}
+par(mfrow = c(2, 2))  # Split the plotting panel into a 2 x 2 grid
+plot(model)
+```
+
+## Example 2
+
+
+```{r}
+x_data <- runif(100)
+y_data <- x_data^3
+fake <- tibble(x_data=x_data, y_data = y_data)
+model <- lm(y_data ~ x_data, data = fake)
+par(mfrow = c(1, 1)) 
+plot(x_data, y_data)
+abline(model, col='red')
+```
+```{r}
+model <- lm(y_data ~ x_data, data = fake)
+par(mfrow = c(2, 2))  # Split the plotting panel into a 2 x 2 grid
+plot(model)
+par(mfrow = c(1, 1)) 
+```
+
+## Example 3
+
+```{r}
+x1_data <- runif(100)
+x2_data <- runif(100)
+y_data <- x1_data^3 + x2_data^3
+fake <- tibble(x1_data=x1_data,x2_data=x2_data, y_data = y_data)
+model <- lm(y_data ~ x1_data + x2_data, data = fake)
+par(mfrow = c(2, 2))  # Split the plotting panel into a 2 x 2 grid
+plot(model)
+par(mfrow = c(1, 1))
+```
+
+## Example 4
+
+
+```{r}
+model <- lm(Weight ~ Height, data = body_data)
+par(mfrow = c(2, 2))  # Split the plotting panel into a 2 x 2 grid
+plot(model)
+par(mfrow = c(1, 1)) 
+```
+
+# Assumption 2: normal distribution of the errors
+
+```{r}
+model <- lm(Bicep ~ Shoulder, data = body_data)
+residuals <- resid(model)
+hist(residuals, 50)
+```
+```{r}
+par(mfrow = c(2, 2))  # Split the plotting panel into a 2 x 2 grid
+plot(model)
+par(mfrow = c(1, 1)) 
+```
+
+# Assumption 3: Homoscedasticity
+
+```{r}
+n<-500
+errors <-rnorm(n, sd=seq(0.1,5, length.out=n))
+x<-runif(n)
+x<-sort(x)
+y<- (20 * x) + errors
+plot(x, y)
+fake<-tibble(x=x, y=y)
+model <- lm(y~x, data = fake) 
+
+```
+
+The model is still fitted properly!
+
+```{r}
+summary(model)
+plot(x, y)
+abline(model, col='red')
+```
+
+
+```{r}
+par(mfrow = c(2, 2))  # Split the plotting panel into a 2 x 2 grid
+plot(model)
+par(mfrow = c(1, 1)) 
+```
+
+# Assumption 4: Little multicollinearity
+
+```{r}
+partial<-select(body_data, Chest, Waist, Forearm, Bicep)
+pairs(partial)
+```
+
+
