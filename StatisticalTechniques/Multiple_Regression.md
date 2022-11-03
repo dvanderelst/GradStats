@@ -35,7 +35,14 @@ Dieter
     -   <a href="#what-if-the-models-only-differ-by-one-variable"
         id="toc-what-if-the-models-only-differ-by-one-variable">What if the
         models only differ by one variable</a>
-    -   <a href="#step" id="toc-step">Step</a>
+-   <a href="#interactions" id="toc-interactions">Interactions</a>
+    -   <a href="#using-non-zeroed-data" id="toc-using-non-zeroed-data">Using
+        non-zeroed data</a>
+    -   <a href="#using-zeroed-data" id="toc-using-zeroed-data">Using zeroed
+        data</a>
+-   <a href="#step" id="toc-step">Step</a>
+    -   <a href="#using-the-murder-data" id="toc-using-the-murder-data">Using
+        the Murder data</a>
     -   <a href="#using-the-body-data" id="toc-using-the-body-data">Using the
         body data</a>
 
@@ -488,7 +495,119 @@ anova(simple_model, complex_model)
     ## 1     48 337.76                           
     ## 2     47 332.85  1    4.9163 0.6942 0.4089
 
-### Step
+## Interactions
+
+### Using non-zeroed data
+
+``` r
+library(gapminder)
+gap <- gapminder
+model <- lm(lifeExp ~ gdpPercap * year, data = gap)
+summary(model)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = lifeExp ~ gdpPercap * year, data = gap)
+    ## 
+    ## Residuals:
+    ##     Min      1Q  Median      3Q     Max 
+    ## -54.234  -7.314   1.002   7.951  19.780 
+    ## 
+    ## Coefficients:
+    ##                  Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)    -3.532e+02  3.267e+01 -10.811  < 2e-16 ***
+    ## gdpPercap      -8.754e-03  2.547e-03  -3.437 0.000602 ***
+    ## year            2.060e-01  1.653e-02  12.463  < 2e-16 ***
+    ## gdpPercap:year  4.754e-06  1.285e-06   3.700 0.000222 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 9.658 on 1700 degrees of freedom
+    ## Multiple R-squared:  0.442,  Adjusted R-squared:  0.441 
+    ## F-statistic: 448.8 on 3 and 1700 DF,  p-value: < 2.2e-16
+
+``` r
+range(gap$gdpPercap)
+```
+
+    ## [1]    241.1659 113523.1329
+
+``` r
+range(gap$year)
+```
+
+    ## [1] 1952 2007
+
+See this link for a plot of the model:
+<https://www.wolframalpha.com/input?i=plot+-3.532e%2B02+%2B+x+*+-8.754e-03+%2B+y+*+2.060e-01+%2B+4.754e-06+*+%28x+*+y%29+with+x++%3D+241+to+113523+and+y+%3D+1952+to+2007>
+
+![](images/not_zeroed.gif)  
+
+![](images/not_zeroed_top.gif)
+
+### Using zeroed data
+
+``` r
+gap <- mutate(gap, year = scale(year))
+gap <- mutate(gap, gdpPercap = scale(gdpPercap))
+model <- lm(lifeExp ~ gdpPercap * year, data = gap)
+range(gap$gdpPercap)
+```
+
+    ## [1] -0.7075012 10.7845089
+
+``` r
+range(gap$year)
+```
+
+    ## [1] -1.592787  1.592787
+
+``` r
+summary(model)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = lifeExp ~ gdpPercap * year, data = gap)
+    ## 
+    ## Residuals:
+    ##     Min      1Q  Median      3Q     Max 
+    ## -54.234  -7.314   1.002   7.951  19.780 
+    ## 
+    ## Coefficients:
+    ##                Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)     59.2906     0.2392  247.90  < 2e-16 ***
+    ## gdpPercap        6.4680     0.2430   26.61  < 2e-16 ***
+    ## year             4.1489     0.2404   17.26  < 2e-16 ***
+    ## gdpPercap:year   0.8091     0.2187    3.70 0.000222 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 9.658 on 1700 degrees of freedom
+    ## Multiple R-squared:  0.442,  Adjusted R-squared:  0.441 
+    ## F-statistic: 448.8 on 3 and 1700 DF,  p-value: < 2.2e-16
+
+The fitted model becomes,
+
+![z = 59.29 + 6.46  x + 4.14  y + 0.80 + x y](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;z%20%3D%2059.29%20%2B%206.46%20%20x%20%2B%204.14%20%20y%20%2B%200.80%20%2B%20x%20y "z = 59.29 + 6.46  x + 4.14  y + 0.80 + x y")
+
+with
+![x](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;x "x")
+the gdpPercap and
+![y](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;y "y")
+the year.
+
+See this link for a graph:
+<https://www.wolframalpha.com/input?i=plot+59.2906+%2B+6.4680+*+x+%2B+4.1489+*+y+%2B+0.8091+%2B+x+*+y+with+x+from+-+1+to+11+and+y+from+-2+to+2>
+
+![](images/zeroed.gif)
+
+![](images/zeroed_top%20.gif)
+
+## Step
+
+### Using the Murder data
 
 ``` r
 library(MASS)

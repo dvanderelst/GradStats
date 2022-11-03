@@ -1,0 +1,39 @@
+---
+title: "t-test"
+date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
+output:
+  github_document:
+    html_preview: true
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(tidyverse)
+```
+
+The most boring data in the world...
+
+
+```{r}
+data <- read_csv('data/bands.csv')
+```
+
+Note: here we treat the data as collected on seperate rubber bands. This is, we run a two sample t-test.
+
+```{r}
+t.test(data$ambient, data$heated)
+```
+
+
+```{r}
+c1 <- adjustcolor( "red2", alpha.f = 0.25)
+c2 <- adjustcolor( "green2", alpha.f = 0.25)
+hist(data$ambient, col=c1, xlim = c(200, 350), ylim = c(0, 6))
+hist(data$heated, col=c2, add=TRUE)
+```
+

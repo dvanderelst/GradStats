@@ -10,14 +10,13 @@ output:
     toc_depth: 4
 ---
 
-
-
 ## Read in some data
 
 ```{r}
 library(tidyverse)
 body_data <-read_csv('data/body.csv')
 ```
+
 ## Revisit the simple linear model
 
 ```{r}
@@ -28,7 +27,8 @@ summary(model)
 ```{r}
 anova(model)
 ```
-### Manual calculation of the F value 
+
+### Manual calculation of the F value
 
 ```{r}
 predicted <- predict(model)
@@ -57,7 +57,6 @@ vik_data <-read_csv('data/vik_table_9_2.csv')
 head(vik_data)
 ```
 
-
 ```{r}
 model <- lm(vik_data$Y ~ vik_data$X1 + vik_data$X2)
 summary(model)
@@ -68,7 +67,6 @@ summary(model)
 ```{r}
 confint(model)
 ```
-
 
 ### Manual calculation of the F value
 
@@ -131,8 +129,8 @@ Let's now explicitly compare the base and the full model. This results in the sa
 ```{r}
 anova(model_base, model_full)
 ```
-### Manually calculating the F ratio for the omnibus test
 
+### Manually calculating the F ratio for the omnibus test
 
 ```{r}
 full_model_predictions <- predict(model_full)
@@ -150,7 +148,6 @@ manual_f <- captured_variance/uncaptured_variance
 manual_f
 ```
 
-
 ## Model comparison
 
 ### A simple and a complex model
@@ -162,7 +159,6 @@ head(state_data)
 ```
 
 Let's fit two (nested) models,
-
 
 ```{r}
 simple_model <- lm(state_data$Murder ~ state_data$Illiteracy)
@@ -182,9 +178,10 @@ summary(complex_model)
 ```{r}
 anova(simple_model, complex_model)
 ```
+
 ### What if the models only differ by one variable
 
-In this case, the p-value associated with the newly introduced variable is equal to the p value of the anova comparison. In fact the $F$ value is equal to $t^2$ value. 
+In this case, the p-value associated with the newly introduced variable is equal to the p value of the anova comparison. In fact the $F$ value is equal to $t^2$ value.
 
 ```{r}
 simple_model <- lm(state_data$Murder ~ state_data$Illiteracy)
@@ -193,7 +190,57 @@ summary(complex_model)
 anova(simple_model, complex_model)
 ```
 
-### Step
+## Interactions
+
+### Using non-zeroed data
+
+```{r}
+library(gapminder)
+gap <- gapminder
+model <- lm(lifeExp ~ gdpPercap * year, data = gap)
+summary(model)
+```
+
+```{r}
+range(gap$gdpPercap)
+range(gap$year)
+```
+
+See this link for a plot of the model: <https://www.wolframalpha.com/input?i=plot+-3.532e%2B02+%2B+x+*+-8.754e-03+%2B+y+*+2.060e-01+%2B+4.754e-06+*+%28x+*+y%29+with+x++%3D+241+to+113523+and+y+%3D+1952+to+2007>
+
+![](images/not_zeroed.gif)\
+
+![](images/not_zeroed_top.gif)
+
+### Using zeroed data
+
+```{r}
+gap <- mutate(gap, year = scale(year))
+gap <- mutate(gap, gdpPercap = scale(gdpPercap))
+model <- lm(lifeExp ~ gdpPercap * year, data = gap)
+range(gap$gdpPercap)
+range(gap$year)
+```
+
+```{r}
+summary(model)
+```
+
+The fitted model becomes,
+
+$$
+z = 59.29 + 6.46  x + 4.14  y + 0.80 + x y
+$$ with $x$ the gdpPercap and $y$ the year.
+
+See this link for a graph: <https://www.wolframalpha.com/input?i=plot+59.2906+%2B+6.4680+*+x+%2B+4.1489+*+y+%2B+0.8091+%2B+x+*+y+with+x+from+-+1+to+11+and+y+from+-2+to+2>
+
+![](images/zeroed.gif)
+
+![](images/zeroed_top%20.gif)
+
+## Step
+
+### Using the Murder data
 
 ```{r}
 library(MASS)
@@ -203,10 +250,8 @@ stepAIC(full, direction="backward", trace = TRUE)
 
 ### Using the body data
 
-
 ```{r}
 library(MASS)
 full=lm(Weight~.,data=body_data)
 stepAIC(full, direction="backward", trace = TRUE)
 ```
-

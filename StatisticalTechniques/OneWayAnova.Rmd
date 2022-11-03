@@ -1,0 +1,117 @@
+---
+title: "One-Way Anova"
+date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
+output:
+  github_document:
+    html_preview: true
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(reshape)
+```
+
+# Fake
+
+## Make some population data
+
+```{r}
+sample_size <- 15
+
+population1 <- rnorm(100000, mean = 7.5, sd = 2)
+population2 <- rnorm(100000, mean = 10, sd = 2)
+population3 <- rnorm(100000, mean = 6, sd = 2)
+
+hist(population1, breaks=100, col=rgb(1,0,0,0.2), main='', xlab = 'Penguin Weight')
+hist(population2, breaks=100,  add=TRUE, col=rgb(0,1,0,0.2))
+hist(population3, breaks=100,  add=TRUE, col=rgb(0,0,1,0.2))
+title('Populations 1, 2, and 3')
+```
+
+## Sample from the populations
+
+```{r}
+
+
+france <- sample(population1, sample_size)
+senegal <- sample(population2, sample_size)
+japan <- sample(population3, sample_size)
+
+hist(france, breaks=100, col=rgb(1,0,0,0.2), main='', xlab='Penguin Weight')
+hist(senegal, breaks=100,  add=TRUE, col=rgb(0,1,0,0.2))
+hist(japan, breaks=100,  add=TRUE, col=rgb(0,0,1,0.2))
+title('Samples 1, 2, and 3')
+
+data <-data.frame(cbind(france,senegal,japan))
+data<-melt(data, id.vars=c())
+colnames(data) <- c('sample', 'weight')
+data$sample<-factor(data$sample)
+head(data)
+tail(data)
+```
+
+```{r}
+boxplot(weight ~ sample, data = data)
+```
+
+## Run classic ANOVA
+
+```{r}
+result <- aov(weight ~ sample, data = data)
+summary(result)
+```
+
+## Run GLM
+
+```{r}
+result <- lm(weight ~ sample, data = data)
+summary(result)
+```
+
+## Change contrasts
+
+<https://stats.oarc.ucla.edu/r/library/r-library-contrast-coding-systems-for-categorical-variables/>
+
+```{r}
+contrasts(data$sample) <- contr.sum(n = 3)
+result <- lm(weight ~ sample, data = data)
+summary(result)
+```
+
+# Real data: feet
+
+```{r}
+library(tidyverse)
+feet <- read_csv('data/feet.csv')
+head(feet)
+```
+
+```{r}
+model <- lm(FootLength ~ Sex, data = feet)
+summary(model)
+```
+
+```{r}
+boxplot(FootLength ~ Sex, data = feet)
+```
+
+# Real data: flies
+
+<http://jse.amstat.org/datasets/fruitfly.txt>
+
+```{r}
+flies <- read_csv('data/flies.csv')
+head(flies)
+
+model <- lm(LONGEVITY ~ TYPE, data = flies)
+summary(model)
+```
+
+```{r}
+boxplot(LONGEVITY ~ TYPE, data = flies)
+```
+
