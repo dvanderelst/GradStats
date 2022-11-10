@@ -1,6 +1,6 @@
 One-Way Anova
 ================
-Last Updated: 01, November, 2022 at 19:19
+Last Updated: 10, November, 2022 at 08:54
 
 -   <a href="#fake" id="toc-fake">Fake</a>
     -   <a href="#make-some-population-data"
@@ -12,6 +12,10 @@ Last Updated: 01, November, 2022 at 19:19
     -   <a href="#run-glm" id="toc-run-glm">Run GLM</a>
     -   <a href="#change-contrasts" id="toc-change-contrasts">Change
         contrasts</a>
+        -   <a href="#deviation-contrasts" id="toc-deviation-contrasts">Deviation
+            contrasts</a>
+        -   <a href="#compare-with-data" id="toc-compare-with-data">Compare with
+            data</a>
 -   <a href="#real-data-feet" id="toc-real-data-feet">Real data: feet</a>
 -   <a href="#real-data-flies" id="toc-real-data-flies">Real data: flies</a>
 
@@ -62,24 +66,24 @@ head(data)
 ```
 
     ##   sample   weight
-    ## 1 france 8.382589
-    ## 2 france 7.686666
-    ## 3 france 6.716767
-    ## 4 france 9.779120
-    ## 5 france 8.297750
-    ## 6 france 8.750631
+    ## 1 france 9.132046
+    ## 2 france 8.866993
+    ## 3 france 6.467537
+    ## 4 france 6.521154
+    ## 5 france 8.832558
+    ## 6 france 5.692038
 
 ``` r
 tail(data)
 ```
 
-    ##    sample   weight
-    ## 40  japan 5.305449
-    ## 41  japan 5.112406
-    ## 42  japan 5.695557
-    ## 43  japan 9.204709
-    ## 44  japan 5.997825
-    ## 45  japan 5.156102
+    ##    sample    weight
+    ## 40  japan  6.029728
+    ## 41  japan  6.027024
+    ## 42  japan 10.800846
+    ## 43  japan  8.361775
+    ## 44  japan  4.057559
+    ## 45  japan  6.117828
 
 ``` r
 boxplot(weight ~ sample, data = data)
@@ -94,9 +98,9 @@ result <- aov(weight ~ sample, data = data)
 summary(result)
 ```
 
-    ##             Df Sum Sq Mean Sq F value Pr(>F)  
-    ## sample       2  33.85  16.923   4.731  0.014 *
-    ## Residuals   42 150.23   3.577                 
+    ##             Df Sum Sq Mean Sq F value   Pr(>F)    
+    ## sample       2  100.9   50.43   15.39 9.71e-06 ***
+    ## Residuals   42  137.7    3.28                     
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -113,23 +117,29 @@ summary(result)
     ## 
     ## Residuals:
     ##     Min      1Q  Median      3Q     Max 
-    ## -3.2920 -1.3284 -0.1785  0.9751  4.2607 
+    ## -5.0299 -0.7675  0.0969  1.1159  4.1190 
     ## 
     ## Coefficients:
     ##               Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)     7.8943     0.4883  16.166   <2e-16 ***
-    ## samplesenegal   0.6994     0.6906   1.013    0.317    
-    ## samplejapan    -1.3875     0.6906  -2.009    0.051 .  
+    ## (Intercept)     8.0162     0.4675  17.148  < 2e-16 ***
+    ## samplesenegal   2.2911     0.6611   3.466  0.00123 ** 
+    ## samplejapan    -1.3343     0.6611  -2.018  0.04998 *  
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 1.891 on 42 degrees of freedom
-    ## Multiple R-squared:  0.1839, Adjusted R-squared:  0.145 
-    ## F-statistic: 4.731 on 2 and 42 DF,  p-value: 0.01403
+    ## Residual standard error: 1.811 on 42 degrees of freedom
+    ## Multiple R-squared:  0.4228, Adjusted R-squared:  0.3954 
+    ## F-statistic: 15.39 on 2 and 42 DF,  p-value: 9.707e-06
 
 ## Change contrasts
 
 <https://stats.oarc.ucla.edu/r/library/r-library-contrast-coding-systems-for-categorical-variables/>
+
+### Deviation contrasts
+
+Here, I use deviation coding: This coding system compares the mean of
+the dependent variable for a given level to the overall mean of the
+dependent variable.
 
 ``` r
 contrasts(data$sample) <- contr.sum(n = 3)
@@ -143,19 +153,156 @@ summary(result)
     ## 
     ## Residuals:
     ##     Min      1Q  Median      3Q     Max 
-    ## -3.2920 -1.3284 -0.1785  0.9751  4.2607 
+    ## -5.0299 -0.7675  0.0969  1.1159  4.1190 
     ## 
     ## Coefficients:
     ##             Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)   7.6649     0.2819  27.187   <2e-16 ***
-    ## sample1       0.2294     0.3987   0.575   0.5682    
-    ## sample2       0.9287     0.3987   2.329   0.0247 *  
+    ## (Intercept)   8.3351     0.2699  30.883  < 2e-16 ***
+    ## sample1      -0.3190     0.3817  -0.836    0.408    
+    ## sample2       1.9722     0.3817   5.167 6.18e-06 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 1.891 on 42 degrees of freedom
-    ## Multiple R-squared:  0.1839, Adjusted R-squared:  0.145 
-    ## F-statistic: 4.731 on 2 and 42 DF,  p-value: 0.01403
+    ## Residual standard error: 1.811 on 42 degrees of freedom
+    ## Multiple R-squared:  0.4228, Adjusted R-squared:  0.3954 
+    ## F-statistic: 15.39 on 2 and 42 DF,  p-value: 9.707e-06
+
+``` r
+data
+```
+
+    ##     sample    weight
+    ## 1   france  9.132046
+    ## 2   france  8.866993
+    ## 3   france  6.467537
+    ## 4   france  6.521154
+    ## 5   france  8.832558
+    ## 6   france  5.692038
+    ## 7   france  7.935718
+    ## 8   france 10.211630
+    ## 9   france  6.008655
+    ## 10  france  7.309716
+    ## 11  france  7.637482
+    ## 12  france  8.520361
+    ## 13  france  9.652237
+    ## 14  france  8.741230
+    ## 15  france  8.713195
+    ## 16 senegal 12.150618
+    ## 17 senegal  5.277399
+    ## 18 senegal 12.727207
+    ## 19 senegal 13.047310
+    ## 20 senegal  8.416281
+    ## 21 senegal  9.801193
+    ## 22 senegal 10.664118
+    ## 23 senegal 10.404217
+    ## 24 senegal  9.825719
+    ## 25 senegal 11.230005
+    ## 26 senegal  8.544779
+    ## 27 senegal 12.765590
+    ## 28 senegal  6.651629
+    ## 29 senegal 12.010281
+    ## 30 senegal 11.093289
+    ## 31   japan  7.973793
+    ## 32   japan  7.853446
+    ## 33   japan  7.334599
+    ## 34   japan  5.593767
+    ## 35   japan  4.502954
+    ## 36   japan  5.914364
+    ## 37   japan  6.501367
+    ## 38   japan  6.066000
+    ## 39   japan  7.093355
+    ## 40   japan  6.029728
+    ## 41   japan  6.027024
+    ## 42   japan 10.800846
+    ## 43   japan  8.361775
+    ## 44   japan  4.057559
+    ## 45   japan  6.117828
+
+``` r
+model.matrix(result)
+```
+
+    ##    (Intercept) sample1 sample2
+    ## 1            1       1       0
+    ## 2            1       1       0
+    ## 3            1       1       0
+    ## 4            1       1       0
+    ## 5            1       1       0
+    ## 6            1       1       0
+    ## 7            1       1       0
+    ## 8            1       1       0
+    ## 9            1       1       0
+    ## 10           1       1       0
+    ## 11           1       1       0
+    ## 12           1       1       0
+    ## 13           1       1       0
+    ## 14           1       1       0
+    ## 15           1       1       0
+    ## 16           1       0       1
+    ## 17           1       0       1
+    ## 18           1       0       1
+    ## 19           1       0       1
+    ## 20           1       0       1
+    ## 21           1       0       1
+    ## 22           1       0       1
+    ## 23           1       0       1
+    ## 24           1       0       1
+    ## 25           1       0       1
+    ## 26           1       0       1
+    ## 27           1       0       1
+    ## 28           1       0       1
+    ## 29           1       0       1
+    ## 30           1       0       1
+    ## 31           1      -1      -1
+    ## 32           1      -1      -1
+    ## 33           1      -1      -1
+    ## 34           1      -1      -1
+    ## 35           1      -1      -1
+    ## 36           1      -1      -1
+    ## 37           1      -1      -1
+    ## 38           1      -1      -1
+    ## 39           1      -1      -1
+    ## 40           1      -1      -1
+    ## 41           1      -1      -1
+    ## 42           1      -1      -1
+    ## 43           1      -1      -1
+    ## 44           1      -1      -1
+    ## 45           1      -1      -1
+    ## attr(,"assign")
+    ## [1] 0 1 1
+    ## attr(,"contrasts")
+    ## attr(,"contrasts")$sample
+    ##         [,1] [,2]
+    ## france     1    0
+    ## senegal    0    1
+    ## japan     -1   -1
+
+### Compare with data
+
+``` r
+# Fitted coefficients
+result$coefficients
+```
+
+    ## (Intercept)     sample1     sample2 
+    ##   8.3351242  -0.3189541   1.9721847
+
+``` r
+all_data <- c(france, senegal, japan)
+grand_mean <- mean(all_data)
+mean_senegal <- mean(senegal)
+mean_france <- mean(france)
+
+delta1 <- mean_france - grand_mean
+delta2 <- mean_senegal - grand_mean
+
+
+# Japan is reference == assumed to be grand mean
+
+c(grand_mean, delta1, delta2)
+```
+
+    ## [1]  8.3351242 -0.3189541  1.9721847
 
 # Real data: feet
 
@@ -229,7 +376,7 @@ summary(model)
 boxplot(FootLength ~ Sex, data = feet)
 ```
 
-![](OneWayAnova_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](OneWayAnova_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
 # Real data: flies
 
@@ -289,4 +436,4 @@ summary(model)
 boxplot(LONGEVITY ~ TYPE, data = flies)
 ```
 
-![](OneWayAnova_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](OneWayAnova_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->

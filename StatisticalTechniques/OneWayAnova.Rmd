@@ -76,11 +76,42 @@ summary(result)
 
 <https://stats.oarc.ucla.edu/r/library/r-library-contrast-coding-systems-for-categorical-variables/>
 
+### Deviation contrasts
+
+Here, I use deviation coding: This coding system compares the mean of the dependent variable for a given level to the overall mean of the dependent variable.
+
 ```{r}
 contrasts(data$sample) <- contr.sum(n = 3)
 result <- lm(weight ~ sample, data = data)
 summary(result)
 ```
+```{r}
+data
+model.matrix(result)
+```
+
+
+### Compare with data
+
+```{r}
+# Fitted coefficients
+result$coefficients
+
+all_data <- c(france, senegal, japan)
+grand_mean <- mean(all_data)
+mean_senegal <- mean(senegal)
+mean_france <- mean(france)
+
+delta1 <- mean_france - grand_mean
+delta2 <- mean_senegal - grand_mean
+
+
+# Japan is reference == assumed to be grand mean
+
+c(grand_mean, delta1, delta2)
+
+```
+
 
 # Real data: feet
 
