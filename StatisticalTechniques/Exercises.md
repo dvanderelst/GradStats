@@ -1,16 +1,17 @@
 Exercises
 ================
 Dieter
-Last Updated: 10, November, 2022 at 09:46
+Last Updated: 10, November, 2022 at 09:54
 
--   <a href="#part-1-regression-anova-and-model-comparision"
-    id="toc-part-1-regression-anova-and-model-comparision">PART 1:
-    regression, anova, and model comparision</a>
+-   <a href="#part-1-regression-anova-and-model-comparison"
+    id="toc-part-1-regression-anova-and-model-comparison">PART 1:
+    regression, anova, and model comparison</a>
     -   <a href="#oysters" id="toc-oysters">Oysters</a>
     -   <a href="#heart-rate" id="toc-heart-rate">Heart rate</a>
         -   <a href="#questions" id="toc-questions">Questions</a>
         -   <a href="#examples" id="toc-examples">Examples</a>
     -   <a href="#home-prices" id="toc-home-prices">Home prices</a>
+        -   <a href="#questions-1" id="toc-questions-1">Questions</a>
         -   <a href="#examples-1" id="toc-examples-1">Examples</a>
     -   <a href="#cars" id="toc-cars">Cars</a>
 
@@ -27,7 +28,12 @@ library(tidyverse)
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
 
-# PART 1: regression, anova, and model comparision
+# PART 1: regression, anova, and model comparison
+
+For this series, we are using data from JSE Data Archive:
+<http://jse.amstat.org/jse_data_archive.htm>. I use the links to the
+data so that you can directly read the data from the internet (in most
+cases).
 
 ## Oysters
 
@@ -173,17 +179,20 @@ hist(data$temp)
 -   TYPE: Random sample
 -   SIZE: 76 observations, 19 variables
 
-DESCRIPTIVE ABSTRACT:The data file contains information on 76
-single-family homes inEugene, Oregon during 2005. This dataset is
-suitable for a completemultiple linear regression analysis of home price
-data that coversmany of the usual regression topics, including
-interaction andpredictor transformations. Whereas realtors use
-experience and localknowledge to subjectively value a house based on its
-characteristics(size, amenities, location, etc.) and the prices of
-similar housesnearby, regression analysis can provide an alternative
-that moreobjectively models local house prices using these same
-data.SOURCES:The data were provided by Victoria Whitman, a realtor in
-Eugene, in2005. The data were used in a case study in Pardoe (2006).
+DESCRIPTIVE ABSTRACT:
+
+The data file contains information on 76 single-family homes in Eugene,
+Oregon during 2005. This dataset is suitable for a complete multiple
+linear regression analysis of home price data that covers many of the
+usual regression topics, including interaction and predictor
+transformations. Whereas realtors use experience and local knowledge to
+subjectively value a house based on its characteristics(size, amenities,
+location, etc.) and the prices of similar houses nearby, regression
+analysis can provide an alternative that more objectively models local
+house prices using these same data.
+
+SOURCES:The data were provided by Victoria Whitman, a realtor in Eugene,
+in 2005. The data were used in a case study in Pardoe (2006).
 
 VARIABLE DESCRIPTIONS:
 
@@ -209,38 +218,8 @@ Adams = indicator for Adams Elementary (reference: EdgewoodElementary)
 Crest = indicator for Crest Elementary (reference: EdgewoodElementary)
 Parker = indicator for Parker Elementary (reference: EdgewoodElementary)
 
-SPECIAL <NOTES:None.STORY> BEHIND THE <DATA:The> data file contains
-information on 76 single-family homes inEugene, Oregon during 2005. At
-the time the data were collected, thedata submitter was preparing to
-place his house on the market and itwas important to come up with a
-reasonable asking price. Whereasrealtors use experience and local
-knowledge to subjectively value ahouse based on its characteristics
-(size, amenities, location, etc.)and the prices of similar houses
-nearby, regression analysis providesan alternative that more objectively
-models local house prices usingthese same data. Better still, realtor
-experience can help guide themodeling process to fine-tune a final
-predictive model. For example,both realtor experience and regression
-modeling results suggest theneed for a BathBed interaction term and an
-Age-squared transformationin the model.PEDAGOGICAL <NOTES:It> can be
-challenging when teaching regression concepts to findinteresting
-real-life datasets that allow analyses that put all theconcepts together
-in one large example. For example, concepts likeinteraction and
-predictor transformations are
-oftenhttp://jse.amstat.org/datasets/normtemp.dat.txt illustratedthrough
-small-scale, unrealistic examples with just one or twopredictor
-variables that make it difficult for students to appreciatehow these
-concepts might be applied in more realistic multi-variableproblems. This
-dataset addresses this challenge by allowing for acomplete multiple
-linear regression analysis of home price data thatcovers many of the
-usual regression topics, including interaction andpredictor
-transformations. The statistical ideas discussed range fromthose
-suitable for a second college statistics course to thosetypically found
-in more advanced linear regression courses.
-
 REFERENCES:Pardoe, I. (2006). Applied Regression Modeling: A Business
-Approach.Hoboken, NJ: Wiley.SUBMITTED BY:Iain PardoeUniversity of
-OregonLundquist College of Business, 1208 University of Oregon, Eugene,
-OR97403, <USA.ipardoe@lcbmail.uoregon.edu>
+Approach. Hoboken, NJ: Wiley.
 
 ``` r
 data <-read_table('http://jse.amstat.org/datasets/homes76.dat.txt')
@@ -270,15 +249,7 @@ data <-read_table('http://jse.amstat.org/datasets/homes76.dat.txt')
     ##   D12 = col_double()
     ## )
 
-``` r
-colnames(data)
-```
-
-    ##  [1] "id"     "Y"      "X1"     "X2"     "X3"     "X4"     "X3X4"   "year"  
-    ##  [9] "X5"     "X5sq"   "X6"     "status" "D7"     "elem"   "D8"     "D9"    
-    ## [17] "D10"    "D11"    "D12"
-
-#### Questions
+### Questions
 
 -   Does size or age influence price?
 -   Do age and size interact in influencing the price?
