@@ -1,0 +1,72 @@
+---
+title: "ANCOVA"
+date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
+output:
+  github_document:
+    html_preview: true
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(readxl)
+```
+
+```{r}
+data <- read_excel('data/vik_table_17_2.xlsx')
+```
+
+# One-way ancova
+
+```{r}
+model1 <- lm(weight ~ sex, data = data)
+summary(model1)
+```
+
+```{r}
+boxplot(weight ~ sex, data = data)
+```
+
+
+# Ancova
+
+```{r}
+model2 <- lm(weight ~ sex * age, data = data)
+summary(model2)
+```
+```{r}
+model.matrix(model2)
+```
+
+```{r}
+females <- filter(data, sex == 'F')
+males <- filter(data, sex == 'M')
+
+coefs <- coefficients(model2)
+
+prediction_females <- coefs[1] + coefs[3]  * females$age 
+prediction_males <- coefs[1] + coefs[2] +coefs[3]  * males$age + coefs[4] * males$age 
+
+plot(females$age, females$weight, col='red', xlim = range(data$age), ylim = range(data$weight))
+points(females$age, prediction_females, type='b', col='red')
+
+points(males$age, males$weight, col='blue')
+points(males$age, prediction_males, type='b', col='blue')
+
+# To double check my equations
+# points(data$age, model2$fitted.values, col='green')
+# my_predications <- c(prediction_females, prediction_males)
+# r_predications <- unname(model2$fitted.values)
+```
+
+
+# Compare models
+
+```{r}
+anova(model1, model2)
+```
+
