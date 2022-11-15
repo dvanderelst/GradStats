@@ -70,10 +70,36 @@ Some additional questions:
 
 ### Examples
 
+
+```{r}
+model <- lm(temp ~ gender, data = data)
+summary(model)
+```
+
+
+```{r}
+data$gender <- as.factor(data$gender)
+model <- lm(temp ~ gender, data = data)
+summary(model)
+boxplot(data$temp ~ data$gender)
+```
+
+
 ```{r}
 model <- lm(rate ~ temp, data = data)
 summary(model)
 ```
+
+```{r}
+residuals <- model$residuals
+hist(residuals)
+```
+
+
+```{r}
+cor.test(data$rate, data$temp)
+```
+
 
 ```{r}
 plot(data$temp, data$rate)

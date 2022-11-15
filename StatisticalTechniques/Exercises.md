@@ -1,7 +1,7 @@
 Exercises
 ================
 Dieter
-Last Updated: 10, November, 2022 at 09:54
+Last Updated: 15, November, 2022 at 10:54
 
 -   <a href="#part-1-regression-anova-and-model-comparison"
     id="toc-part-1-regression-anova-and-model-comparison">PART 1:
@@ -137,6 +137,61 @@ Some additional questions:
 ### Examples
 
 ``` r
+model <- lm(temp ~ gender, data = data)
+summary(model)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = temp ~ gender, data = data)
+    ## 
+    ## Residuals:
+    ##      Min       1Q   Median       3Q      Max 
+    ## -1.99385 -0.47154  0.00615  0.40615  2.40615 
+    ## 
+    ## Coefficients:
+    ##             Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)  97.8154     0.2001 488.834   <2e-16 ***
+    ## gender        0.2892     0.1266   2.285   0.0239 *  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 0.7215 on 128 degrees of freedom
+    ## Multiple R-squared:  0.03921,    Adjusted R-squared:  0.0317 
+    ## F-statistic: 5.223 on 1 and 128 DF,  p-value: 0.02393
+
+``` r
+data$gender <- as.factor(data$gender)
+model <- lm(temp ~ gender, data = data)
+summary(model)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = temp ~ gender, data = data)
+    ## 
+    ## Residuals:
+    ##      Min       1Q   Median       3Q      Max 
+    ## -1.99385 -0.47154  0.00615  0.40615  2.40615 
+    ## 
+    ## Coefficients:
+    ##             Estimate Std. Error  t value Pr(>|t|)    
+    ## (Intercept) 98.10462    0.08949 1096.298   <2e-16 ***
+    ## gender2      0.28923    0.12655    2.285   0.0239 *  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 0.7215 on 128 degrees of freedom
+    ## Multiple R-squared:  0.03921,    Adjusted R-squared:  0.0317 
+    ## F-statistic: 5.223 on 1 and 128 DF,  p-value: 0.02393
+
+``` r
+boxplot(data$temp ~ data$gender)
+```
+
+![](Exercises_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+``` r
 model <- lm(rate ~ temp, data = data)
 summary(model)
 ```
@@ -161,17 +216,40 @@ summary(model)
     ## F-statistic: 8.802 on 1 and 128 DF,  p-value: 0.003591
 
 ``` r
+residuals <- model$residuals
+hist(residuals)
+```
+
+![](Exercises_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
+``` r
+cor.test(data$rate, data$temp)
+```
+
+    ## 
+    ##  Pearson's product-moment correlation
+    ## 
+    ## data:  data$rate and data$temp
+    ## t = 2.9668, df = 128, p-value = 0.003591
+    ## alternative hypothesis: true correlation is not equal to 0
+    ## 95 percent confidence interval:
+    ##  0.08519113 0.40802170
+    ## sample estimates:
+    ##       cor 
+    ## 0.2536564
+
+``` r
 plot(data$temp, data$rate)
 abline(model)
 ```
 
-![](Exercises_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](Exercises_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
 ``` r
 hist(data$temp)
 ```
 
-![](Exercises_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+![](Exercises_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
 ## Home prices
 
@@ -391,7 +469,7 @@ summary(model1)
 plot(data$Mileage, data$Price)
 ```
 
-![](Exercises_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](Exercises_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
 
 Ancova. We’ll see this later…
 
