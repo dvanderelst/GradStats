@@ -1,0 +1,231 @@
+---
+title: "Mixed Models"
+date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
+output:
+  github_document:
+    html_preview: true
+    toc: true
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 100 populations of penguins
+
+```{r}
+sample_size <- 15
+populations <- 100
+variance_random_effect <- 0.25
+fixed_effect <- 2.5
+
+random_factor <- rnorm(populations, 0, sd=sqrt(variance_random_effect))
+
+
+all_heights <-c()
+all_weights <-c()
+all_ids <-c()
+
+for (i in 1:populations){
+  heights <- rnorm(sample_size)
+  errors <- rnorm(sample_size, sd=0.25)
+  weights <- fixed_effect * heights + random_factor[i] + errors
+  population_ids <- rep(i, times = sample_size)
+  
+  all_heights <- c(all_heights, heights)
+  all_weights <- c(all_weights, weights)
+  all_ids <- c(all_ids, population_ids)
+}
+ 
+penguin_data <- data.frame(all_ids, all_heights, all_weights)
+colnames(penguin_data) <-c('id', 'height', 'weight')
+
+```
+
+### Fit a mixed model
+
+```{r}
+v <- var(random_factor)
+s <- sd(random_factor)
+c(v, s)
+```
+
+#### Using lme
+
+The 1 indicates that an intercept is to be fitted for each level of the random variable.
+
+```{r}
+library(nlme)
+model <- lme(weight ~ height, random=~1|id, data = penguin_data)
+summary(model)
+```
+
+#### Using lmer
+
+```{r}
+library(lme4)
+model <- lmer(weight ~ height + (1|id), data = penguin_data)
+summary(model)
+```
+
+```{r}
+library(lmerTest)
+#  To get (estimated) degrees of freedom and the p -values associated with the t -statistics and those degrees of freedom
+model <- lmer(weight ~ height + (1|id), data = penguin_data)
+summary(model)
+```
+
+## Pre and Post Penguins
+
+```{r}
+sample_size <- 100
+variance_random_effect <- 0.25
+fixed_effect <- 0.5
+
+random_factor <- rnorm(populations, 0, sd=sqrt(variance_random_effect))
+
+ids <- seq(sample_size)
+
+pre_data <- rnorm(sample_size, mean = 10) + random_factor
+post_data <- rnorm(sample_size, mean = 10 + fixed_effect) + random_factor
+
+
+id <- c(ids, ids)
+measurement<-c(rep(1, sample_size), rep(2, sample_size))
+weight <-c(pre_data, post_data)
+
+repeated_data <- data.frame(id, measurement, weight)
+repeated_data$measurement <- as.factor(repeated_data$measurement)
+head(repeated_data)
+```
+
+```{r}
+v <- var(random_factor)
+s <- sd(random_factor)
+c(v, s)
+```
+
+```{r}
+library(lme4)
+model <- lmer(weight ~ measurement + (1|id), data = repeated_data)
+summary(model)
+```
+
+## Three measures
+
+```{r}
+sample_size <- 100
+variance_random_effect <- 0.25
+
+time_effect1 <- 0.75
+time_effect2 <- 1
+
+random_factor <- rnorm(populations, 0, sd=sqrt(variance_random_effect))
+ids <- seq(sample_size)
+
+data1 <- rnorm(sample_size, mean = 10) + 0.0000000000 + random_factor
+data2 <- rnorm(sample_size, mean = 10) + time_effect1 + random_factor
+data3 <- rnorm(sample_size, mean = 10) + time_effect2 + random_factor
+
+id <- c(ids, ids, ids)
+measurement<-c(rep(1, sample_size), rep(2, sample_size), rep(3, sample_size))
+weight <-c(data1, data2, data3)
+
+three_repeats_data <- data.frame(id, measurement,  weight)
+three_repeats_data$measurement <- as.factor(three_repeats_data$measurement)
+head(three_repeats_data)
+```
+
+```{r}
+v <- var(random_factor)
+s <- sd(random_factor)
+c(v, s)
+```
+
+```{r}
+library(lme4)
+model <- lmer(weight ~ measurement + (1|id), data = three_repeats_data)
+summary(model)
+```
+
+## Interaction effects
+
+```{r}
+sample_size <- 100
+variance_random_effect <- 0.25
+
+random_factor <- rnorm(populations, 0, sd=sqrt(variance_random_effect))
+sex <- c(rep(0, sample_size/2), rep(1, sample_size/2))
+ids <- seq(sample_size)
+
+data1 <- rnorm(sample_size, mean = 10) + 0 + sex * 0 + random_factor
+data2 <- rnorm(sample_size, mean = 10) + 1 + sex * 2 + random_factor
+data3 <- rnorm(sample_size, mean = 10) + 2 + sex * 4 + random_factor
+
+id <- c(ids, ids, ids)
+sex <-c(sex, sex, sex) # used when demoing interaction effects
+measurement<-c(rep(0, sample_size), rep(1, sample_size), rep(2, sample_size))
+weight <-c(data1, data2, data3)
+
+interaction_data <- data.frame(id, measurement, sex,  weight)
+interaction_data$measurement <- as.factor(interaction_data$measurement)
+interaction_data$sex <- as.factor(interaction_data$sex)
+head(interaction_data)
+```
+
+```{r}
+library(lme4)
+model <- lmer(weight ~ measurement * sex + (1|id), data = interaction_data)
+summary(model)
+```
+
+```{r}
+boxplot(interaction_data$weight ~ interaction_data$measurement * interaction_data$sex)
+```
+
+## Real data (cars)
+
+```{r}
+library(tidyverse)
+library(readxl)
+car_data <-read_xls('data/kuiper.xls')
+colnames(car_data)
+```
+
+```{r}
+car_data$Price <-scale(car_data$Price)
+car_data$Mileage <-scale(car_data$Mileage)
+car_model <- lmer(Price ~ Mileage + (1|Make), data = car_data)
+summary(car_model)
+```
+
+## Vik 2013, Chapter 18 (Repeated measures ANOVA)
+
+In this chapter, the author performs a repeated measures ANOVA using an idiosyncratic calculation method. Here, I run the same analysis using the rstatix and car packages to show that the numbers correspond to what he calculates.
+
+![](images/2022-11-16_22-23.png)
+
+Vik, P. (2013). Regression, ANOVA, and the General Linear Model. SAGE Publications, Inc. (US). <https://bookshelf.vitalsource.com/books/9781483316017>
+
+```{r}
+vik_data <- read_xls('data/vik_repeated.xls')
+vik_data <- pivot_longer(vik_data, cols = c('time1', 'time2'))
+head(vik_data)
+```
+
+```{r}
+library(rstatix)
+res.aov <- anova_test(data = vik_data, dv = value, wid = id, within = name)
+get_anova_table(res.aov)
+```
+
+Here, the same thing using a different package that also spits out the sums of squares.
+
+```{r}
+library(car)
+design <- factorial_design(vik_data, dv = value, wid = id, within = name)
+res.anova <- Anova(design$model, idata = design$idata, idesign = design$idesign, type = 3)
+summary(res.anova)
+```
