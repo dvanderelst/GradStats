@@ -1,51 +1,22 @@
 Mixed Models
 ================
-Last Updated: 17, November, 2022 at 11:39
+Last Updated: 17, November, 2022 at 10:25
 
-- <a href="#100-populations-of-penguins"
-  id="toc-100-populations-of-penguins">100 populations of penguins</a>
-  - <a href="#make-data" id="toc-make-data">Make data</a>
-  - <a href="#fit-a-mixed-model" id="toc-fit-a-mixed-model">Fit a mixed
-    model</a>
-    - <a href="#fitting-the-model-using-the-lme-function"
-      id="toc-fitting-the-model-using-the-lme-function">fitting the model
-      using the lme function</a>
-    - <a href="#intepreting-the-fitted-parameters"
-      id="toc-intepreting-the-fitted-parameters">Intepreting the fitted
-      parameters</a>
-    - <a href="#fitting-the-model-using-the-lmer-function"
-      id="toc-fitting-the-model-using-the-lmer-function">fitting the model
-      using the lmer function</a>
-- <a href="#pre-and-post-penguins" id="toc-pre-and-post-penguins">Pre and
-  Post Penguins</a>
-  - <a href="#make-data-1" id="toc-make-data-1">Make data</a>
-  - <a href="#fit-model" id="toc-fit-model">Fit model</a>
-  - <a href="#intepreting-the-model"
-    id="toc-intepreting-the-model">Intepreting the model</a>
-- <a href="#three-measures" id="toc-three-measures">Three measures</a>
-- <a href="#interaction-effects" id="toc-interaction-effects">Interaction
-  effects</a>
-- <a href="#real-data-cars" id="toc-real-data-cars">Real data (cars)</a>
-- <a href="#vik-2013-chapter-18-repeated-measures-anova"
-  id="toc-vik-2013-chapter-18-repeated-measures-anova">Vik 2013, Chapter
-  18 (Repeated measures ANOVA)</a>
-
-``` r
-library(tidyverse)
-```
-
-    ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
-    ## ✔ ggplot2 3.4.0      ✔ purrr   0.3.5 
-    ## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
-    ## ✔ tidyr   1.2.1      ✔ stringr 1.4.1 
-    ## ✔ readr   2.1.3      ✔ forcats 0.5.2 
-    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    ## ✖ dplyr::filter() masks stats::filter()
-    ## ✖ dplyr::lag()    masks stats::lag()
+-   <a href="#100-populations-of-penguins"
+    id="toc-100-populations-of-penguins">100 populations of penguins</a>
+    -   <a href="#fit-a-mixed-model" id="toc-fit-a-mixed-model">Fit a mixed
+        model</a>
+-   <a href="#pre-and-post-penguins" id="toc-pre-and-post-penguins">Pre and
+    Post Penguins</a>
+-   <a href="#three-measures" id="toc-three-measures">Three measures</a>
+-   <a href="#interaction-effects" id="toc-interaction-effects">Interaction
+    effects</a>
+-   <a href="#real-data-cars" id="toc-real-data-cars">Real data (cars)</a>
+-   <a href="#vik-2013-chapter-18-repeated-measures-anova"
+    id="toc-vik-2013-chapter-18-repeated-measures-anova">Vik 2013, Chapter
+    18 (Repeated measures ANOVA)</a>
 
 ## 100 populations of penguins
-
-### Make data
 
 ``` r
 sample_size <- 15
@@ -73,16 +44,7 @@ for (i in 1:populations){
  
 penguin_data <- data.frame(all_ids, all_heights, all_weights)
 colnames(penguin_data) <-c('id', 'height', 'weight')
-head(penguin_data)
 ```
-
-    ##   id     height    weight
-    ## 1  1 -0.5948500 -1.029969
-    ## 2  1  0.7210879  2.370175
-    ## 3  1  1.5680265  4.265775
-    ## 4  1 -0.5744618 -1.058510
-    ## 5  1  0.2478848  1.042556
-    ## 6  1  1.2830536  3.525327
 
 ### Fit a mixed model
 
@@ -92,128 +54,51 @@ s <- sd(random_factor)
 c(v, s)
 ```
 
-    ## [1] 0.2321638 0.4818338
+    ## [1] 0.2695996 0.5192298
 
-#### fitting the model using the lme function
+#### Using lme
 
 The 1 indicates that an intercept is to be fitted for each level of the
 random variable.
 
 ``` r
 library(nlme)
-```
-
-    ## 
-    ## Attaching package: 'nlme'
-
-    ## The following object is masked from 'package:dplyr':
-    ## 
-    ##     collapse
-
-``` r
 model <- lme(weight ~ height, random=~1|id, data = penguin_data)
 summary(model)
 ```
 
     ## Linear mixed-effects model fit by REML
-    ##   Data: penguin_data 
+    ##  Data: penguin_data 
     ##        AIC      BIC    logLik
-    ##   485.0806 506.3282 -238.5403
+    ##   546.9083 568.1559 -269.4542
     ## 
     ## Random effects:
     ##  Formula: ~1 | id
-    ##         (Intercept)  Residual
-    ## StdDev:   0.4876171 0.2466863
+    ##         (Intercept) Residual
+    ## StdDev:   0.5131968 0.251299
     ## 
-    ## Fixed effects:  weight ~ height 
-    ##                  Value  Std.Error   DF  t-value p-value
-    ## (Intercept) -0.0094268 0.04917596 1399  -0.1917   0.848
-    ## height       2.5006696 0.00657127 1399 380.5457   0.000
+    ## Fixed effects: weight ~ height 
+    ##                 Value  Std.Error   DF  t-value p-value
+    ## (Intercept) 0.0733414 0.05172830 1399   1.4178  0.1565
+    ## height      2.4966396 0.00678282 1399 368.0829  0.0000
     ##  Correlation: 
     ##        (Intr)
-    ## height 0.001 
+    ## height -0.002
     ## 
     ## Standardized Within-Group Residuals:
-    ##          Min           Q1          Med           Q3          Max 
-    ## -3.665120093 -0.658393606  0.007837227  0.643809079  4.024783209 
+    ##         Min          Q1         Med          Q3         Max 
+    ## -3.22399307 -0.65531681  0.01849189  0.66026948  2.70040978 
     ## 
     ## Number of Observations: 1500
     ## Number of Groups: 100
 
-#### Intepreting the fitted parameters
-
-A different intercept is fitted for each population.
-
-``` r
-coefs <-coefficients(model)
-coefs$population <- seq(1, populations)
-head(coefs, 15)
-```
-
-    ##    (Intercept)  height population
-    ## 1   0.37966428 2.50067          1
-    ## 2   0.20739137 2.50067          2
-    ## 3   0.02087309 2.50067          3
-    ## 4  -0.74597973 2.50067          4
-    ## 5   1.03876531 2.50067          5
-    ## 6   0.72013990 2.50067          6
-    ## 7   0.01381824 2.50067          7
-    ## 8  -0.35330302 2.50067          8
-    ## 9  -1.06519420 2.50067          9
-    ## 10 -0.37121698 2.50067         10
-    ## 11  0.10140628 2.50067         11
-    ## 12 -0.05134085 2.50067         12
-    ## 13 -0.41306573 2.50067         13
-    ## 14  0.15366769 2.50067         14
-    ## 15 -0.64702687 2.50067         15
-
-``` r
-head(penguin_data)
-```
-
-    ##   id     height    weight
-    ## 1  1 -0.5948500 -1.029969
-    ## 2  1  0.7210879  2.370175
-    ## 3  1  1.5680265  4.265775
-    ## 4  1 -0.5744618 -1.058510
-    ## 5  1  0.2478848  1.042556
-    ## 6  1  1.2830536  3.525327
-
-``` r
-population1<-filter(penguin_data, id==1)
-population2<-filter(penguin_data, id==2)
-population3<-filter(penguin_data, id==3)
-
-prediction1 <- coefs$`(Intercept)`[1] + coefs$height[1] * population1$height
-prediction2 <- coefs$`(Intercept)`[2] + coefs$height[2] * population2$height
-prediction3 <- coefs$`(Intercept)`[3] + coefs$height[3] * population3$height
-
-plot(population1$height, population1$weight, col='red')
-points(population1$height, prediction1, type='l', col='red')
-
-points(population2$height, population2$weight, col='green')
-points(population2$height, prediction2, type='l', col='green')
-
-points(population3$height, population3$weight, col='blue')
-points(population3$height, prediction3, type='l', col='blue')
-```
-
-![](MixedModels_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
-
-#### fitting the model using the lmer function
+#### Using lmer
 
 ``` r
 library(lme4)
 ```
 
     ## Loading required package: Matrix
-
-    ## 
-    ## Attaching package: 'Matrix'
-
-    ## The following objects are masked from 'package:tidyr':
-    ## 
-    ##     expand, pack, unpack
 
     ## 
     ## Attaching package: 'lme4'
@@ -231,26 +116,26 @@ summary(model)
     ## Formula: weight ~ height + (1 | id)
     ##    Data: penguin_data
     ## 
-    ## REML criterion at convergence: 477.1
+    ## REML criterion at convergence: 538.9
     ## 
     ## Scaled residuals: 
     ##     Min      1Q  Median      3Q     Max 
-    ## -3.6651 -0.6584  0.0078  0.6438  4.0248 
+    ## -3.2240 -0.6553  0.0185  0.6603  2.7004 
     ## 
     ## Random effects:
     ##  Groups   Name        Variance Std.Dev.
-    ##  id       (Intercept) 0.23777  0.4876  
-    ##  Residual             0.06085  0.2467  
+    ##  id       (Intercept) 0.26337  0.5132  
+    ##  Residual             0.06315  0.2513  
     ## Number of obs: 1500, groups:  id, 100
     ## 
     ## Fixed effects:
-    ##              Estimate Std. Error t value
-    ## (Intercept) -0.009427   0.049176  -0.192
-    ## height       2.500670   0.006571 380.546
+    ##             Estimate Std. Error t value
+    ## (Intercept) 0.073341   0.051728   1.418
+    ## height      2.496640   0.006783 368.083
     ## 
     ## Correlation of Fixed Effects:
     ##        (Intr)
-    ## height 0.001
+    ## height -0.002
 
 ``` r
 library(lmerTest)
@@ -278,32 +163,30 @@ summary(model)
     ## Formula: weight ~ height + (1 | id)
     ##    Data: penguin_data
     ## 
-    ## REML criterion at convergence: 477.1
+    ## REML criterion at convergence: 538.9
     ## 
     ## Scaled residuals: 
     ##     Min      1Q  Median      3Q     Max 
-    ## -3.6651 -0.6584  0.0078  0.6438  4.0248 
+    ## -3.2240 -0.6553  0.0185  0.6603  2.7004 
     ## 
     ## Random effects:
     ##  Groups   Name        Variance Std.Dev.
-    ##  id       (Intercept) 0.23777  0.4876  
-    ##  Residual             0.06085  0.2467  
+    ##  id       (Intercept) 0.26337  0.5132  
+    ##  Residual             0.06315  0.2513  
     ## Number of obs: 1500, groups:  id, 100
     ## 
     ## Fixed effects:
-    ##               Estimate Std. Error         df t value Pr(>|t|)    
-    ## (Intercept) -9.427e-03  4.918e-02  9.900e+01  -0.192    0.848    
-    ## height       2.501e+00  6.571e-03  1.402e+03 380.546   <2e-16 ***
+    ##              Estimate Std. Error        df t value Pr(>|t|)    
+    ## (Intercept) 7.334e-02  5.173e-02 9.900e+01   1.418    0.159    
+    ## height      2.497e+00  6.783e-03 1.401e+03 368.083   <2e-16 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
     ## Correlation of Fixed Effects:
     ##        (Intr)
-    ## height 0.001
+    ## height -0.002
 
 ## Pre and Post Penguins
-
-### Make data
 
 ``` r
 sample_size <- 100
@@ -311,13 +194,11 @@ variance_random_effect <- 0.25
 fixed_effect <- 0.5
 
 random_factor <- rnorm(populations, 0, sd=sqrt(variance_random_effect))
-noise <- rnorm(populations, 0, sd=0.1)
-
 
 ids <- seq(sample_size)
 
-pre_data <- rnorm(sample_size, mean = 10) + random_factor + noise
-post_data <- rnorm(sample_size, mean = 10 + fixed_effect) + random_factor + noise
+pre_data <- rnorm(sample_size, mean = 10) + random_factor
+post_data <- rnorm(sample_size, mean = 10 + fixed_effect) + random_factor
 
 
 id <- c(ids, ids)
@@ -330,12 +211,12 @@ head(repeated_data)
 ```
 
     ##   id measurement    weight
-    ## 1  1           1 10.784820
-    ## 2  2           1  8.090301
-    ## 3  3           1 10.419956
-    ## 4  4           1  8.912452
-    ## 5  5           1 11.736383
-    ## 6  6           1 11.759799
+    ## 1  1           1  8.568009
+    ## 2  2           1  9.840842
+    ## 3  3           1  9.469965
+    ## 4  4           1 10.448332
+    ## 5  5           1  8.996440
+    ## 6  6           1 10.454640
 
 ``` r
 v <- var(random_factor)
@@ -343,9 +224,7 @@ s <- sd(random_factor)
 c(v, s)
 ```
 
-    ## [1] 0.2835656 0.5325088
-
-### Fit model
+    ## [1] 0.1866066 0.4319799
 
 ``` r
 library(lme4)
@@ -358,50 +237,28 @@ summary(model)
     ## Formula: weight ~ measurement + (1 | id)
     ##    Data: repeated_data
     ## 
-    ## REML criterion at convergence: 653.9
+    ## REML criterion at convergence: 594.2
     ## 
     ## Scaled residuals: 
-    ##      Min       1Q   Median       3Q      Max 
-    ## -2.20886 -0.64857  0.02216  0.64364  2.51046 
+    ##     Min      1Q  Median      3Q     Max 
+    ## -2.8568 -0.5694 -0.1027  0.4984  3.4177 
     ## 
     ## Random effects:
     ##  Groups   Name        Variance Std.Dev.
-    ##  id       (Intercept) 0.2905   0.5389  
-    ##  Residual             1.2559   1.1207  
+    ##  id       (Intercept) 0.2027   0.4502  
+    ##  Residual             0.9390   0.9690  
     ## Number of obs: 200, groups:  id, 100
     ## 
     ## Fixed effects:
     ##              Estimate Std. Error       df t value Pr(>|t|)    
-    ## (Intercept)   10.1212     0.1244 191.2519  81.391  < 2e-16 ***
-    ## measurement2   0.4949     0.1585  99.0000   3.123  0.00235 ** 
+    ## (Intercept)   10.0263     0.1069 191.9512  93.835   <2e-16 ***
+    ## measurement2   0.3574     0.1370  99.0000   2.608   0.0105 *  
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
     ## Correlation of Fixed Effects:
     ##             (Intr)
-    ## measuremnt2 -0.637
-
-### Intepreting the model
-
-``` r
-predictions <-unname(predict(model))
-before <- predictions[1: sample_size]
-after <- predictions[101:length(predictions)]
-
-c1 <- rgb(173,216,230,max = 255, alpha = 80, names = "lt.blue")
-c2 <- rgb(255,192,203, max = 255, alpha = 80, names = "lt.pink")
-
-hist(before, col=c1, xlim=range(predictions))
-hist(after, add=TRUE, col=c2)
-```
-
-![](MixedModels_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
-
-``` r
-plot(before, after)
-```
-
-![](MixedModels_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+    ## measuremnt2 -0.641
 
 ## Three measures
 
@@ -429,12 +286,12 @@ head(three_repeats_data)
 ```
 
     ##   id measurement    weight
-    ## 1  1           1 12.507390
-    ## 2  2           1  7.808258
-    ## 3  3           1 10.776542
-    ## 4  4           1  8.905573
-    ## 5  5           1 10.521292
-    ## 6  6           1  9.858302
+    ## 1  1           1  9.533451
+    ## 2  2           1  9.150010
+    ## 3  3           1 11.851147
+    ## 4  4           1 10.851420
+    ## 5  5           1 11.981861
+    ## 6  6           1  8.776240
 
 ``` r
 v <- var(random_factor)
@@ -442,7 +299,7 @@ s <- sd(random_factor)
 c(v, s)
 ```
 
-    ## [1] 0.2120675 0.4605079
+    ## [1] 0.2369219 0.4867462
 
 ``` r
 library(lme4)
@@ -455,30 +312,30 @@ summary(model)
     ## Formula: weight ~ measurement + (1 | id)
     ##    Data: three_repeats_data
     ## 
-    ## REML criterion at convergence: 923
+    ## REML criterion at convergence: 909.2
     ## 
     ## Scaled residuals: 
     ##      Min       1Q   Median       3Q      Max 
-    ## -2.91740 -0.65198  0.01567  0.59009  2.32571 
+    ## -2.52553 -0.63295  0.01161  0.62035  2.44563 
     ## 
     ## Random effects:
     ##  Groups   Name        Variance Std.Dev.
-    ##  id       (Intercept) 0.2296   0.4792  
-    ##  Residual             1.0579   1.0286  
+    ##  id       (Intercept) 0.2361   0.4859  
+    ##  Residual             0.9982   0.9991  
     ## Number of obs: 300, groups:  id, 100
     ## 
     ## Fixed effects:
     ##              Estimate Std. Error       df t value Pr(>|t|)    
-    ## (Intercept)   10.0449     0.1135 279.2392  88.524  < 2e-16 ***
-    ## measurement2   0.5848     0.1455 198.0000   4.020 8.27e-05 ***
-    ## measurement3   0.9701     0.1455 198.0000   6.669 2.51e-10 ***
+    ## (Intercept)    9.9335     0.1111 276.7519  89.414  < 2e-16 ***
+    ## measurement2   0.8918     0.1413 198.0000   6.312 1.77e-09 ***
+    ## measurement3   0.9526     0.1413 198.0000   6.742 1.67e-10 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
     ## Correlation of Fixed Effects:
     ##             (Intr) msrmn2
-    ## measuremnt2 -0.641       
-    ## measuremnt3 -0.641  0.500
+    ## measuremnt2 -0.636       
+    ## measuremnt3 -0.636  0.500
 
 ## Interaction effects
 
@@ -506,12 +363,12 @@ head(interaction_data)
 ```
 
     ##   id measurement sex    weight
-    ## 1  1           0   0 11.553680
-    ## 2  2           0   0 10.521194
-    ## 3  3           0   0 10.050414
-    ## 4  4           0   0 10.903965
-    ## 5  5           0   0  8.102904
-    ## 6  6           0   0  9.657976
+    ## 1  1           0   0 10.020238
+    ## 2  2           0   0  8.918820
+    ## 3  3           0   0 10.464567
+    ## 4  4           0   0  9.472134
+    ## 5  5           0   0  9.138534
+    ## 6  6           0   0 10.471172
 
 ``` r
 library(lme4)
@@ -524,47 +381,63 @@ summary(model)
     ## Formula: weight ~ measurement * sex + (1 | id)
     ##    Data: interaction_data
     ## 
-    ## REML criterion at convergence: 894.5
+    ## REML criterion at convergence: 917.2
     ## 
     ## Scaled residuals: 
     ##      Min       1Q   Median       3Q      Max 
-    ## -2.20583 -0.69013  0.05915  0.56011  2.83733 
+    ## -2.38248 -0.59310 -0.02224  0.72977  2.66373 
     ## 
     ## Random effects:
     ##  Groups   Name        Variance Std.Dev.
-    ##  id       (Intercept) 0.2682   0.5179  
-    ##  Residual             0.9185   0.9584  
+    ##  id       (Intercept) 0.1922   0.4384  
+    ##  Residual             1.0587   1.0289  
     ## Number of obs: 300, groups:  id, 100
     ## 
     ## Fixed effects:
     ##                   Estimate Std. Error       df t value Pr(>|t|)    
-    ## (Intercept)        10.0852     0.1541 266.7450  65.463  < 2e-16 ***
-    ## measurement1        1.0849     0.1917 196.0000   5.660 5.31e-08 ***
-    ## measurement2        2.0240     0.1917 196.0000  10.560  < 2e-16 ***
-    ## sex1               -0.1565     0.2179 266.7450  -0.718    0.473    
-    ## measurement1:sex1   1.7864     0.2711 196.0000   6.590 3.96e-10 ***
-    ## measurement2:sex1   4.0445     0.2711 196.0000  14.921  < 2e-16 ***
+    ## (Intercept)         9.5169     0.1582 280.7434  60.169  < 2e-16 ***
+    ## measurement1        1.4738     0.2058 196.0000   7.162 1.57e-11 ***
+    ## measurement2        2.2805     0.2058 196.0000  11.082  < 2e-16 ***
+    ## sex1                0.6808     0.2237 280.7434   3.044  0.00256 ** 
+    ## measurement1:sex1   1.5035     0.2910 196.0000   5.166 5.86e-07 ***
+    ## measurement2:sex1   3.5926     0.2910 196.0000  12.345  < 2e-16 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
     ## Correlation of Fixed Effects:
     ##             (Intr) msrmn1 msrmn2 sex1   msr1:1
-    ## measuremnt1 -0.622                            
-    ## measuremnt2 -0.622  0.500                     
-    ## sex1        -0.707  0.440  0.440              
-    ## msrmnt1:sx1  0.440 -0.707 -0.354 -0.622       
-    ## msrmnt2:sx1  0.440 -0.354 -0.707 -0.622  0.500
+    ## measuremnt1 -0.651                            
+    ## measuremnt2 -0.651  0.500                     
+    ## sex1        -0.707  0.460  0.460              
+    ## msrmnt1:sx1  0.460 -0.707 -0.354 -0.651       
+    ## msrmnt2:sx1  0.460 -0.354 -0.707 -0.651  0.500
 
 ``` r
 boxplot(interaction_data$weight ~ interaction_data$measurement * interaction_data$sex)
 ```
 
-![](MixedModels_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+![](MixedModels_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
 ## Real data (cars)
 
 ``` r
 library(tidyverse)
+```
+
+    ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
+    ## ✔ ggplot2 3.3.6     ✔ purrr   0.3.4
+    ## ✔ tibble  3.1.8     ✔ dplyr   1.0.9
+    ## ✔ tidyr   1.2.0     ✔ stringr 1.4.0
+    ## ✔ readr   2.1.2     ✔ forcats 0.5.2
+    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ✖ dplyr::collapse() masks nlme::collapse()
+    ## ✖ tidyr::expand()   masks Matrix::expand()
+    ## ✖ dplyr::filter()   masks stats::filter()
+    ## ✖ dplyr::lag()      masks stats::lag()
+    ## ✖ tidyr::pack()     masks Matrix::pack()
+    ## ✖ tidyr::unpack()   masks Matrix::unpack()
+
+``` r
 library(readxl)
 car_data <-read_xls('data/kuiper.xls')
 colnames(car_data)
