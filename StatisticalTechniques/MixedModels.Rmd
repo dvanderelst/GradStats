@@ -5,6 +5,7 @@ output:
   github_document:
     html_preview: true
     toc: true
+    toc_depth: 5
 ---
 
 
@@ -13,7 +14,14 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r}
+library(tidyverse)
+```
+
+
 ## 100 populations of penguins
+
+### Make data
 
 ```{r}
 sample_size <- 15
@@ -41,6 +49,7 @@ for (i in 1:populations){
  
 penguin_data <- data.frame(all_ids, all_heights, all_weights)
 colnames(penguin_data) <-c('id', 'height', 'weight')
+head(penguin_data)
 
 ```
 
@@ -52,7 +61,7 @@ s <- sd(random_factor)
 c(v, s)
 ```
 
-#### Using lme
+#### fitting the model using the lme function
 
 The 1 indicates that an intercept is to be fitted for each level of the random variable.
 
@@ -61,8 +70,38 @@ library(nlme)
 model <- lme(weight ~ height, random=~1|id, data = penguin_data)
 summary(model)
 ```
+#### Intepreting the fitted parameters
 
-#### Using lmer
+A different intercept is fitted for each population.
+
+```{r}
+coefs <-coefficients(model)
+coefs$population <- seq(1, populations)
+head(coefs, 15)
+```
+```{r}
+head(penguin_data)
+
+population1<-filter(penguin_data, id==1)
+population2<-filter(penguin_data, id==2)
+population3<-filter(penguin_data, id==3)
+
+prediction1 <- coefs$`(Intercept)`[1] + coefs$height[1] * population1$height
+prediction2 <- coefs$`(Intercept)`[2] + coefs$height[2] * population2$height
+prediction3 <- coefs$`(Intercept)`[3] + coefs$height[3] * population3$height
+
+plot(population1$height, population1$weight, col='red')
+points(population1$height, prediction1, type='l', col='red')
+
+points(population2$height, population2$weight, col='green')
+points(population2$height, prediction2, type='l', col='green')
+
+points(population3$height, population3$weight, col='blue')
+points(population3$height, prediction3, type='l', col='blue')
+```
+
+
+#### fitting the model using the lmer function
 
 ```{r}
 library(lme4)
@@ -79,17 +118,21 @@ summary(model)
 
 ## Pre and Post Penguins
 
+### Make data
+
 ```{r}
 sample_size <- 100
 variance_random_effect <- 0.25
 fixed_effect <- 0.5
 
 random_factor <- rnorm(populations, 0, sd=sqrt(variance_random_effect))
+noise <- rnorm(populations, 0, sd=0.1)
+
 
 ids <- seq(sample_size)
 
-pre_data <- rnorm(sample_size, mean = 10) + random_factor
-post_data <- rnorm(sample_size, mean = 10 + fixed_effect) + random_factor
+pre_data <- rnorm(sample_size, mean = 10) + random_factor + noise
+post_data <- rnorm(sample_size, mean = 10 + fixed_effect) + random_factor + noise
 
 
 id <- c(ids, ids)
@@ -107,11 +150,33 @@ s <- sd(random_factor)
 c(v, s)
 ```
 
+### Fit model
+
 ```{r}
 library(lme4)
 model <- lmer(weight ~ measurement + (1|id), data = repeated_data)
 summary(model)
 ```
+
+### Intepreting the model
+
+```{r}
+predictions <-unname(predict(model))
+before <- predictions[1: sample_size]
+after <- predictions[101:length(predictions)]
+
+c1 <- rgb(173,216,230,max = 255, alpha = 80, names = "lt.blue")
+c2 <- rgb(255,192,203, max = 255, alpha = 80, names = "lt.pink")
+
+hist(before, col=c1, xlim=range(predictions))
+hist(after, add=TRUE, col=c2)
+
+```
+
+```{r}
+plot(before, after)
+```
+
 
 ## Three measures
 
