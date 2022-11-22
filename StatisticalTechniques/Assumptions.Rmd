@@ -26,6 +26,11 @@ vik_data <-read_csv('data/vik_table_9_2.csv')
 ## Example 1
 
 ```{r}
+plot(vik_data$X1, vik_data$Y)
+```
+
+
+```{r}
 model <- lm(Y ~ X1, data = vik_data)
 plot(fitted(model), resid(model))
 ```

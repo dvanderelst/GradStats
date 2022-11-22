@@ -1,24 +1,24 @@
 Assumptions
 ================
-Last Updated: 01, November, 2022 at 08:26
+Last Updated: 22, November, 2022 at 09:39
 
--   <a href="#read-some-data" id="toc-read-some-data">Read some data</a>
--   <a href="#assumption-1-linearity-of-model"
-    id="toc-assumption-1-linearity-of-model">Assumption 1: Linearity of
-    model</a>
-    -   <a href="#example-1" id="toc-example-1">Example 1</a>
-    -   <a href="#example-2" id="toc-example-2">Example 2</a>
-    -   <a href="#example-3" id="toc-example-3">Example 3</a>
-    -   <a href="#example-4" id="toc-example-4">Example 4</a>
--   <a href="#assumption-2-normal-distribution-of-the-errors"
-    id="toc-assumption-2-normal-distribution-of-the-errors">Assumption 2:
-    normal distribution of the errors</a>
--   <a href="#assumption-3-homoscedasticity"
-    id="toc-assumption-3-homoscedasticity">Assumption 3:
-    Homoscedasticity</a>
--   <a href="#assumption-4-little-multicollinearity"
-    id="toc-assumption-4-little-multicollinearity">Assumption 4: Little
-    multicollinearity</a>
+- <a href="#read-some-data" id="toc-read-some-data">Read some data</a>
+- <a href="#assumption-1-linearity-of-model"
+  id="toc-assumption-1-linearity-of-model">Assumption 1: Linearity of
+  model</a>
+  - <a href="#example-1" id="toc-example-1">Example 1</a>
+  - <a href="#example-2" id="toc-example-2">Example 2</a>
+  - <a href="#example-3" id="toc-example-3">Example 3</a>
+  - <a href="#example-4" id="toc-example-4">Example 4</a>
+- <a href="#assumption-2-normal-distribution-of-the-errors"
+  id="toc-assumption-2-normal-distribution-of-the-errors">Assumption 2:
+  normal distribution of the errors</a>
+- <a href="#assumption-3-homoscedasticity"
+  id="toc-assumption-3-homoscedasticity">Assumption 3:
+  Homoscedasticity</a>
+- <a href="#assumption-4-little-multicollinearity"
+  id="toc-assumption-4-little-multicollinearity">Assumption 4: Little
+  multicollinearity</a>
 
 # Read some data
 
@@ -27,10 +27,10 @@ library(tidyverse)
 ```
 
     ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
-    ## ✔ ggplot2 3.3.6     ✔ purrr   0.3.4
-    ## ✔ tibble  3.1.8     ✔ dplyr   1.0.9
-    ## ✔ tidyr   1.2.0     ✔ stringr 1.4.0
-    ## ✔ readr   2.1.2     ✔ forcats 0.5.2
+    ## ✔ ggplot2 3.4.0      ✔ purrr   0.3.5 
+    ## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
+    ## ✔ tidyr   1.2.1      ✔ stringr 1.4.1 
+    ## ✔ readr   2.1.3      ✔ forcats 0.5.2 
     ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
@@ -64,18 +64,24 @@ vik_data <-read_csv('data/vik_table_9_2.csv')
 ## Example 1
 
 ``` r
+plot(vik_data$X1, vik_data$Y)
+```
+
+![](Assumptions_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+
+``` r
 model <- lm(Y ~ X1, data = vik_data)
 plot(fitted(model), resid(model))
 ```
 
-![](Assumptions_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+![](Assumptions_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
 ``` r
 par(mfrow = c(2, 2))  # Split the plotting panel into a 2 x 2 grid
 plot(model)
 ```
 
-![](Assumptions_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+![](Assumptions_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 ## Example 2
 
@@ -89,7 +95,7 @@ plot(x_data, y_data)
 abline(model, col='red')
 ```
 
-![](Assumptions_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+![](Assumptions_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 ``` r
 model <- lm(y_data ~ x_data, data = fake)
@@ -97,7 +103,7 @@ par(mfrow = c(2, 2))  # Split the plotting panel into a 2 x 2 grid
 plot(model)
 ```
 
-![](Assumptions_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+![](Assumptions_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 ``` r
 par(mfrow = c(1, 1)) 
@@ -115,7 +121,7 @@ par(mfrow = c(2, 2))  # Split the plotting panel into a 2 x 2 grid
 plot(model)
 ```
 
-![](Assumptions_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](Assumptions_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 ``` r
 par(mfrow = c(1, 1))
@@ -129,7 +135,7 @@ par(mfrow = c(2, 2))  # Split the plotting panel into a 2 x 2 grid
 plot(model)
 ```
 
-![](Assumptions_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](Assumptions_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 ``` r
 par(mfrow = c(1, 1)) 
@@ -143,14 +149,14 @@ residuals <- resid(model)
 hist(residuals, 50)
 ```
 
-![](Assumptions_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+![](Assumptions_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 ``` r
 par(mfrow = c(2, 2))  # Split the plotting panel into a 2 x 2 grid
 plot(model)
 ```
 
-![](Assumptions_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+![](Assumptions_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
 ``` r
 par(mfrow = c(1, 1)) 
@@ -167,7 +173,7 @@ y<- (20 * x) + errors
 plot(x, y)
 ```
 
-![](Assumptions_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](Assumptions_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
 ``` r
 fake<-tibble(x=x, y=y)
@@ -185,33 +191,33 @@ summary(model)
     ## lm(formula = y ~ x, data = fake)
     ## 
     ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -10.5364  -1.3715   0.0084   1.3069  15.1510 
+    ##     Min      1Q  Median      3Q     Max 
+    ## -9.2905 -1.2183  0.0314  1.2335  8.7717 
     ## 
     ## Coefficients:
-    ##              Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept) -0.005425   0.270780   -0.02    0.984    
-    ## x           19.843104   0.469699   42.25   <2e-16 ***
+    ##             Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)  0.04764    0.24108   0.198    0.843    
+    ## x           19.73059    0.41414  47.642   <2e-16 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 3.009 on 498 degrees of freedom
-    ## Multiple R-squared:  0.7818, Adjusted R-squared:  0.7814 
-    ## F-statistic:  1785 on 1 and 498 DF,  p-value: < 2.2e-16
+    ## Residual standard error: 2.711 on 498 degrees of freedom
+    ## Multiple R-squared:  0.8201, Adjusted R-squared:  0.8197 
+    ## F-statistic:  2270 on 1 and 498 DF,  p-value: < 2.2e-16
 
 ``` r
 plot(x, y)
 abline(model, col='red')
 ```
 
-![](Assumptions_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+![](Assumptions_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
 ``` r
 par(mfrow = c(2, 2))  # Split the plotting panel into a 2 x 2 grid
 plot(model)
 ```
 
-![](Assumptions_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](Assumptions_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 ``` r
 par(mfrow = c(1, 1)) 
@@ -224,4 +230,4 @@ partial<-select(body_data, Chest, Waist, Forearm, Bicep)
 pairs(partial)
 ```
 
-![](Assumptions_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+![](Assumptions_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->

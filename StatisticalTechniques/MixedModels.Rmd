@@ -8,8 +8,6 @@ output:
     toc_depth: 5
 ---
 
-
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -17,7 +15,6 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(tidyverse)
 ```
-
 
 ## 100 populations of penguins
 
@@ -70,6 +67,7 @@ library(nlme)
 model <- lme(weight ~ height, random=~1|id, data = penguin_data)
 summary(model)
 ```
+
 #### Intepreting the fitted parameters
 
 A different intercept is fitted for each population.
@@ -79,6 +77,7 @@ coefs <-coefficients(model)
 coefs$population <- seq(1, populations)
 head(coefs, 15)
 ```
+
 ```{r}
 head(penguin_data)
 
@@ -99,7 +98,6 @@ points(population2$height, prediction2, type='l', col='green')
 points(population3$height, population3$weight, col='blue')
 points(population3$height, prediction3, type='l', col='blue')
 ```
-
 
 #### fitting the model using the lmer function
 
@@ -160,6 +158,17 @@ summary(model)
 
 ### Intepreting the model
 
+It turns out that getting the variance terms is a bit tricky: 
+
++ <https://stats.stackexchange.com/questions/122218/why-do-the-estimated-values-from-a-best-linear-unbiased-predictor-blup-differ>
++ <https://easystats.github.io/insight/reference/get_variance.html#ref-usage>
+
+```{r}
+library(insight)
+get_variance_random(model)
+get_variance_intercept(model)
+```
+
 ```{r}
 predictions <-unname(predict(model))
 before <- predictions[1: sample_size]
@@ -168,17 +177,12 @@ after <- predictions[101:length(predictions)]
 c1 <- rgb(173,216,230,max = 255, alpha = 80, names = "lt.blue")
 c2 <- rgb(255,192,203, max = 255, alpha = 80, names = "lt.pink")
 
-hist(before, col=c1, xlim=range(predictions))
+hist(before, col=c1, xlim=range(predictions), ylim=c(0, 30))
 hist(after, add=TRUE, col=c2)
 
 ```
 
-```{r}
-plot(before, after)
-```
-
-
-## Three measures
+## Three repeated measures
 
 ```{r}
 sample_size <- 100
@@ -230,7 +234,7 @@ data2 <- rnorm(sample_size, mean = 10) + 1 + sex * 2 + random_factor
 data3 <- rnorm(sample_size, mean = 10) + 2 + sex * 4 + random_factor
 
 id <- c(ids, ids, ids)
-sex <-c(sex, sex, sex) # used when demoing interaction effects
+sex <-c(sex, sex, sex)
 measurement<-c(rep(0, sample_size), rep(1, sample_size), rep(2, sample_size))
 weight <-c(data1, data2, data3)
 
@@ -241,6 +245,13 @@ head(interaction_data)
 ```
 
 ```{r}
+v <- var(random_factor)
+s <- sd(random_factor)
+c(v, s)
+```
+
+
+```{r}
 library(lme4)
 model <- lmer(weight ~ measurement * sex + (1|id), data = interaction_data)
 summary(model)
@@ -249,6 +260,13 @@ summary(model)
 ```{r}
 boxplot(interaction_data$weight ~ interaction_data$measurement * interaction_data$sex)
 ```
+
+```{r}
+library(ggplot2)
+interaction_data$prediction <- unname(predict(model))
+ggplot(interaction_data) + aes(x=measurement, y=prediction, group=id, color=sex) + geom_line()
+```
+
 
 ## Real data (cars)
 
