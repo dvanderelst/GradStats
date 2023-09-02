@@ -1,37 +1,38 @@
 Basic Programming
 ================
-Last Updated: 22, September, 2022 at 09:58
+Last Updated: 02, September, 2023 at 10:36
 
--   <a href="#basics-of-programming-variables-and-functions"
-    id="toc-basics-of-programming-variables-and-functions">Basics of
-    programming: variables and functions</a>
--   <a href="#basic-operations-r-as-a-calculator"
-    id="toc-basic-operations-r-as-a-calculator">Basic operations: R as a
-    calculator</a>
--   <a href="#logical-operations" id="toc-logical-operations">Logical
-    operations</a>
--   <a href="#storing-data-in-variables"
-    id="toc-storing-data-in-variables">Storing data in variables</a>
-    -   <a href="#assigning-data-to-a-variable"
-        id="toc-assigning-data-to-a-variable">Assigning data to a variable</a>
-    -   <a href="#note-on-naming-variables"
-        id="toc-note-on-naming-variables">Note on naming variables</a>
-    -   <a href="#the-vector" id="toc-the-vector">The vector</a>
--   <a href="#a-trick" id="toc-a-trick">A trick</a>
--   <a href="#functions" id="toc-functions">Functions</a>
--   <a href="#flow-control-in-r" id="toc-flow-control-in-r">Flow control in
-    R</a>
-    -   <a href="#the-if-statement" id="toc-the-if-statement">The
-        <code>if</code> statement</a>
-    -   <a href="#the-for-loop" id="toc-the-for-loop">The <code>for</code>
-        loop</a>
-    -   <a href="#the-while-loop" id="toc-the-while-loop">The <code>while</code>
-        loop</a>
-    -   <a href="#the-break-keyword" id="toc-the-break-keyword">The
-        <code>break</code> keyword</a>
--   <a href="#exercises" id="toc-exercises">Exercises</a>
--   <a href="#note-on-vector-preallocation"
-    id="toc-note-on-vector-preallocation">Note on vector preallocation</a>
+- <a href="#basics-of-programming-variables-and-functions"
+  id="toc-basics-of-programming-variables-and-functions">Basics of
+  programming: variables and functions</a>
+- <a href="#basic-operations-r-as-a-calculator"
+  id="toc-basic-operations-r-as-a-calculator">Basic operations: R as a
+  calculator</a>
+- <a href="#logical-operations" id="toc-logical-operations">Logical
+  operations</a>
+- <a href="#storing-data-in-variables"
+  id="toc-storing-data-in-variables">Storing data in variables</a>
+  - <a href="#assigning-data-to-a-variable"
+    id="toc-assigning-data-to-a-variable">Assigning data to a variable</a>
+  - <a href="#note-on-naming-variables"
+    id="toc-note-on-naming-variables">Note on naming variables</a>
+  - <a href="#the-vector" id="toc-the-vector">The vector</a>
+- <a href="#a-trick" id="toc-a-trick">A trick</a>
+- <a href="#functions" id="toc-functions">Functions</a>
+- <a href="#flow-control-in-r" id="toc-flow-control-in-r">Flow control in
+  R</a>
+  - <a href="#the-if-statement" id="toc-the-if-statement">The
+    <code>if</code> statement</a>
+  - <a href="#the-for-loop" id="toc-the-for-loop">The <code>for</code>
+    loop</a>
+  - <a href="#the-while-loop" id="toc-the-while-loop">The <code>while</code>
+    loop</a>
+  - <a href="#the-break-keyword" id="toc-the-break-keyword">The
+    <code>break</code> keyword</a>
+- <a href="#note-on-vector-preallocation"
+  id="toc-note-on-vector-preallocation">Note on vector preallocation</a>
+- <a href="#working-with-text" id="toc-working-with-text">Working with
+  text</a>
 
 ## Basics of programming: variables and functions
 
@@ -277,7 +278,7 @@ print(result)
     ## 
     ## Coefficients:
     ## (Intercept)            x  
-    ##       9.782        5.114
+    ##       9.904        4.957
 
 ## Flow control in R
 
@@ -379,11 +380,11 @@ for (x in my_vector) {
 }
 ```
 
-    ## [1] 2.439401
-    ## [1] 0.2353017
-    ## [1] 1.258225
-    ## [1] 0.5124524
-    ## [1] 2.753018
+    ## [1] 2.662378
+    ## [1] 0.3475585
+    ## [1] 2.625078
+    ## [1] 0.8234597
+    ## [1] 1.285177
 
 Just to drive the point home, another example:
 
@@ -480,20 +481,6 @@ while (i < 100000) {
     ## [1] 4
     ## [1] 5
 
-## Exercises
-
--   Write a for loop that iterates over the numbers 1 to 7 and prints
-    the cube of each number using `print()`.
--   Write a while loop that prints out standard random normal numbers
-    (use `rnorm()`) but stops (breaks) if you get a number bigger than
-    1.
--   Using a for loop simulate the flip a coin twenty times, keeping
-    track of the individual outcomes (1 = heads, 0 = tails) in a vector.
--   Use a while loop to investigate the number of terms required before
-    the series
-    ![1 \times 2 \times 3 \times ,\ldots](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;1%20%5Ctimes%202%20%5Ctimes%203%20%5Ctimes%20%2C%5Cldots "1 \times 2 \times 3 \times ,\ldots")
-    reaches above 10 million.
-
 ## Note on vector preallocation
 
 This piece of code build a vector by appending numbers to the end of it.
@@ -510,7 +497,7 @@ endTime <- Sys.time()
 print(sprintf('Duration: %.2f', endTime - startTime))
 ```
 
-    ## [1] "Duration: 0.38"
+    ## [1] "Duration: 0.80"
 
 This piece of code preallocates a vector and is more efficient.
 
@@ -526,4 +513,8 @@ endTime <- Sys.time()
 print(sprintf('Duration: %.2f', endTime - startTime))
 ```
 
-    ## [1] "Duration: 0.02"
+    ## [1] "Duration: 0.05"
+
+# Working with text
+
+\[TBC\]
