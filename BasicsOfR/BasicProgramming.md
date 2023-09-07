@@ -1,6 +1,6 @@
 Basic Programming
 ================
-Last Updated: 02, September, 2023 at 10:36
+Last Updated: 07, September, 2023 at 08:57
 
 - <a href="#basics-of-programming-variables-and-functions"
   id="toc-basics-of-programming-variables-and-functions">Basics of
@@ -31,8 +31,9 @@ Last Updated: 02, September, 2023 at 10:36
     <code>break</code> keyword</a>
 - <a href="#note-on-vector-preallocation"
   id="toc-note-on-vector-preallocation">Note on vector preallocation</a>
-- <a href="#working-with-text" id="toc-working-with-text">Working with
-  text</a>
+- <a href="#working-with-text-the-paste-function"
+  id="toc-working-with-text-the-paste-function">Working with text: the
+  paste() function</a>
 
 ## Basics of programming: variables and functions
 
@@ -220,7 +221,7 @@ selected
 
 ## A trick
 
-Before we go on, I want to share a simple trick. Using a IDE like
+Before we go on, I want to share a simple trick. Using an IDE like
 Rstudio makes life easier (or at least it should). One of the benefits
 of the IDE is tab-completion.
 
@@ -278,7 +279,7 @@ print(result)
     ## 
     ## Coefficients:
     ## (Intercept)            x  
-    ##       9.904        4.957
+    ##      10.115        4.813
 
 ## Flow control in R
 
@@ -380,11 +381,11 @@ for (x in my_vector) {
 }
 ```
 
-    ## [1] 2.662378
-    ## [1] 0.3475585
-    ## [1] 2.625078
-    ## [1] 0.8234597
-    ## [1] 1.285177
+    ## [1] 1.218152
+    ## [1] 1.400858
+    ## [1] 0.7454921
+    ## [1] 1.272398
+    ## [1] 1.66428
 
 Just to drive the point home, another example:
 
@@ -497,7 +498,7 @@ endTime <- Sys.time()
 print(sprintf('Duration: %.2f', endTime - startTime))
 ```
 
-    ## [1] "Duration: 0.80"
+    ## [1] "Duration: 0.47"
 
 This piece of code preallocates a vector and is more efficient.
 
@@ -513,8 +514,68 @@ endTime <- Sys.time()
 print(sprintf('Duration: %.2f', endTime - startTime))
 ```
 
-    ## [1] "Duration: 0.05"
+    ## [1] "Duration: 0.02"
 
-# Working with text
+# Working with text: the paste() function
 
-\[TBC\]
+``` r
+x <- runif(100)
+y <- 10 + 5 * x + rnorm(100)
+result <- lm(y ~ x)
+summary(result)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = y ~ x)
+    ## 
+    ## Residuals:
+    ##      Min       1Q   Median       3Q      Max 
+    ## -1.85224 -0.77850  0.05368  0.64199  2.19397 
+    ## 
+    ## Coefficients:
+    ##             Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)   9.9279     0.1821   54.53   <2e-16 ***
+    ## x             5.2523     0.3181   16.51   <2e-16 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 0.9437 on 98 degrees of freedom
+    ## Multiple R-squared:  0.7356, Adjusted R-squared:  0.7329 
+    ## F-statistic: 272.6 on 1 and 98 DF,  p-value: < 2.2e-16
+
+``` r
+test1 <- paste(10000)
+test2<-paste(result$coefficients[1], result$coefficients[2], sep = ', ')
+test3<-paste('The coefficients are: ', result$coefficients[1],  ', ', result$coefficients[2], sep='')
+print(test1)
+```
+
+    ## [1] "10000"
+
+``` r
+print(test2)
+```
+
+    ## [1] "9.92790570337572, 5.25233646908989"
+
+``` r
+print(test3)
+```
+
+    ## [1] "The coefficients are: 9.92790570337572, 5.25233646908989"
+
+``` r
+for (x in 1:10) {print(test3)}
+```
+
+    ## [1] "The coefficients are: 9.92790570337572, 5.25233646908989"
+    ## [1] "The coefficients are: 9.92790570337572, 5.25233646908989"
+    ## [1] "The coefficients are: 9.92790570337572, 5.25233646908989"
+    ## [1] "The coefficients are: 9.92790570337572, 5.25233646908989"
+    ## [1] "The coefficients are: 9.92790570337572, 5.25233646908989"
+    ## [1] "The coefficients are: 9.92790570337572, 5.25233646908989"
+    ## [1] "The coefficients are: 9.92790570337572, 5.25233646908989"
+    ## [1] "The coefficients are: 9.92790570337572, 5.25233646908989"
+    ## [1] "The coefficients are: 9.92790570337572, 5.25233646908989"
+    ## [1] "The coefficients are: 9.92790570337572, 5.25233646908989"
