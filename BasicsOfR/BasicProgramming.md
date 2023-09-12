@@ -1,6 +1,6 @@
 Basic Programming
 ================
-Last Updated: 07, September, 2023 at 08:57
+Last Updated: 12, September, 2023 at 08:37
 
 - <a href="#basics-of-programming-variables-and-functions"
   id="toc-basics-of-programming-variables-and-functions">Basics of
@@ -29,11 +29,18 @@ Last Updated: 07, September, 2023 at 08:57
     loop</a>
   - <a href="#the-break-keyword" id="toc-the-break-keyword">The
     <code>break</code> keyword</a>
+- <a href="#exercises" id="toc-exercises">Exercises</a>
 - <a href="#note-on-vector-preallocation"
   id="toc-note-on-vector-preallocation">Note on vector preallocation</a>
 - <a href="#working-with-text-the-paste-function"
   id="toc-working-with-text-the-paste-function">Working with text: the
   paste() function</a>
+- <a href="#solutions-to-exercises"
+  id="toc-solutions-to-exercises">Solutions to exercises</a>
+  - <a href="#one" id="toc-one">One</a>
+  - <a href="#two" id="toc-two">Two</a>
+  - <a href="#three" id="toc-three">Three</a>
+  - <a href="#four" id="toc-four">Four</a>
 
 ## Basics of programming: variables and functions
 
@@ -74,7 +81,7 @@ sin(pi / 2)
     ## [1] FALSE
 
 ``` r
-5 + 1 == 6 #NOTICE: I am using == to check equality!
+5 + 1 == 6 #NOTE: I am using == to check equality!
 ```
 
     ## [1] TRUE
@@ -279,7 +286,7 @@ print(result)
     ## 
     ## Coefficients:
     ## (Intercept)            x  
-    ##      10.115        4.813
+    ##       9.847        5.283
 
 ## Flow control in R
 
@@ -381,11 +388,11 @@ for (x in my_vector) {
 }
 ```
 
-    ## [1] 1.218152
-    ## [1] 1.400858
-    ## [1] 0.7454921
-    ## [1] 1.272398
-    ## [1] 1.66428
+    ## [1] 0.5906325
+    ## [1] 1.660245
+    ## [1] 1.133295
+    ## [1] 2.086144
+    ## [1] 2.253179
 
 Just to drive the point home, another example:
 
@@ -482,6 +489,18 @@ while (i < 100000) {
     ## [1] 4
     ## [1] 5
 
+## Exercises
+
+- Write a for loop that iterates over the numbers 1 to 7 and prints the
+  cube of each number using `print()`.
+- Write a while loop that prints out standard random normal numbers (use
+  `rnorm()`) but stops (breaks) if you get a number bigger than 1.
+- Using a for loop simulate the flip a coin twenty times, keeping track
+  of the individual outcomes (1 = heads, 0 = tails) in a vector.
+- Use a while loop to investigate the number of terms required before
+  the series $1 \times 2 \times 3 \times ,\ldots$ reaches above 10
+  million.
+
 ## Note on vector preallocation
 
 This piece of code build a vector by appending numbers to the end of it.
@@ -498,7 +517,7 @@ endTime <- Sys.time()
 print(sprintf('Duration: %.2f', endTime - startTime))
 ```
 
-    ## [1] "Duration: 0.47"
+    ## [1] "Duration: 0.45"
 
 This piece of code preallocates a vector and is more efficient.
 
@@ -514,7 +533,7 @@ endTime <- Sys.time()
 print(sprintf('Duration: %.2f', endTime - startTime))
 ```
 
-    ## [1] "Duration: 0.02"
+    ## [1] "Duration: 0.03"
 
 # Working with text: the paste() function
 
@@ -531,18 +550,18 @@ summary(result)
     ## 
     ## Residuals:
     ##      Min       1Q   Median       3Q      Max 
-    ## -1.85224 -0.77850  0.05368  0.64199  2.19397 
+    ## -2.29281 -0.49598 -0.02963  0.56539  2.47102 
     ## 
     ## Coefficients:
     ##             Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)   9.9279     0.1821   54.53   <2e-16 ***
-    ## x             5.2523     0.3181   16.51   <2e-16 ***
+    ## (Intercept)   9.8593     0.2121   46.48   <2e-16 ***
+    ## x             4.9424     0.3479   14.21   <2e-16 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 0.9437 on 98 degrees of freedom
-    ## Multiple R-squared:  0.7356, Adjusted R-squared:  0.7329 
-    ## F-statistic: 272.6 on 1 and 98 DF,  p-value: < 2.2e-16
+    ## Residual standard error: 0.9497 on 98 degrees of freedom
+    ## Multiple R-squared:  0.6731, Adjusted R-squared:  0.6698 
+    ## F-statistic: 201.8 on 1 and 98 DF,  p-value: < 2.2e-16
 
 ``` r
 test1 <- paste(10000)
@@ -557,25 +576,156 @@ print(test1)
 print(test2)
 ```
 
-    ## [1] "9.92790570337572, 5.25233646908989"
+    ## [1] "9.85925702993896, 4.94238239278284"
 
 ``` r
 print(test3)
 ```
 
-    ## [1] "The coefficients are: 9.92790570337572, 5.25233646908989"
+    ## [1] "The coefficients are: 9.85925702993896, 4.94238239278284"
 
 ``` r
 for (x in 1:10) {print(test3)}
 ```
 
-    ## [1] "The coefficients are: 9.92790570337572, 5.25233646908989"
-    ## [1] "The coefficients are: 9.92790570337572, 5.25233646908989"
-    ## [1] "The coefficients are: 9.92790570337572, 5.25233646908989"
-    ## [1] "The coefficients are: 9.92790570337572, 5.25233646908989"
-    ## [1] "The coefficients are: 9.92790570337572, 5.25233646908989"
-    ## [1] "The coefficients are: 9.92790570337572, 5.25233646908989"
-    ## [1] "The coefficients are: 9.92790570337572, 5.25233646908989"
-    ## [1] "The coefficients are: 9.92790570337572, 5.25233646908989"
-    ## [1] "The coefficients are: 9.92790570337572, 5.25233646908989"
-    ## [1] "The coefficients are: 9.92790570337572, 5.25233646908989"
+    ## [1] "The coefficients are: 9.85925702993896, 4.94238239278284"
+    ## [1] "The coefficients are: 9.85925702993896, 4.94238239278284"
+    ## [1] "The coefficients are: 9.85925702993896, 4.94238239278284"
+    ## [1] "The coefficients are: 9.85925702993896, 4.94238239278284"
+    ## [1] "The coefficients are: 9.85925702993896, 4.94238239278284"
+    ## [1] "The coefficients are: 9.85925702993896, 4.94238239278284"
+    ## [1] "The coefficients are: 9.85925702993896, 4.94238239278284"
+    ## [1] "The coefficients are: 9.85925702993896, 4.94238239278284"
+    ## [1] "The coefficients are: 9.85925702993896, 4.94238239278284"
+    ## [1] "The coefficients are: 9.85925702993896, 4.94238239278284"
+
+# Solutions to exercises
+
+## One
+
+Write a for loop that iterates over the numbers 1 to 7 and prints the
+cube of each number using print().
+
+``` r
+for(i in 1:7){
+  print(i^2)
+  }
+```
+
+    ## [1] 1
+    ## [1] 4
+    ## [1] 9
+    ## [1] 16
+    ## [1] 25
+    ## [1] 36
+    ## [1] 49
+
+## Two
+
+Write a while loop that prints out standard random normal numbers (use
+rnorm()) but stops (breaks) if you get a number bigger than 1.
+
+Option 1
+
+``` r
+value <- 0
+counter <-0
+while(value < 1)
+{
+  value <- rnorm(1)
+  counter <- counter + 1
+}
+print(value)
+```
+
+    ## [1] 1.018015
+
+``` r
+print(counter)
+```
+
+    ## [1] 1
+
+Option 2
+
+``` r
+counter <-0
+while(TRUE)
+{
+  value <- rnorm(1)
+  counter <- counter + 1
+  if (value > 1){break}
+}
+print(value)
+```
+
+    ## [1] 1.433089
+
+``` r
+print(counter)
+```
+
+    ## [1] 12
+
+## Three
+
+Using a for loop simulate the flip a coin twenty times, keeping track of
+the individual outcomes (1 = heads, 0 = tails) in a vector.
+
+``` r
+repeats <- 20
+outcomes <- character(repeats)
+for(i in 1:repeats)
+{
+  outcome <- sample(c('H','T'), 1)
+  outcomes[i] <- outcome
+}
+outcomes
+```
+
+    ##  [1] "H" "H" "T" "T" "T" "H" "T" "T" "H" "H" "T" "T" "H" "H" "H" "T" "H" "T" "H"
+    ## [20] "T"
+
+You could do this in one line (but that was not the exercise).
+
+``` r
+repeats <- 20
+outcomes <- sample(c('H','T'), repeats, replace = TRUE)
+outcomes
+```
+
+    ##  [1] "T" "H" "H" "T" "H" "T" "T" "H" "H" "T" "T" "T" "T" "H" "H" "T" "T" "T" "T"
+    ## [20] "T"
+
+## Four
+
+Use a while loop to investigate the number of terms required before the
+series 1 ,reaches above 10 million.
+
+``` r
+product <- 1
+term <- 0
+
+while(product < 10000000)
+{
+  term <- term + 1
+  product <- product * term
+  
+}
+print(term)
+```
+
+    ## [1] 11
+
+``` r
+# Check
+1:term
+```
+
+    ##  [1]  1  2  3  4  5  6  7  8  9 10 11
+
+``` r
+cumprod(1:term)>10000000
+```
+
+    ##  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE
