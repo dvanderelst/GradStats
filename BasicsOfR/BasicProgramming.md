@@ -1,6 +1,6 @@
 Basic Programming
 ================
-Last Updated: 12, September, 2023 at 08:37
+Last Updated: 14, September, 2023 at 08:19
 
 - <a href="#basics-of-programming-variables-and-functions"
   id="toc-basics-of-programming-variables-and-functions">Basics of
@@ -21,6 +21,7 @@ Last Updated: 12, September, 2023 at 08:37
 - <a href="#functions" id="toc-functions">Functions</a>
 - <a href="#flow-control-in-r" id="toc-flow-control-in-r">Flow control in
   R</a>
+  - <a href="#overview" id="toc-overview">Overview</a>
   - <a href="#the-if-statement" id="toc-the-if-statement">The
     <code>if</code> statement</a>
   - <a href="#the-for-loop" id="toc-the-for-loop">The <code>for</code>
@@ -286,7 +287,7 @@ print(result)
     ## 
     ## Coefficients:
     ## (Intercept)            x  
-    ##       9.847        5.283
+    ##       9.721        5.275
 
 ## Flow control in R
 
@@ -307,6 +308,54 @@ plot(data$age, data$average )
 ```
 
 ![](BasicProgramming_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
+
+### Overview
+
+<table style="width:99%;">
+<caption>Uses of the different flow commands</caption>
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 25%" />
+<col style="width: 32%" />
+<col style="width: 31%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Keyword</th>
+<th>Use</th>
+<th>Example 1</th>
+<th>Example 2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>if (or, else if)</strong></td>
+<td>Execute some steps if a condition is true (or false)</td>
+<td>If the value of a variable is larger than 5, print it to the
+screen.</td>
+<td>If the result of a statistical test is significant, add a symbol to
+the graph.</td>
+</tr>
+<tr class="even">
+<td><strong>For</strong></td>
+<td>Repeat some steps for each item in collection, such as a
+vector.</td>
+<td>For each value in a vector, print the value to the screen.</td>
+<td><strong><em>Repeat something exactly n times.</em></strong></td>
+</tr>
+<tr class="odd">
+<td>While</td>
+<td>Repeat some steps as long as something is true (or false).</td>
+<td>As long as the value of a variable is smaller than 5, generate a new
+value for it.</td>
+<td><p>While your data has outliers, remove them.</p>
+<p><br />
+</p></td>
+</tr>
+</tbody>
+</table>
+
+Uses of the different flow commands
 
 ### The `if` statement
 
@@ -388,11 +437,11 @@ for (x in my_vector) {
 }
 ```
 
-    ## [1] 0.5906325
-    ## [1] 1.660245
-    ## [1] 1.133295
-    ## [1] 2.086144
-    ## [1] 2.253179
+    ## [1] 1.761547
+    ## [1] 2.441087
+    ## [1] 1.755204
+    ## [1] 2.074092
+    ## [1] 0.8666347
 
 Just to drive the point home, another example:
 
@@ -517,7 +566,7 @@ endTime <- Sys.time()
 print(sprintf('Duration: %.2f', endTime - startTime))
 ```
 
-    ## [1] "Duration: 0.45"
+    ## [1] "Duration: 0.52"
 
 This piece of code preallocates a vector and is more efficient.
 
@@ -550,18 +599,18 @@ summary(result)
     ## 
     ## Residuals:
     ##      Min       1Q   Median       3Q      Max 
-    ## -2.29281 -0.49598 -0.02963  0.56539  2.47102 
+    ## -2.68998 -0.60358  0.07373  0.74622  2.04164 
     ## 
     ## Coefficients:
     ##             Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)   9.8593     0.2121   46.48   <2e-16 ***
-    ## x             4.9424     0.3479   14.21   <2e-16 ***
+    ## (Intercept)  10.0073     0.2072   48.29   <2e-16 ***
+    ## x             5.1464     0.3435   14.98   <2e-16 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 0.9497 on 98 degrees of freedom
-    ## Multiple R-squared:  0.6731, Adjusted R-squared:  0.6698 
-    ## F-statistic: 201.8 on 1 and 98 DF,  p-value: < 2.2e-16
+    ## Residual standard error: 1.057 on 98 degrees of freedom
+    ## Multiple R-squared:  0.6961, Adjusted R-squared:  0.693 
+    ## F-statistic: 224.5 on 1 and 98 DF,  p-value: < 2.2e-16
 
 ``` r
 test1 <- paste(10000)
@@ -576,28 +625,28 @@ print(test1)
 print(test2)
 ```
 
-    ## [1] "9.85925702993896, 4.94238239278284"
+    ## [1] "10.0073231820186, 5.14644550725118"
 
 ``` r
 print(test3)
 ```
 
-    ## [1] "The coefficients are: 9.85925702993896, 4.94238239278284"
+    ## [1] "The coefficients are: 10.0073231820186, 5.14644550725118"
 
 ``` r
 for (x in 1:10) {print(test3)}
 ```
 
-    ## [1] "The coefficients are: 9.85925702993896, 4.94238239278284"
-    ## [1] "The coefficients are: 9.85925702993896, 4.94238239278284"
-    ## [1] "The coefficients are: 9.85925702993896, 4.94238239278284"
-    ## [1] "The coefficients are: 9.85925702993896, 4.94238239278284"
-    ## [1] "The coefficients are: 9.85925702993896, 4.94238239278284"
-    ## [1] "The coefficients are: 9.85925702993896, 4.94238239278284"
-    ## [1] "The coefficients are: 9.85925702993896, 4.94238239278284"
-    ## [1] "The coefficients are: 9.85925702993896, 4.94238239278284"
-    ## [1] "The coefficients are: 9.85925702993896, 4.94238239278284"
-    ## [1] "The coefficients are: 9.85925702993896, 4.94238239278284"
+    ## [1] "The coefficients are: 10.0073231820186, 5.14644550725118"
+    ## [1] "The coefficients are: 10.0073231820186, 5.14644550725118"
+    ## [1] "The coefficients are: 10.0073231820186, 5.14644550725118"
+    ## [1] "The coefficients are: 10.0073231820186, 5.14644550725118"
+    ## [1] "The coefficients are: 10.0073231820186, 5.14644550725118"
+    ## [1] "The coefficients are: 10.0073231820186, 5.14644550725118"
+    ## [1] "The coefficients are: 10.0073231820186, 5.14644550725118"
+    ## [1] "The coefficients are: 10.0073231820186, 5.14644550725118"
+    ## [1] "The coefficients are: 10.0073231820186, 5.14644550725118"
+    ## [1] "The coefficients are: 10.0073231820186, 5.14644550725118"
 
 # Solutions to exercises
 
@@ -638,13 +687,13 @@ while(value < 1)
 print(value)
 ```
 
-    ## [1] 1.018015
+    ## [1] 1.831578
 
 ``` r
 print(counter)
 ```
 
-    ## [1] 1
+    ## [1] 2
 
 Option 2
 
@@ -659,13 +708,13 @@ while(TRUE)
 print(value)
 ```
 
-    ## [1] 1.433089
+    ## [1] 1.33274
 
 ``` r
 print(counter)
 ```
 
-    ## [1] 12
+    ## [1] 15
 
 ## Three
 
@@ -683,8 +732,8 @@ for(i in 1:repeats)
 outcomes
 ```
 
-    ##  [1] "H" "H" "T" "T" "T" "H" "T" "T" "H" "H" "T" "T" "H" "H" "H" "T" "H" "T" "H"
-    ## [20] "T"
+    ##  [1] "T" "T" "H" "T" "H" "H" "T" "T" "H" "T" "T" "T" "T" "T" "T" "H" "T" "T" "H"
+    ## [20] "H"
 
 You could do this in one line (but that was not the exercise).
 
@@ -694,8 +743,8 @@ outcomes <- sample(c('H','T'), repeats, replace = TRUE)
 outcomes
 ```
 
-    ##  [1] "T" "H" "H" "T" "H" "T" "T" "H" "H" "T" "T" "T" "T" "H" "H" "T" "T" "T" "T"
-    ## [20] "T"
+    ##  [1] "T" "T" "T" "T" "T" "T" "T" "H" "H" "H" "H" "T" "H" "H" "H" "T" "T" "H" "H"
+    ## [20] "H"
 
 ## Four
 

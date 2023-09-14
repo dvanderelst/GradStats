@@ -24,7 +24,7 @@ sampling_distribution_sd <- sqrt(sample_sd^2 + sample_sd^2)
 x <- seq(-2, 2, length=1000)
 y <- dnorm(x, mean =  sampling_distribution_mean, sd = sampling_distribution_sd)
   
-hist(differences, freq=F,breaks=50)
+hist(differences, freq=F,breaks=50, main='simulated and calculated sampl. dist.')
 points(x,y, t='l')
 
 
