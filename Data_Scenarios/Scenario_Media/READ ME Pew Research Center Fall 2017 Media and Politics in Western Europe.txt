@@ -1,0 +1,44 @@
+PEW RESEARCH CENTER - Media and Politics in Western Europe
+
+Survey of eight Western European countries conducted Oct. 30-Dec. 20, 2017.
+ 
+
+It is important to read this information before using the Pew Research Center's Fall 2017 Media and Politics in Western Europe survey dataset. 
+
+
+1.	The general population weight must be used when analyzing the attitudes and opinions of the general populations.
+	General population variable name:  Weight		
+	Weight by weight for this analysis. 
+
+ 
+2.	The full topline results are for the overall sample, unless otherwise stated. 
+
+
+3.	The questionnaire includes full question and response option wording, response option values, and filtering and scripting instructions.
+
+
+4.	Methodological overviews of each survey country, including sample design, mode, languages, fieldwork dates, sample size, margin of error and representativeness are available on our methods website: 
+	http://www.pewresearch.org/methodology/international-survey-research/international-methodology/media-and-politics-in-western-europe/all-country/all-year
+
+
+5.	Certain variables have been eliminated from the dataset either because of disclosure sensitivities or due to the possibility that the translated item caused confusion.
+	Q8DEh has been omitted due to the possibility that the language used to identify the German news outlet Die Tageszeitung may have confused respondents.
+
+
+6.	This survey employed multiple forms of randomization, including: 
+		(a) Order of battery items: For battery questions, we randomized the order in which battery items were asked. 
+		(b) Order of paired statement questions: Paired statement questions (Q22-Q32) were grouped by topic, resulting in five groups: Q22/Q23 (EU), Q24/Q25 (economy), Q26/Q27 (elites), Q28/Q29/Q30 (immigration) and Q31/Q32 (social issues). 
+		    The order of the first four groups was randomized; Q31 and Q32 were always asked last. The order of the questions within each group was randomized as well.
+		(c) Order of statements within pared statement questions: Within each paired statement question (Q22-Q32), we also randomized the order in which the statements appeared.
+	Variables indicating randomization order are available upon request.	
+
+
+7.	In Q8 through Q10, respondents were asked a series of questions about eight specific news outlets in their country, which in some cases are part of a larger news organization.
+	For example, in France, Q8FRb, Q9FRb and Q10FRb asked specifically about the television news channel France 2, which is part of the larger France Télévisions family of channels.
+
+
+8a.	In the Q8 question battery, respondents were asked whether they use eight key news sources in their country. 
+	To avoid redundancy, if respondents said in Q7 that their top news source was one of these eight news outlets, they were not asked again whether they used that source in Q8. 
+	For example, if a British respondent said in Q7 that their top news source was "BBC," we did not ask them again in Q8UKa if they use the BBC. Instead, this respondent was coded as being a BBC user in Q8UKa.
+
+8b.	If a respondent's top source in Q7 was one of the 8 particular sources asked about in Q8, they were not asked Q9i or Q10i. 

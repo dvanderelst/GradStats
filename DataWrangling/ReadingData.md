@@ -1,58 +1,64 @@
 Reading Data
 ================
-Last Updated: 04, October, 2022 at 08:29
+Last Updated: 18, September, 2023 at 16:45
 
--   <a href="#reading-data-from-excel-using-readxl"
-    id="toc-reading-data-from-excel-using-readxl">Reading data from excel
-    using readxl</a>
--   <a href="#reading-data-from-a-flat-comma-seperated-text-file"
-    id="toc-reading-data-from-a-flat-comma-seperated-text-file">Reading data
-    from a flat comma seperated text file</a>
--   <a href="#tibbles" id="toc-tibbles">Tibbles</a>
--   <a href="#some-interesting-options-when-using-read_csv"
-    id="toc-some-interesting-options-when-using-read_csv">Some interesting
-    options when using <code>read_csv()</code></a>
-    -   <a href="#no-column-names-no-problem"
-        id="toc-no-column-names-no-problem">No column names? No problem!</a>
-    -   <a href="#specifying-missing-data"
-        id="toc-specifying-missing-data">Specifying missing data</a>
-    -   <a href="#reading-from-url" id="toc-reading-from-url">Reading from
-        URL</a>
--   <a href="#reading-files-not-seperated-by-commas"
-    id="toc-reading-files-not-seperated-by-commas">Reading files not
-    seperated by commas</a>
--   <a href="#exploring-data" id="toc-exploring-data">Exploring data</a>
--   <a href="#selecting-variables" id="toc-selecting-variables">Selecting
-    variables</a>
--   <a href="#creating-new-variables"
-    id="toc-creating-new-variables">Creating new variables</a>
--   <a href="#creating-new-variables-using-mutate"
-    id="toc-creating-new-variables-using-mutate">Creating new variables
-    using <code>mutate</code></a>
--   <a href="#exercises" id="toc-exercises">Exercises</a>
-    -   <a href="#exercise-1" id="toc-exercise-1">Exercise 1</a>
-    -   <a href="#exercise-2" id="toc-exercise-2">Exercise 2</a>
+- <a href="#before-we-begin" id="toc-before-we-begin">Before we begin…</a>
+- <a href="#reading-data-from-excel-using-readxl"
+  id="toc-reading-data-from-excel-using-readxl">Reading data from excel
+  using readxl</a>
+- <a href="#reading-data-from-a-comma-separated-text-file"
+  id="toc-reading-data-from-a-comma-separated-text-file">Reading data from
+  a comma separated text file</a>
+- <a href="#tibbles" id="toc-tibbles">Tibbles</a>
+- <a href="#some-interesting-options-when-using-read_csv"
+  id="toc-some-interesting-options-when-using-read_csv">Some interesting
+  options when using <code>read_csv()</code></a>
+  - <a href="#no-column-names-no-problem"
+    id="toc-no-column-names-no-problem">No column names? No problem!</a>
+  - <a href="#specifying-missing-data"
+    id="toc-specifying-missing-data">Specifying missing data</a>
+  - <a href="#reading-from-url" id="toc-reading-from-url">Reading from
+    URL</a>
+- <a href="#reading-files-not-seperated-by-commas"
+  id="toc-reading-files-not-seperated-by-commas">Reading files not
+  seperated by commas</a>
+- <a href="#exploring-data" id="toc-exploring-data">Exploring data</a>
+- <a href="#selecting-variables" id="toc-selecting-variables">Selecting
+  variables</a>
+- <a href="#creating-new-variables"
+  id="toc-creating-new-variables">Creating new variables</a>
+- <a href="#creating-new-variables-using-mutate"
+  id="toc-creating-new-variables-using-mutate">Creating new variables
+  using <code>mutate</code></a>
+- <a href="#exercises" id="toc-exercises">Exercises</a>
+  - <a href="#exercise-1" id="toc-exercise-1">Exercise 1</a>
+  - <a href="#exercise-2" id="toc-exercise-2">Exercise 2</a>
 
 ``` r
 library(tidyverse)
 ```
 
-    ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
-    ## ✔ ggplot2 3.3.6     ✔ purrr   0.3.4
-    ## ✔ tibble  3.1.8     ✔ dplyr   1.0.9
-    ## ✔ tidyr   1.2.0     ✔ stringr 1.4.0
-    ## ✔ readr   2.1.2     ✔ forcats 0.5.2
+    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+    ## ✔ dplyr     1.1.0     ✔ readr     2.1.4
+    ## ✔ forcats   1.0.0     ✔ stringr   1.5.0
+    ## ✔ ggplot2   3.4.1     ✔ tibble    3.2.0
+    ## ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+    ## ✔ purrr     1.0.1     
     ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
+    ## ℹ Use the ]8;;http://conflicted.r-lib.org/conflicted package]8;; to force all conflicts to become errors
 
-``` r
-library(readxl)
-```
+## Before we begin…
+
+Dowload the following data files to your computer:
+
+- transit-data.xlsx
+- pakistan_intellectual_capital.csv
 
 ## Reading data from excel using readxl
 
-Excel spreadsheet are often used and easy ways to store data.
+Excel spreadsheets are often used and easy ways to store data.
 
 Explore the data in `transit-data.xlsx`. (Please note the organization
 of my project folder.)
@@ -65,6 +71,7 @@ different date formats, and (3) the data contain weird characters.
 Read the first sheet of data:
 
 ``` r
+library(readxl)
 data <-read_excel("data/transit-data.xlsx")
 ```
 
@@ -108,9 +115,9 @@ names.** There is a quick way to solve this.
 colnames(more_data) <- make.names(colnames(more_data))
 ```
 
-## Reading data from a flat comma seperated text file
+## Reading data from a comma separated text file
 
-R has functions for reading in flat text files. However, the functions
+R has functions for reading in text files. However, the functions
 provided by tidyverse are more powerful. When reading in data, R reports
 on the column types. Information about the different types and their
 labels can be found here: [Column
@@ -242,10 +249,10 @@ data <- read_csv(url)
 `read_csv()` expects comma separated field. For data separated by other
 characters use these:
 
--   tab separated: `read_tsv()`
--   all others: `read_delim()`, specifying the `delim` argument.
--   `read_csv2()` uses `;` for the field separator and `,` for the
-    decimal point. This format is common in some European countries.
+- tab separated: `read_tsv()`
+- all others: `read_delim()`, specifying the `delim` argument.
+- `read_csv2()` uses `;` for the field separator and `,` for the decimal
+  point. This format is common in some European countries.
 
 ## Exploring data
 
@@ -286,7 +293,6 @@ head(data)
     ## #   ²​`University Currently Teaching`, ³​Department,
     ## #   ⁴​`Province University Located`, ⁵​Designation, ⁶​`Terminal Degree`,
     ## #   ⁷​`Graduated from`
-    ## # ℹ Use `colnames()` to see all variable names
 
 ``` r
 tail(data)
@@ -307,7 +313,6 @@ tail(data)
     ## #   ²​`University Currently Teaching`, ³​Department,
     ## #   ⁴​`Province University Located`, ⁵​Designation, ⁶​`Terminal Degree`,
     ## #   ⁷​`Graduated from`
-    ## # ℹ Use `colnames()` to see all variable names
 
 Get a quick summary
 
@@ -529,7 +534,6 @@ data
     ##  9     9 EagleBoys ThinCrust        BBQMeatlovers     30.0  709.
     ## 10    10 EagleBoys DeepPan          BBQMeatlovers     29.4  678.
     ## # … with 240 more rows
-    ## # ℹ Use `print(n = ...)` to see more rows
 
 For fun: `transmute` only keeps the new variable.
 
@@ -552,20 +556,19 @@ data
     ##  9  709.
     ## 10  678.
     ## # … with 240 more rows
-    ## # ℹ Use `print(n = ...)` to see more rows
 
 ## Exercises
 
 ### Exercise 1
 
--   Read in the cars.txt file
+- Read in the cars.txt file
 
--   Print the first lines of the data
+- Print the first lines of the data
 
--   Print the column names
+- Print the column names
 
--   Calculate the difference in mpg on the highway and the city, add
-    this difference as a new variable to the data.
+- Calculate the difference in mpg on the highway and the city, add this
+  difference as a new variable to the data.
 
 ### Exercise 2
 
@@ -574,15 +577,15 @@ it to your computer. This file contains data on the wages of Lancashire
 cotton factory workers in 1833. For each age category, the file lists
 the following:
 
--   `age`: age in years
+- `age`: age in years
 
--   `mnum:` number of male workers of the corresponding age
+- `mnum:` number of male workers of the corresponding age
 
--   `mwage`: average wage of male workers of the corresponding age
+- `mwage`: average wage of male workers of the corresponding age
 
--   `fnum`: number of female workers of the corresponding age
+- `fnum`: number of female workers of the corresponding age
 
--   `fwage`: average wage of female workers of the corresponding age
+- `fwage`: average wage of female workers of the corresponding age
 
 More info on the data can be found in this paper: *Boot, H.M. 1995. How
 Skilled Were the Lancashire Cotton Factory Workers in 1833? Economic
@@ -590,13 +593,13 @@ History Review 48: 283-303.*
 
 Write a script that does the following:
 
--   Reads in the data
+- Reads in the data
 
--   Adds a new variable that lists the difference between the number of
-    male and female workers
+- Adds a new variable that lists the difference between the number of
+  male and female workers
 
--   Adds a new variable `diff_pct` that gives the difference in average
-    wage between the male and female workers expressed as a percentage
-    of the female wage.
+- Adds a new variable `diff_pct` that gives the difference in average
+  wage between the male and female workers expressed as a percentage of
+  the female wage.
 
-    ![diff_pct = 100 \times \frac{mwage - fwage}{fwage}](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;diff_pct%20%3D%20100%20%5Ctimes%20%5Cfrac%7Bmwage%20-%20fwage%7D%7Bfwage%7D "diff_pct = 100 \times \frac{mwage - fwage}{fwage}")
+  $$diff_pct = 100 \times \frac{mwage - fwage}{fwage}$$

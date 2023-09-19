@@ -7,6 +7,12 @@ output:
     toc: true
 ---
 
+## Before we start...
+
+Download the following data sets:
+
++ raw_depression.csv
+
 ## Loading the tidyverse
 
 ```{r}

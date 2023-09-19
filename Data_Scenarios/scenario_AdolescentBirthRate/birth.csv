@@ -1,0 +1,170 @@
+year,region,country,rate,income,infant,neonatal,under_five,income_levels
+2007,Africa,Algeria,9.0,Upper middle income,26.4,18.4,30.7,2
+2007,Americas,Barbados,49.7332,High income,14.0,9.9,15.3,3
+2008,Africa,Eritrea,76.0,Low income,41.9,21.7,60.0,0
+2008,Africa,South Sudan,158.09337,Low income,75.3,45.6,119.2,0
+2008,Americas,Paraguay,62.75439,Upper middle income,23.3,14.7,27.7,2
+2008,South-East Asia,Democratic People's Republic of Korea,0.65036,Low income,25.2,16.7,31.8,0
+2008,South-East Asia,Sri Lanka,20.27778,Lower middle income,10.6,7.1,12.3,1
+2008,Eastern Mediterranean,Morocco,32.0,Lower middle income,30.1,21.8,35.0,1
+2009,Americas,Nicaragua,92.0,Lower middle income,20.1,9.8,23.7,1
+2009,Americas,Trinidad and Tobago,37.99265,High income,28.1,20.5,32.0,3
+2009,Europe,Republic of North Macedonia,20.082,Upper middle income,9.6,7.2,10.9,2
+2009,Eastern Mediterranean,Djibouti,20.6,Lower middle income,64.3,38.3,79.1,1
+2009,Eastern Mediterranean,Iraq,82.0,Upper middle income,30.8,21.3,37.8,2
+2009,Eastern Mediterranean,Syrian Arab Republic,54.0,Low income,13.9,8.8,16.2,0
+2009,Eastern Mediterranean,United Arab Emirates,34.2,High income,7.4,4.5,8.6,3
+2009,Western Pacific,Solomon Islands,42.0,Lower middle income,22.2,10.9,26.4,1
+2010,Africa,Cabo Verde,80.0,Lower middle income,21.2,14.9,25.1,1
+2010,Africa,Central African Republic,229.0,Low income,101.9,46.8,150.9,0
+2010,Africa,Congo,147.0,Lower middle income,43.6,22.7,63.1,1
+2010,Africa,Equatorial Guinea,176.0,Upper middle income,80.5,35.4,113.5,2
+2010,Africa,Mozambique,167.0,Low income,70.7,31.7,103.1,0
+2010,Americas,Honduras,101.0,Lower middle income,20.1,13,23.7,1
+2010,Europe,Uzbekistan,29.53688,Lower middle income,31.6,19.4,36.2,1
+2010,Eastern Mediterranean,Tunisia,3.0,Lower middle income,14.9,9.9,17.4,1
+2010,Western Pacific,Kiribati,49.9,Lower middle income,49.6,25.9,64.9,1
+2011,Africa,Botswana,37.5,Upper middle income,38.9,29.8,48.8,2
+2011,Africa,Comoros,70.0,Low income,60.9,36.2,82.7,0
+2011,Africa,Gambia,88.0,Low income,47.6,31.5,78.0,0
+2011,Africa,Guinea,146.0,Low income,67.4,28.7,105.1,0
+2011,Africa,Liberia,104.77028,Low income,67.8,28.8,93.4,0
+2011,Africa,Togo,85.0,Low income,57.6,28.3,87.7,0
+2011,Americas,Haiti,49.0,Low income,59.6,29.5,80.6,0
+2011,Americas,Jamaica,45.721779999999995,Upper middle income,15.6,13,18.2,2
+2011,Europe,Tajikistan,54.0,Low income,35.5,18.9,41.0,0
+2011,Eastern Mediterranean,Iran (Islamic Republic of),23.00445,Upper middle income,16.1,11.5,18.8,2
+2011,Eastern Mediterranean,Jordan,26.0,Upper middle income,17.5,12.2,20.5,2
+2011,Eastern Mediterranean,Pakistan,44.0,Lower middle income,71.3,50,88.8,1
+2011,Western Pacific,Samoa,39.2,Upper middle income,15.9,9.7,18.5,2
+2011,Western Pacific,Tonga,30.0,Upper middle income,15.0,7.3,17.5,2
+2011,Western Pacific,Vanuatu,78.0,Lower middle income,24.5,12.7,29.3,1
+2012,Africa,Democratic Republic of the Congo,138.0,Low income,80.4,31.6,108.3,0
+2012,Africa,Guinea-Bissau,106.0,Low income,66.2,42.4,103.0,0
+2012,Africa,Namibia,82.0,Upper middle income,38.2,18.8,52.1,2
+2012,Africa,Sierra Leone,125.0,Low income,99.8,38.9,145.6,0
+2012,Africa,Zambia,141.0,Lower middle income,49.6,25.2,74.9,1
+2012,Americas,Bahamas,32.00966,High income,8.1,5.7,10.0,3
+2012,Americas,El Salvador,69.22079000000001,Lower middle income,15.1,8.6,17.6,1
+2012,South-East Asia,Bhutan,28.4,Lower middle income,31.1,20.8,38.1,1
+2012,Eastern Mediterranean,Egypt,56.0,Lower middle income,22.4,14.1,26.7,1
+2012,Eastern Mediterranean,Yemen,67.0,Low income,43.2,27,55.4,0
+2012,Western Pacific,Philippines,57.0,Lower middle income,23.9,14.4,30.4,1
+2013,Africa,Chad,179.0,Low income,80.1,37,138.4,0
+2013,Africa,Gabon,91.0,Upper middle income,39.3,23.5,56.9,2
+2013,Africa,Ghana,59.0,Lower middle income,42.8,28,61.5,1
+2013,Africa,Lesotho,94.0,Lower middle income,72.0,40.3,95.8,1
+2013,Africa,Mauritania,76.95048,Lower middle income,58.4,36.7,89.5,1
+2013,Africa,Sao Tome and Principe,92.0,Lower middle income,29.2,16.9,38.5,1
+2013,Africa,Senegal,80.0,Low income,37.7,23.3,55.6,0
+2013,Africa,Eswatini,87.0,Lower middle income,48.7,19.3,65.7,1
+2013,Africa,Uganda,141.0,Low income,42.9,23.1,62.7,0
+2013,Americas,Canada,11.1,High income,4.8,3.6,5.5,3
+2013,Americas,Guatemala,92.0,Upper middle income,26.3,14.8,31.7,2
+2013,Americas,Guyana,74.0,Upper middle income,28.9,21.3,35.1,2
+2013,South-East Asia,India,28.13318,Lower middle income,39.1,28.4,49.5,1
+2013,Eastern Mediterranean,Afghanistan,87.0,Low income,58.7,44,79.2,0
+2013,Eastern Mediterranean,Libya,10.86,Upper middle income,12.3,7.6,14.4,2
+2013,Eastern Mediterranean,Sudan,87.0,Lower middle income,48.1,31.6,71.0,1
+2013,Western Pacific,Cambodia,57.0,Lower middle income,30.6,18.3,35.7,1
+2015,Africa,Burundi,58.0,Low income,45.9,23.4,67.1,0
+2015,Africa,Niger,146.0,Low income,51.6,27.4,93.5,0
+2015,Africa,Seychelles,65.75246,High income,12.4,8.7,14.5,3
+2015,Africa,South Africa,71.0,Upper middle income,31.8,11.2,40.3,2
+2015,Americas,Argentina,65.48509,High income,10.2,6.7,11.4,3
+2015,Americas,Bolivia (Plurinational State of),71.0,Lower middle income,30.0,19.9,37.5,1
+2015,Americas,Brazil,60.7985,Upper middle income,14.0,9.4,15.7,2
+2015,Americas,Panama,84.33069,High income,14.8,9.5,17.2,3
+2015,Americas,Peru,49.35595,Upper middle income,12.6,8,16.2,2
+2015,Americas,United States of America,22.3,High income,5.8,3.8,6.8,3
+2015,Americas,Uruguay,55.64431,High income,7.6,4.9,8.9,3
+2015,South-East Asia,Nepal,88.0,Low income,29.9,22.6,36.6,0
+2015,South-East Asia,Thailand,51.0,Upper middle income,9.0,5.8,10.4,2
+2015,Europe,Albania,18.86,Upper middle income,8.3,5.9,9.4,2
+2015,Europe,Armenia,24.33,Upper middle income,12.5,7.4,14.0,2
+2015,Europe,Austria,7.63,High income,3.0,2.3,3.7,3
+2015,Europe,Belgium,6.57,High income,3.2,2.2,4.0,3
+2015,Europe,Bulgaria,39.36,Upper middle income,7.0,4.1,8.3,2
+2015,Europe,Croatia,9.59,High income,4.1,3.1,4.8,3
+2015,Europe,Cyprus,4.91,High income,2.3,1.7000000000000002,2.9,3
+2015,Europe,Czechia,11.61,High income,2.5,1.6,3.1,3
+2015,Europe,Denmark,3.4,High income,3.6,3.1,4.2,3
+2015,Europe,Estonia,12.54,High income,2.5,1.4,3.1,3
+2015,Europe,Finland,6.15,High income,2.0,1.7000000000000002,2.4,3
+2015,Europe,France,9.21,High income,3.5,2.4,4.2,3
+2015,Europe,Georgia,47.92,Lower middle income,10.8,7.9,12.1,1
+2015,Europe,Germany,7.84,High income,3.3,2.3,3.9,3
+2015,Europe,Greece,8.03518,High income,3.9,2.7,4.8,3
+2015,Europe,Hungary,22.77,High income,4.3,2.7,5.1,3
+2015,Europe,Iceland,8.03,High income,1.7000000000000002,1.1,2.3,3
+2015,Europe,Ireland,8.65,High income,3.1,2.3,3.7,3
+2015,Europe,Israel,9.677610000000001,High income,3.0,2.1,3.8,3
+2015,Europe,Italy,5.13,High income,3.0,2.1,3.5,3
+2015,Europe,Kazakhstan,36.0,Upper middle income,10.7,5.6,12.0,2
+2015,Europe,Latvia,17.99,High income,4.3,2.6,5.0,3
+2015,Europe,Lithuania,14.06,High income,4.0,2.3,5.0,3
+2015,Europe,Luxembourg,5.63,High income,2.2,1.8,2.7,3
+2015,Europe,Malta,11.38734,High income,5.7,4.5,6.6,3
+2015,Europe,Netherlands,3.19,High income,3.4,2.6,4.0,3
+2015,Europe,Norway,4.58,High income,2.2,1.6,2.7,3
+2015,Europe,Poland,12.31,High income,4.2,3,4.9,3
+2015,Europe,Portugal,8.222380000000001,High income,3.0,2.2,3.7,3
+2015,Europe,Romania,35.29,Upper middle income,7.8,4.3,9.2,2
+2015,Europe,Russian Federation,24.0,Upper middle income,7.3,3.8,8.6,2
+2015,Europe,Serbia,16.39,Upper middle income,5.5,4,6.3,2
+2015,Europe,Slovakia,24.26,High income,5.0,3,6.0,3
+2015,Europe,Slovenia,4.52696,High income,1.9,1.3,2.4,3
+2015,Europe,Spain,7.72,High income,2.7,1.9,3.2,3
+2015,Europe,Sweden,4.45,High income,2.4,1.6,2.9,3
+2015,Europe,Switzerland,2.63,High income,3.8,3,4.3,3
+2015,Europe,United Kingdom of Great Britain and Northern Ireland,14.39,High income,3.8,2.7,4.5,3
+2015,Europe,Montenegro,11.11656,Upper middle income,3.8,2.7,4.1,2
+2015,Eastern Mediterranean,Kuwait,6.1,High income,7.5,4.6,8.8,3
+2015,Eastern Mediterranean,Qatar,10.469610000000001,High income,6.9,4,8.1,3
+2015,Western Pacific,Australia,11.9,High income,3.2,2.3,3.8,3
+2015,Western Pacific,Brunei Darussalam,11.368269999999999,High income,9.0,4.7,10.5,3
+2015,Western Pacific,China,9.19,Upper middle income,9.2,5.5,10.8,2
+2015,Western Pacific,Japan,4.1,High income,2.1,0.9,3.0,3
+2015,Western Pacific,Malaysia,11.53355,Upper middle income,6.5,4,7.6,2
+2015,Western Pacific,Singapore,2.7,High income,2.1,1,2.7,3
+2014,Africa,Angola,163.0,Lower middle income,60.9,31.6,93.6,1
+2014,Africa,Benin,94.0,Low income,68.0,34.1,106.2,0
+2014,Africa,Burkina Faso,122.0,Low income,56.1,27.3,92.6,0
+2014,Africa,Cameroon,119.0,Lower middle income,60.3,27,93.8,1
+2014,Africa,Ethiopia,80.0,Low income,46.1,31.9,67.5,0
+2014,Africa,Kenya,96.0,Lower middle income,36.3,22.2,50.5,1
+2014,Africa,Madagascar,152.0,Low income,36.1,19.9,49.9,0
+2014,Africa,Malawi,136.0,Low income,44.1,25,65.7,0
+2014,Africa,Mali,174.0,Low income,71.0,37.5,117.7,0
+2014,Africa,Nigeria,145.0,Lower middle income,71.0,34.9,111.6,1
+2014,Africa,Rwanda,45.0,Low income,33.0,18.2,44.7,0
+2014,Africa,United Republic of Tanzania,132.0,Low income,42.4,22.5,61.3,0
+2014,Africa,Zimbabwe,110.0,Low income,42.3,25.2,61.1,0
+2014,Americas,Belize,74.0,Upper middle income,14.1,9.9,16.4,2
+2014,Americas,Chile,44.657709999999994,High income,6.9,5.3,8.1,3
+2014,Americas,Colombia,71.61811,Upper middle income,14.0,8.8,16.2,2
+2014,Americas,Cuba,49.99762,Upper middle income,4.3,2.4,5.7,2
+2014,Americas,Dominican Republic,45.34468,Upper middle income,26.8,21.7,32.3,2
+2014,Americas,Ecuador,56.48913,Upper middle income,13.4,8.1,15.5,2
+2014,Americas,Mexico,66.21212,Upper middle income,13.2,7.6,15.4,2
+2014,Americas,Saint Vincent and the Grenadines,63.72549,Upper middle income,16.5,10.7,18.1,2
+2014,Americas,Suriname,57.73145,Upper middle income,19.2,11.3,21.6,2
+2014,South-East Asia,Indonesia,40.1,Lower middle income,23.7,13.8,28.3,1
+2014,South-East Asia,Maldives,12.91843,Upper middle income,8.0,5.3,9.3,2
+2014,South-East Asia,Myanmar,36.0,Lower middle income,42.5,25.9,54.4,1
+2014,Europe,Belarus,20.45,Upper middle income,3.2,1.7000000000000002,4.3,2
+2014,Europe,Bosnia and Herzegovina,10.7,Upper middle income,5.4,4.4,6.2,2
+2014,Europe,Republic of Moldova,26.73,Lower middle income,14.0,12.1,16.3,1
+2014,Europe,Turkey,26.89,Upper middle income,12.4,7.5,14.4,2
+2014,Europe,Turkmenistan,28.0,Upper middle income,44.4,22.7,52.2,2
+2014,Europe,Ukraine,26.09,Lower middle income,8.4,5.8,9.8,1
+2014,Eastern Mediterranean,Bahrain,14.33208,High income,6.6,3.2,7.7,3
+2014,Western Pacific,Lao People's Democratic Republic,75.6,Lower middle income,53.0,30.1,70.1,1
+2014,Western Pacific,Mongolia,26.7,Lower middle income,16.9,10.5,19.8,1
+2014,Western Pacific,Viet Nam,30.1,Lower middle income,17.5,11.2,21.9,1
+2016,Africa,Mauritius,24.09885,Upper middle income,12.2,8.4,13.8,2
+2016,South-East Asia,Bangladesh,78.0,Lower middle income,28.3,19.5,34.3,1
+2016,Europe,Azerbaijan,52.8,Upper middle income,21.9,12.6,24.6,2
+2016,Eastern Mediterranean,Oman,13.526,High income,9.7,5.1,11.3,3
+2016,Western Pacific,New Zealand,16.0,High income,4.5,3,5.4,3
+2016,Western Pacific,Republic of Korea,1.3,High income,2.9,1.6,3.4,3

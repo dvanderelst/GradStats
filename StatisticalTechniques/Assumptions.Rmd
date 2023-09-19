@@ -7,11 +7,9 @@ output:
     toc: true
 ---
 
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
 
 # Read some data
 
@@ -29,18 +27,17 @@ vik_data <-read_csv('data/vik_table_9_2.csv')
 plot(vik_data$X1, vik_data$Y)
 ```
 
-
 ```{r}
 model <- lm(Y ~ X1, data = vik_data)
 plot(fitted(model), resid(model))
 ```
+
 ```{r}
 par(mfrow = c(2, 2))  # Split the plotting panel into a 2 x 2 grid
 plot(model)
 ```
 
 ## Example 2
-
 
 ```{r}
 x_data <- runif(100)
@@ -51,6 +48,7 @@ par(mfrow = c(1, 1))
 plot(x_data, y_data)
 abline(model, col='red')
 ```
+
 ```{r}
 model <- lm(y_data ~ x_data, data = fake)
 par(mfrow = c(2, 2))  # Split the plotting panel into a 2 x 2 grid
@@ -73,7 +71,6 @@ par(mfrow = c(1, 1))
 
 ## Example 4
 
-
 ```{r}
 model <- lm(Weight ~ Height, data = body_data)
 par(mfrow = c(2, 2))  # Split the plotting panel into a 2 x 2 grid
@@ -88,6 +85,7 @@ model <- lm(Bicep ~ Shoulder, data = body_data)
 residuals <- resid(model)
 hist(residuals, 50)
 ```
+
 ```{r}
 par(mfrow = c(2, 2))  # Split the plotting panel into a 2 x 2 grid
 plot(model)
@@ -116,6 +114,36 @@ plot(x, y)
 abline(model, col='red')
 ```
 
+```{r}
+par(mfrow = c(2, 2))  # Split the plotting panel into a 2 x 2 grid
+plot(model)
+par(mfrow = c(1, 1)) 
+```
+
+# More examples
+
+## Gambling
+
+The teengamb data frame has 47 rows and 5 columns. A survey was conducted to study teenage gambling in Britain. This data frame contains the following columns:
+
++ sex 0=male, 1=female 
++ Socioeconomic status score based on parents’ occupation 
++ Income in pounds per week
++ Verbal score in words out of 12 correctly deﬁned
++ Gamble expenditure on gambling in pounds per year
+
+```{r}
+library(faraway)
+data <- teengamb
+head(data)
+model<- lm(gamble~income, data=data)
+```
+```{r}
+plot(data$income, data$gamble)
+```
+```{r}
+summary(model)
+```
 
 ```{r}
 par(mfrow = c(2, 2))  # Split the plotting panel into a 2 x 2 grid
@@ -123,11 +151,28 @@ plot(model)
 par(mfrow = c(1, 1)) 
 ```
 
-# Assumption 4: Little multicollinearity
-
 ```{r}
-partial<-select(body_data, Chest, Waist, Forearm, Bicep)
-pairs(partial)
+plot(data$status,data$gamble)
 ```
 
+## Pima
+
+The National Institute of Diabetes and Digestive and Kidney Diseases conducted a study on 768 adult female Pima Indians living near Phoenix. The dataset contains the following variables
+
++ Number of times pregnant
++ Plasma glucose concentration at 2 hours in an oral glucose tolerance test
++ Diastolic blood pressure (mm Hg)
++ Triceps skin fold thickness (mm) insulin 2-Hour serum insulin (mu U/ml)
++ Body mass index (weight in kg/(height in metres squared))
++ Diabetes pedigree function age Age (years)
++ Test whether the patient shows signs of diabetes (coded 0 if negative, 1 if positive)
+
+```{r}
+data<-pima
+model <-lm(test ~ age + insulin, data=data)
+
+par(mfrow = c(2, 2))  # Split the plotting panel into a 2 x 2 grid
+plot(model)
+par(mfrow = c(1, 1)) 
+```
 

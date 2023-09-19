@@ -13,12 +13,17 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 library(tidyverse)
-library(readxl)
 ```
+
+## Before we begin...
+Dowload the following data files to your computer:
+
++ transit-data.xlsx
++ pakistan_intellectual_capital.csv
 
 ## Reading data from excel using readxl
 
-Excel spreadsheet are often used and easy ways to store data.
+Excel spreadsheets are often used and easy ways to store data.
 
 Explore the data in `transit-data.xlsx`. (Please note the organization of my project folder.)
 
@@ -29,6 +34,7 @@ Note that (1) Data does not start in cell A1, (2) Data contains different date f
 Read the first sheet of data:
 
 ```{r}
+library(readxl)
 data <-read_excel("data/transit-data.xlsx")
 ```
 
@@ -63,9 +69,9 @@ The column names are human readable but not very handy for coding. **Indeed, in 
 colnames(more_data) <- make.names(colnames(more_data))
 ```
 
-## Reading data from a flat comma seperated text file
+## Reading data from a comma separated text file
 
-R has functions for reading in flat text files. However, the functions provided by tidyverse are more powerful. When reading in data, R reports on the column types. Information about the different types and their labels can be found here: [Column Types](https://tibble.tidyverse.org/articles/types.html)
+R has functions for reading in text files. However, the functions provided by tidyverse are more powerful. When reading in data, R reports on the column types. Information about the different types and their labels can be found here: [Column Types](https://tibble.tidyverse.org/articles/types.html)
 
 *Note: The default report on the column types is a bit disorganized in this view. It will look better in your console.*
 
