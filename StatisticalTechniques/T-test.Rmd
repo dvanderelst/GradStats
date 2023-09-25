@@ -23,7 +23,7 @@ The most boring data in the world...
 data <- read_csv('data/bands.csv')
 ```
 
-Note: here we treat the data as collected on seperate rubber bands. This is, we run a two sample t-test.
+Note: here we treat the data as collected on separate rubber bands. This is, we run a two sample t-test.
 
 ```{r}
 t.test(data$ambient, data$heated)

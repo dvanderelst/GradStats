@@ -1,0 +1,35 @@
+---
+title: "Monte Carlo F value"
+author: "Dieter"
+date: '2022-08-29'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+
+f_values<-c()
+repeats <- 100
+n <- 25
+beta1 <- 2
+beta2 <- 3
+
+for (x in 1:repeats){
+
+x1 <- rnorm(n, mean = 0, sd = 1)
+x2 <- rnorm(n, mean = 0, sd = 1)
+dependent <- beta1 * x1 + beta2 * x2 + rnorm(n, mean = 0, sd = 0.25)
+model0 <-lm(dependent~1)
+model1 <-lm(dependent~x1 + x2)
+summary(model1)
+comparison<-anova(model0, model1)
+f_value <-comparison$F[2]
+f_values<-c(f_values, f_value)
+}
+
+hist(f_values)
+```
+

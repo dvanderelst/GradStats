@@ -1,0 +1,70 @@
+---
+title: "Logic of F"
+author: "Dieter"
+date: '2022-08-29'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Data
+
+Here, I provide some data and fit the model. I also plot the prediction of the base model and the augmented model.
+
+```{r}
+
+independent <- c(54,46,42,50,43,41,46,39,37,45,45,41,54)
+dependent <-c(601,579,572,617,566,547,597,580,536,579,576,601,664)
+
+mean_independent <- mean(dependent)
+
+model <-lm(dependent~independent)
+
+plot(independent, dependent)
+abline(model, col='red', lwd=3, lty=3)
+abline(h=mean_independent, col='blue', lwd=3, lty=3)
+
+```
+
+Here, I calculate the three sum of squares. These can be compared with the anova table.
+
+```{r}
+predictions <- predict(model)
+mean_predictions <-mean(predictions)
+
+summary(model)
+anova(model)
+
+ss_residuals <- sum(model$residuals^2)
+ss_predictions <- sum((predictions - mean_predictions)^2)
+ss_total <- sum((dependent - mean_independent)^2)
+
+txt1 <- sprintf('ss total: %.2f', ss_total)
+txt2 <- sprintf('ss predictions: %.2f', ss_predictions)
+txt3 <- sprintf('ss residuals: %.2f', ss_residuals)
+
+print(txt1)
+print(txt2)
+print(txt3)
+```
+
+Now, I am ready to calculate the F and its nominator and denominator. These can be compared with the anova table.
+
+```{r}
+
+nominator <- (ss_total-ss_residuals)/1
+denominator <- ss_residuals/model$df.residual
+
+f = nominator / denominator
+print(nominator)
+print(denominator)
+print(f)
+
+
+
+```
+
+
+
