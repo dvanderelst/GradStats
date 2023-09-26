@@ -1,80 +1,95 @@
 Cleaning Data
 ================
-Last Updated: 13, October, 2022 at 09:06
+Last Updated: 26, September, 2023 at 08:53
 
--   <a href="#loading-the-tidyverse" id="toc-loading-the-tidyverse">Loading
-    the tidyverse</a>
--   <a href="#some-simple-operations" id="toc-some-simple-operations">Some
-    simple operations</a>
-    -   <a href="#opening-large-text-files"
-        id="toc-opening-large-text-files">Opening large text files</a>
-    -   <a href="#detecting-outliers" id="toc-detecting-outliers">Detecting
-        outliers</a>
-    -   <a href="#missing-data" id="toc-missing-data">Missing data</a>
-    -   <a href="#separating-a-column" id="toc-separating-a-column">Separating a
-        column</a>
-    -   <a href="#combining-columns" id="toc-combining-columns">Combining
-        columns</a>
-    -   <a href="#strings-using-stringr" id="toc-strings-using-stringr">Strings
-        using <code>stringr</code></a>
--   <a href="#reorganizing-data" id="toc-reorganizing-data">Reorganizing
+- <a href="#before-we-start" id="toc-before-we-start">Before we start…</a>
+- <a href="#loading-the-tidyverse" id="toc-loading-the-tidyverse">Loading
+  the tidyverse</a>
+- <a href="#some-simple-operations" id="toc-some-simple-operations">Some
+  simple operations</a>
+  - <a href="#opening-large-text-files"
+    id="toc-opening-large-text-files">Opening large text files</a>
+  - <a href="#detecting-outliers" id="toc-detecting-outliers">Detecting
+    outliers</a>
+  - <a href="#missing-data" id="toc-missing-data">Missing data</a>
+  - <a href="#separating-a-column" id="toc-separating-a-column">Separating a
+    column</a>
+  - <a href="#combining-columns" id="toc-combining-columns">Combining
+    columns</a>
+  - <a href="#strings-using-stringr" id="toc-strings-using-stringr">Strings
+    using <code>stringr</code></a>
+- <a href="#reorganizing-data" id="toc-reorganizing-data">Reorganizing
+  data</a>
+  - <a href="#loading-some-data" id="toc-loading-some-data">Loading some
     data</a>
-    -   <a href="#loading-some-data" id="toc-loading-some-data">Loading some
-        data</a>
-    -   <a href="#grouping-and-summarizing-data"
-        id="toc-grouping-and-summarizing-data">Grouping and summarizing data</a>
-    -   <a href="#further-processing" id="toc-further-processing">Further
-        processing</a>
-    -   <a href="#note-on-dropping-non-existing-levels"
-        id="toc-note-on-dropping-non-existing-levels">Note on dropping
-        non-existing levels</a>
-    -   <a href="#converting-to-wide-format"
-        id="toc-converting-to-wide-format">Converting to wide format</a>
-    -   <a href="#making-data-longer-melting-data"
-        id="toc-making-data-longer-melting-data">Making data longer (melting
-        data)</a>
--   <a href="#merging-data" id="toc-merging-data">Merging data</a>
-    -   <a href="#reading-in-the-data" id="toc-reading-in-the-data">Reading in
-        the data</a>
-    -   <a href="#merging-the-data" id="toc-merging-the-data">Merging the
-        data</a>
--   <a href="#exercise-global-health-data"
-    id="toc-exercise-global-health-data">Exercise: Global Health Data</a>
--   <a href="#example-social-security-applications"
-    id="toc-example-social-security-applications">Example: Social Security
-    Applications</a>
-    -   <a href="#a-reminder-on-pivot_longer"
-        id="toc-a-reminder-on-pivot_longer">A reminder on
-        <code>pivot_longer()</code></a>
-    -   <a href="#using-pivot_longer" id="toc-using-pivot_longer">Using
-        <code>pivot_longer()</code></a>
-    -   <a href="#using-separate" id="toc-using-separate">Using
-        <code>separate()</code></a>
-    -   <a href="#creating-an-other-column"
-        id="toc-creating-an-other-column">Creating an <code>Other</code>
-        column</a>
-    -   <a href="#convert-fiscal_year-to-year"
-        id="toc-convert-fiscal_year-to-year">Convert <code>Fiscal_Year</code> to
-        year</a>
-    -   <a href="#create-a-date-variable" id="toc-create-a-date-variable">Create
-        a date variable</a>
-    -   <a href="#plots" id="toc-plots">Plots</a>
--   <a href="#example-coal-data" id="toc-example-coal-data">Example: Coal
+  - <a href="#grouping-and-summarizing-data"
+    id="toc-grouping-and-summarizing-data">Grouping and summarizing data</a>
+  - <a href="#further-processing" id="toc-further-processing">Further
+    processing</a>
+  - <a href="#note-on-dropping-non-existing-levels"
+    id="toc-note-on-dropping-non-existing-levels">Note on dropping
+    non-existing levels</a>
+  - <a href="#converting-to-wide-format"
+    id="toc-converting-to-wide-format">Converting to wide format</a>
+  - <a href="#making-data-longer-melting-data"
+    id="toc-making-data-longer-melting-data">Making data longer (melting
+    data)</a>
+- <a href="#merging-data" id="toc-merging-data">Merging data</a>
+  - <a href="#reading-in-the-data" id="toc-reading-in-the-data">Reading in
+    the data</a>
+  - <a href="#merging-the-data" id="toc-merging-the-data">Merging the
     data</a>
-    -   <a href="#change-the-first-variable-name"
-        id="toc-change-the-first-variable-name">Change the first variable
-        name</a>
-    -   <a href="#convert-to-a-long-data-format"
-        id="toc-convert-to-a-long-data-format">Convert to a long data format</a>
-    -   <a href="#separate-regions-and-countries"
-        id="toc-separate-regions-and-countries">Separate regions and
-        countries</a>
--   <a href="#further-exercises" id="toc-further-exercises">Further
-    exercises</a>
-    -   <a href="#voice-onset-data" id="toc-voice-onset-data">Voice-onset
-        data</a>
-    -   <a href="#airline-safety-data" id="toc-airline-safety-data">Airline
-        safety data</a>
+- <a href="#exercise-global-health-data"
+  id="toc-exercise-global-health-data">Exercise: Global Health Data</a>
+- <a href="#example-social-security-applications"
+  id="toc-example-social-security-applications">Example: Social Security
+  Applications</a>
+  - <a href="#a-reminder-on-pivot_longer"
+    id="toc-a-reminder-on-pivot_longer">A reminder on
+    <code>pivot_longer()</code></a>
+  - <a href="#using-pivot_longer" id="toc-using-pivot_longer">Using
+    <code>pivot_longer()</code></a>
+  - <a href="#using-separate" id="toc-using-separate">Using
+    <code>separate()</code></a>
+  - <a href="#creating-an-other-column"
+    id="toc-creating-an-other-column">Creating an <code>Other</code>
+    column</a>
+  - <a href="#convert-fiscal_year-to-year"
+    id="toc-convert-fiscal_year-to-year">Convert <code>Fiscal_Year</code> to
+    year</a>
+  - <a href="#create-a-date-variable" id="toc-create-a-date-variable">Create
+    a date variable</a>
+  - <a href="#plots" id="toc-plots">Plots</a>
+- <a href="#example-coal-data" id="toc-example-coal-data">Example: Coal
+  data</a>
+  - <a href="#change-the-first-variable-name"
+    id="toc-change-the-first-variable-name">Change the first variable
+    name</a>
+  - <a href="#convert-to-a-long-data-format"
+    id="toc-convert-to-a-long-data-format">Convert to a long data format</a>
+  - <a href="#separate-regions-and-countries"
+    id="toc-separate-regions-and-countries">Separate regions and
+    countries</a>
+- <a href="#further-exercises" id="toc-further-exercises">Further
+  exercises</a>
+  - <a href="#voice-onset-data" id="toc-voice-onset-data">Voice-onset
+    data</a>
+  - <a href="#airline-safety-data" id="toc-airline-safety-data">Airline
+    safety data</a>
+
+## Before we start…
+
+Download the following data sets:
+
+- `raw_depression.csv`
+- `cars.txt`
+- `DEMO_J.XPT`
+- `INQ_J.XPT`
+- `DUQ_J.XPT`
+- `ssadisability.csv`
+- `coal.csv`
+- `vot.csv`
+- `airline-safety.csv`
 
 ## Loading the tidyverse
 
@@ -83,10 +98,10 @@ library(tidyverse)
 ```
 
     ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
-    ## ✔ ggplot2 3.3.6     ✔ purrr   0.3.4
-    ## ✔ tibble  3.1.8     ✔ dplyr   1.0.9
-    ## ✔ tidyr   1.2.0     ✔ stringr 1.4.0
-    ## ✔ readr   2.1.2     ✔ forcats 0.5.2
+    ## ✔ ggplot2 3.4.0      ✔ purrr   0.3.5 
+    ## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
+    ## ✔ tidyr   1.2.1      ✔ stringr 1.4.1 
+    ## ✔ readr   2.1.3      ✔ forcats 0.5.2 
     ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
@@ -107,7 +122,8 @@ while you’re cleaning it!
 Outliers (as errors) can be most easily identified using graphs.
 However, some textual output might be useful as well.
 
-Let’s read in some data (see codebook.txt for info about the variables).
+Let’s read in some data (see `codebook.txt` for info about the
+variables).
 
 ``` r
 depression_data <- read_tsv('data/raw_depression.csv')
@@ -133,7 +149,7 @@ summary(depression_data$age)
 
 The histogram looks weird because of the very few, very high ages. We
 *could* try to fix these by assuming, for example, that `1998` is the
-birthyear and not the age. We will do this later.
+birth year and not the age. We will do this later.
 
 ``` r
 hist(depression_data$age)
@@ -279,12 +295,12 @@ max(some_data)
 
 Tips from the field:
 
--   When reading in a file, it’s a good idea to know how missing values
-    are encoded so you can tell R which values to interpret as missing.
--   Sometime people will use absurd values to indicate missing data. For
-    example, they might enter -1 or 99999 when an age value is missing.
-    These are then read by R as numbers and your calculations end up
-    being nonsense. One way to catch this it by looking for outliers!
+- When reading in a file, it’s a good idea to know how missing values
+  are encoded so you can tell R which values to interpret as missing.
+- Sometime people will use absurd values to indicate missing data. For
+  example, they might enter -1 or 99999 when an age value is missing.
+  These are then read by R as numbers and your calculations end up being
+  nonsense. One way to catch this it by looking for outliers!
 
 ### Separating a column
 
@@ -320,7 +336,6 @@ head(patient_data, 5)
     ## #   ³​Provider.Street.Address, ⁴​Provider.City, ⁵​Provider.State,
     ## #   ⁶​Provider.Zip.Code, ⁷​Hospital.Referral.Region.Description,
     ## #   ⁸​Total.Discharges
-    ## # ℹ Use `colnames()` to see all variable names
 
 ``` r
 result <- tabyl(patient_data$Hospital.Referral.Region.Description)
@@ -530,7 +545,6 @@ summaries
     ##  9 Compact Nissan                181
     ## 10 Compact Oldsmobile            188
     ## # … with 71 more rows
-    ## # ℹ Use `print(n = ...)` to see more rows
 
 You can ask for more than one summary statistic.
 
@@ -560,7 +574,6 @@ summaries
     ##  9 Compact Nissan                181        181      NA
     ## 10 Compact Oldsmobile            188        188      NA
     ## # … with 71 more rows
-    ## # ℹ Use `print(n = ...)` to see more rows
 
 ### Further processing
 
@@ -668,7 +681,6 @@ head(relig_income, 5)
     ## # … with 2 more variables: `>150k` <dbl>, `Don't know/refused` <dbl>, and
     ## #   abbreviated variable names ¹​`$10-20k`, ²​`$20-30k`, ³​`$30-40k`, ⁴​`$40-50k`,
     ## #   ⁵​`$50-75k`, ⁶​`$75-100k`, ⁷​`$100-150k`
-    ## # ℹ Use `colnames()` to see all variable names
 
 This data is in a wider format. But we can easily melt it to a long
 format.
@@ -761,15 +773,15 @@ library(gapminder)
 gap_data <- gapminder
 ```
 
--   Filter the data for the Americas in 2007. Retain only the `lifeExp`
-    variable and deselect all other variables.
--   Create the variable `gdp`, defined as the product of `pop` and
-    `gdpPercap`.
--   Identify the observation (combination of county, continent, and
-    year) with lowest gdp per person.
--   Identify all observations with above average life expectancy,
-    stratified for each continent.
--   Compute the mean life expectancy for each year per continent.
+- Filter the data for the Americas in 2007. Retain only the `lifeExp`
+  variable and deselect all other variables.
+- Create the variable `gdp`, defined as the product of `pop` and
+  `gdpPercap`.
+- Identify the observation (combination of county, continent, and year)
+  with lowest gdp per person.
+- Identify all observations with above average life expectancy,
+  stratified for each continent.
+- Compute the mean life expectancy for each year per continent.
 
 ## Example: Social Security Applications
 
@@ -789,7 +801,8 @@ ss <- read_csv('data/ssadisability.csv')
     ## Rows: 10 Columns: 25
     ## ── Column specification ────────────────────────────────────────────────────────
     ## Delimiter: ","
-    ## chr (1): Fiscal_Year
+    ## chr  (1): Fiscal_Year
+    ## num (24): Oct_Total, Oct_Internet, Nov_Total, Nov_Internet, Dec_Total, Dec_I...
     ## 
     ## ℹ Use `spec()` to retrieve the full column specification for this data.
     ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
@@ -858,7 +871,7 @@ count
     ## {
     ##     UseMethod("count")
     ## }
-    ## <bytecode: 0x55a02a558ae8>
+    ## <bytecode: 0x557673ae41b0>
     ## <environment: namespace:dplyr>
 
 ### Using `separate()`
@@ -928,6 +941,8 @@ long_again <- select(long_again, -Fiscal_Year)
 library(lubridate)
 ```
 
+    ## Loading required package: timechange
+
     ## 
     ## Attaching package: 'lubridate'
 
@@ -942,7 +957,8 @@ long_again$date<-dmy(long_again$date)
 
 ### Plots
 
-Let’s create some plots.
+Let’s create some plots (We’ll dedicate some more time to plotting in a
+next section of the course).
 
 ``` r
 data_2012 <- filter(long_again, Year == 2012)
@@ -955,7 +971,7 @@ ggplot(data_2012) + aes(x=date, y = Count, group=Source, color=Source) + geom_li
 ggplot(long_again) + aes(x=Month, y = Count, group=Source, color=Source) + geom_line() + facet_grid(~Year)
 ```
 
-    ## Warning: Removed 2 row(s) containing missing values (geom_path).
+    ## Warning: Removed 2 rows containing missing values (`geom_line()`).
 
 ![](CleaningData_files/figure-gfm/unnamed-chunk-47-1.png)<!-- -->
 
@@ -996,7 +1012,6 @@ head(coal_data)
     ## #   `1997` <dbl>, `1998` <dbl>, `1999` <dbl>, `2000` <dbl>, `2001` <dbl>,
     ## #   `2002` <dbl>, `2003` <dbl>, `2004` <dbl>, `2005` <dbl>, `2006` <dbl>,
     ## #   `2007` <dbl>, `2008` <dbl>, `2009` <dbl>
-    ## # ℹ Use `colnames()` to see all variable names
 
 **Take some time to think how you would convert this data to a tidy data
 set.**
@@ -1038,7 +1053,7 @@ I have provided two data sets for some quick exercises:
 
 ### Voice-onset data
 
-These data were taken from
+These data (`vot.csv`) were taken from
 [here](https://www.jvcasillas.com/untidydata/). This is a voice-onset
 time data set. Includes coronal stop data from English and Spanish
 monolinguals, as well as English/Spanish bilinguals. In these data, the
@@ -1051,7 +1066,7 @@ participant is a Spanish speaker, English Speaker or Bilingual.**
 
 ### Airline safety data
 
-I took these data from
+I took these data (`airline-safety.csv`) from
 [here](https://github.com/fivethirtyeight/data/blob/master/airline-safety/airline-safety.csv).
 This is data on airline safety from 1985-1999 and 2000-2014. As you can
 see in the data, the column names can be considered as variables

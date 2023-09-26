@@ -16,10 +16,11 @@ library(tidyverse)
 ```
 
 ## Before we begin...
-Dowload the following data files to your computer:
 
-+ transit-data.xlsx
-+ pakistan_intellectual_capital.csv
+Download the following data files to your computer:
+
+-   `transit-data.xlsx`
+-   `pakistan_intellectual_capital.csv`
 
 ## Reading data from excel using readxl
 
@@ -35,7 +36,7 @@ Read the first sheet of data:
 
 ```{r}
 library(readxl)
-data <-read_excel("data/transit-data.xlsx")
+data <-read_excel("data/transit-data.xlsx") #Be sure to use the correct relative path here.
 ```
 
 Look at the help for the read_excel function:
@@ -63,7 +64,7 @@ We need to skip the first line of the data.
 more_data <- read_excel("data/transit-data.xlsx", sheet = 'transport data', skip=1)
 ```
 
-The column names are human readable but not very handy for coding. **Indeed, in general, only dots and underscores are allowed in variable names.** There is a quick way to solve this.
+The column names are human readable but not very handy for coding. **Indeed, in general, only dots and underscores should be used in variable names.** There is a quick way to solve this.
 
 ```{r}
 colnames(more_data) <- make.names(colnames(more_data))
@@ -138,6 +139,12 @@ data <- read_csv(url)
 
 After reading in the data, it's a good idea to explore the data. Use either the environment tab in Rstudio or use functions that give you some info about your data.
 
+*"This is a critical step that should always be performed. It is simple but it is vital. You should make numerical summaries such as means, standard deviations (SDs), maximum and minimum, correlations and whatever else is appropriate to the speciﬁc dataset. Equally important are graphical summaries."*
+
+*(Faraway, J. J. (2004). Linear models with R. Chapman and Hall/CRC.).*
+
+### Head and tail
+
 ```{r}
 data <- read_csv('data/pakistan_intellectual_capital.csv', n_max=10)
 head(data)
@@ -147,17 +154,23 @@ head(data)
 tail(data)
 ```
 
+### Summary
+
 Get a quick summary
 
 ```{r}
 summary(data)
 ```
 
+### glimpse
+
 The function glimpse gives you also a quick overview:
 
 ```{r}
 glimpse(data)
 ```
+
+### skim
 
 And what about this beautiful exploratory tool?
 
@@ -167,7 +180,12 @@ skim(data)
 
 ```
 
-## Selecting variables
+```{r}
+skim_tee(data)
+```
+
+
+## Addressing a single variable
 
 A simple way to get variables from a tibble is using the `$` operator.
 
@@ -230,7 +248,7 @@ data
 
 ### Exercise 1
 
--   Read in the cars.txt file
+-   Read in the `cars.txt` file
 
 -   Print the first lines of the data
 

@@ -1,6 +1,6 @@
 Reading Data
 ================
-Last Updated: 18, September, 2023 at 16:45
+Last Updated: 26, September, 2023 at 08:44
 
 - <a href="#before-we-begin" id="toc-before-we-begin">Before we begin…</a>
 - <a href="#reading-data-from-excel-using-readxl"
@@ -23,8 +23,12 @@ Last Updated: 18, September, 2023 at 16:45
   id="toc-reading-files-not-seperated-by-commas">Reading files not
   seperated by commas</a>
 - <a href="#exploring-data" id="toc-exploring-data">Exploring data</a>
-- <a href="#selecting-variables" id="toc-selecting-variables">Selecting
-  variables</a>
+  - <a href="#head-and-tail" id="toc-head-and-tail">Head and tail</a>
+  - <a href="#summary" id="toc-summary">Summary</a>
+  - <a href="#glimpse" id="toc-glimpse">glimpse</a>
+  - <a href="#skim" id="toc-skim">skim</a>
+- <a href="#addressing-a-single-variable"
+  id="toc-addressing-a-single-variable">Addressing a single variable</a>
 - <a href="#creating-new-variables"
   id="toc-creating-new-variables">Creating new variables</a>
 - <a href="#creating-new-variables-using-mutate"
@@ -38,23 +42,21 @@ Last Updated: 18, September, 2023 at 16:45
 library(tidyverse)
 ```
 
-    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-    ## ✔ dplyr     1.1.0     ✔ readr     2.1.4
-    ## ✔ forcats   1.0.0     ✔ stringr   1.5.0
-    ## ✔ ggplot2   3.4.1     ✔ tibble    3.2.0
-    ## ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
-    ## ✔ purrr     1.0.1     
+    ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
+    ## ✔ ggplot2 3.4.0      ✔ purrr   0.3.5 
+    ## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
+    ## ✔ tidyr   1.2.1      ✔ stringr 1.4.1 
+    ## ✔ readr   2.1.3      ✔ forcats 0.5.2 
     ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
-    ## ℹ Use the ]8;;http://conflicted.r-lib.org/conflicted package]8;; to force all conflicts to become errors
 
 ## Before we begin…
 
-Dowload the following data files to your computer:
+Download the following data files to your computer:
 
-- transit-data.xlsx
-- pakistan_intellectual_capital.csv
+- `transit-data.xlsx`
+- `pakistan_intellectual_capital.csv`
 
 ## Reading data from excel using readxl
 
@@ -72,7 +74,7 @@ Read the first sheet of data:
 
 ``` r
 library(readxl)
-data <-read_excel("data/transit-data.xlsx")
+data <-read_excel("data/transit-data.xlsx") #Be sure to use the correct relative path here.
 ```
 
 Look at the help for the read_excel function:
@@ -108,8 +110,8 @@ more_data <- read_excel("data/transit-data.xlsx", sheet = 'transport data', skip
 ```
 
 The column names are human readable but not very handy for coding.
-**Indeed, in general, only dots and underscores are allowed in variable
-names.** There is a quick way to solve this.
+**Indeed, in general, only dots and underscores should be used in
+variable names.** There is a quick way to solve this.
 
 ``` r
 colnames(more_data) <- make.names(colnames(more_data))
@@ -260,6 +262,16 @@ After reading in the data, it’s a good idea to explore the data. Use
 either the environment tab in Rstudio or use functions that give you
 some info about your data.
 
+*“This is a critical step that should always be performed. It is simple
+but it is vital. You should make numerical summaries such as means,
+standard deviations (SDs), maximum and minimum, correlations and
+whatever else is appropriate to the speciﬁc dataset. Equally important
+are graphical summaries.”*
+
+*(Faraway, J. J. (2004). Linear models with R. Chapman and Hall/CRC.).*
+
+### Head and tail
+
 ``` r
 data <- read_csv('data/pakistan_intellectual_capital.csv', n_max=10)
 ```
@@ -314,6 +326,8 @@ tail(data)
     ## #   ⁴​`Province University Located`, ⁵​Designation, ⁶​`Terminal Degree`,
     ## #   ⁷​`Graduated from`
 
+### Summary
+
 Get a quick summary
 
 ``` r
@@ -353,6 +367,8 @@ summary(data)
     ##  Max.   :2011                                                              
     ##  NA's   :4
 
+### glimpse
+
 The function glimpse gives you also a quick overview:
 
 ``` r
@@ -374,6 +390,8 @@ glimpse(data)
     ## $ Year                                        <dbl> NA, NA, NA, NA, 2005, 2008…
     ## $ `Area of Specialization/Research Interests` <chr> "Software Engineering & DB…
     ## $ `Other Information`                         <lgl> NA, NA, NA, NA, NA, NA, NA…
+
+### skim
 
 And what about this beautiful exploratory tool?
 
@@ -425,7 +443,60 @@ Data summary
 | S#            |         0 |           1.0 |   18.6 | 11.62 |    3 |    6.25 |   25.5 |   27.75 |   30 | ▅▁▁▁▇ |
 | Year          |         4 |           0.6 | 2008.5 |  1.97 | 2005 | 2008.25 | 2009.0 | 2009.00 | 2011 | ▂▁▂▇▂ |
 
-## Selecting variables
+``` r
+skim_tee(data)
+```
+
+    ## ── Data Summary ────────────────────────
+    ##                            Values
+    ## Name                       data  
+    ## Number of rows             10    
+    ## Number of columns          13    
+    ## _______________________          
+    ## Column type frequency:           
+    ##   character                9     
+    ##   logical                  1     
+    ##   numeric                  3     
+    ## ________________________         
+    ## Group variables            None  
+    ## 
+    ## ── Variable type: character ────────────────────────────────────────────────────
+    ##   skim_variable                             n_missing complete_rate min max
+    ## 1 Teacher Name                                      0             1  11  19
+    ## 2 University Currently Teaching                     0             1  25  38
+    ## 3 Department                                        0             1  16  21
+    ## 4 Province University Located                       0             1  11  11
+    ## 5 Designation                                       0             1   8  19
+    ## 6 Terminal Degree                                   0             1   2   3
+    ## 7 Graduated from                                    0             1  25  85
+    ## 8 Country                                           0             1   8   8
+    ## 9 Area of Specialization/Research Interests         0             1   4  77
+    ##   empty n_unique whitespace
+    ## 1     0       10          0
+    ## 2     0        2          0
+    ## 3     0        2          0
+    ## 4     0        1          0
+    ## 5     0        2          0
+    ## 6     0        4          0
+    ## 7     0        4          0
+    ## 8     0        2          0
+    ## 9     0       10          0
+    ## 
+    ## ── Variable type: logical ──────────────────────────────────────────────────────
+    ##   skim_variable     n_missing complete_rate mean count
+    ## 1 Other Information        10             0  NaN ": " 
+    ## 
+    ## ── Variable type: numeric ──────────────────────────────────────────────────────
+    ##   skim_variable n_missing complete_rate   mean    sd   p0     p25    p50    p75
+    ## 1 ...1                  0           1     17.6 11.6     2    5.25   24.5   26.8
+    ## 2 S#                    0           1     18.6 11.6     3    6.25   25.5   27.8
+    ## 3 Year                  4           0.6 2008.   1.97 2005 2008.   2009   2009  
+    ##   p100 hist 
+    ## 1   29 ▅▁▁▁▇
+    ## 2   30 ▅▁▁▁▇
+    ## 3 2011 ▂▁▂▇▂
+
+## Addressing a single variable
 
 A simple way to get variables from a tibble is using the `$` operator.
 
@@ -561,7 +632,7 @@ data
 
 ### Exercise 1
 
-- Read in the cars.txt file
+- Read in the `cars.txt` file
 
 - Print the first lines of the data
 

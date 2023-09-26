@@ -1,20 +1,30 @@
 Filtering Data
 ================
-Last Updated: 04, October, 2022 at 08:36
+Last Updated: 26, September, 2023 at 08:47
 
--   <a href="#dplyr" id="toc-dplyr">dplyr</a>
--   <a href="#selecting-columns" id="toc-selecting-columns">Selecting
-    columns</a>
--   <a href="#filtering-on-criteria"
-    id="toc-filtering-on-criteria">Filtering on criteria</a>
--   <a href="#ordering-rows" id="toc-ordering-rows">Ordering rows</a>
--   <a href="#exercises" id="toc-exercises">Exercises</a>
-    -   <a href="#exercise-titanic-data"
-        id="toc-exercise-titanic-data">Exercise: Titanic Data</a>
-    -   <a href="#exercise-car-data" id="toc-exercise-car-data">Exercise: Car
-        data</a>
-    -   <a href="#exercise-film-data" id="toc-exercise-film-data">Exercise: Film
-        data</a>
+- <a href="#before-we-begin" id="toc-before-we-begin">Before we begin…</a>
+- <a href="#dplyr" id="toc-dplyr">dplyr</a>
+- <a href="#selecting-columns" id="toc-selecting-columns">Selecting
+  columns</a>
+- <a href="#filtering-on-criteria"
+  id="toc-filtering-on-criteria">Filtering on criteria</a>
+- <a href="#ordering-rows" id="toc-ordering-rows">Ordering rows</a>
+- <a href="#exercises" id="toc-exercises">Exercises</a>
+  - <a href="#exercise-titanic-data"
+    id="toc-exercise-titanic-data">Exercise: Titanic Data</a>
+  - <a href="#exercise-car-data" id="toc-exercise-car-data">Exercise: Car
+    data</a>
+  - <a href="#exercise-film-data" id="toc-exercise-film-data">Exercise: Film
+    data</a>
+
+## Before we begin…
+
+Download the following data files to your computer:
+
+- `transit-data.xlsx`
+- `Titanic.csv`
+- `Cars.txt`
+- `films.dat`
 
 ## dplyr
 
@@ -26,10 +36,10 @@ library(tidyverse)
 ```
 
     ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
-    ## ✔ ggplot2 3.3.6     ✔ purrr   0.3.4
-    ## ✔ tibble  3.1.8     ✔ dplyr   1.0.9
-    ## ✔ tidyr   1.2.0     ✔ stringr 1.4.0
-    ## ✔ readr   2.1.2     ✔ forcats 0.5.2
+    ## ✔ ggplot2 3.4.0      ✔ purrr   0.3.5 
+    ## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
+    ## ✔ tidyr   1.2.1      ✔ stringr 1.4.1 
+    ## ✔ readr   2.1.3      ✔ forcats 0.5.2 
     ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
@@ -428,7 +438,7 @@ unique(subset$sender.location)
 
 ## Ordering rows
 
-You can use arrange to order the rows.
+You can use `arrange` to order the rows.
 
 ``` r
 subset1 <-select(data, sender.location, sender.latitude)
@@ -514,24 +524,24 @@ head(subset1, n = 15)
 
 ### Exercise: Titanic Data
 
-Read in the data and perform the following operations:
+Read in the `Titanic.csv` data and perform the following operations:
 
--   Count the number of male survivors that were older than 25.
--   How many first class passengers where female?
--   How many female passengers survived?
+- Count the number of male survivors that were older than 25.
+- How many first class passengers were female?
+- How many female passengers survived?
 
 ### Exercise: Car data
 
-Read in the data and perform the following operations:
+Read in the `cars.txt` data and perform the following operations:
 
 The data file contains variables describing a number of cars.
 
--   Select all cars with at least 25 mpg in the city.
--   Select all BMW’s
--   Are there any Large cars with more than 25 mpg in the city?
--   Which cars use over 50% more fuel on the city than they do in the
-    highway?
--   Which cars have an action radius of over 400 miles on the highway?
+- Select all cars with at least 25 mpg in the city.
+- Select all BMW’s
+- Are there any Large cars with more than 25 mpg in the city?
+- Which cars use over 50% more fuel on the city than they do in the
+  highway?
+- Which cars have an action radius of over 400 miles on the highway?
 
 ### Exercise: Film data
 
@@ -540,22 +550,20 @@ lists the title, year of release, length in minutes, number of cast
 members listed, rating, and number of lines of description are recorded
 for a simple random sample of 100 movies.
 
--   Write code to select all films from 1980 to 1990 (including both
-    1980 and 1990)
+- Write code to select all films from 1980 to 1990 (including both 1980
+  and 1990)
 
--   Select all films with a rating of 1
+- Select all films with a rating of 1
 
--   Write a short script that allows selecting all movies that were made
-    in the five years before a given date. The script starts by
-    assigning a value (year) to a variable. The script selects all
-    movies made in the 5 years preceding the year assigned to the
-    variable and prints the selected data to the screen. The earliest
-    film in the data was made in 1924. Therefore, if the year assigned
-    to the variable is before 1930, the script should print the message
-    `No movies found`.
+- Write a short script that allows selecting all movies that were made
+  in the five years before a given date. The script starts by assigning
+  a value (year) to a variable. The script selects all movies made in
+  the 5 years preceding the year assigned to the variable and prints the
+  selected data to the screen. The earliest film in the data was made
+  in 1924. Therefore, if the year assigned to the variable is before
+  1930, the script should print the message `No movies found`.
 
--   Write code that adds a new variable `ratio` to the data. This
-    variable is obtained by dividing the number of actors (`Cast`) by
-    the length of the movie (`Length`). Next, select the movies for
-    which the ratio Cast/Length is at least 0.1. Print the selected
-    movies to the screen.
+- Write code that adds a new variable `ratio` to the data. This variable
+  is obtained by dividing the number of actors (`Cast`) by the length of
+  the movie (`Length`). Next, select the movies for which the ratio
+  Cast/Length is at least 0.1. Print the selected movies to the screen.

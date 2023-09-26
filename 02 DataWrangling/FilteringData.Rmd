@@ -11,6 +11,15 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+## Before we begin...
+
+Download the following data files to your computer:
+
+-   `transit-data.xlsx`
+-   `Titanic.csv`
+-   `Cars.txt`
+-   `films.dat`
+
 ## dplyr
 
 dplyr uses two functions to select columns and filter rows: `select()` and `filter()`.
@@ -88,7 +97,7 @@ unique(subset$sender.location)
 
 ## Ordering rows
 
-You can use arrange to order the rows.
+You can use `arrange` to order the rows.
 
 ```{r}
 subset1 <-select(data, sender.location, sender.latitude)
@@ -118,7 +127,7 @@ head(subset1, n = 15)
 
 ### Exercise: Titanic Data
 
-Read in the data and perform the following operations:
+Read in the `Titanic.csv` data and perform the following operations:
 
 -   Count the number of male survivors that were older than 25.
 -   How many first class passengers were female?
@@ -126,7 +135,7 @@ Read in the data and perform the following operations:
 
 ### Exercise: Car data
 
-Read in the data and perform the following operations:
+Read in the `cars.txt` data and perform the following operations:
 
 The data file contains variables describing a number of cars.
 
