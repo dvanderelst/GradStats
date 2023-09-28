@@ -21,6 +21,8 @@ Download the following data files to your computer:
 
 -   `transit-data.xlsx`
 -   `pakistan_intellectual_capital.csv`
+-   `cars.txt`
+-   `wages1833.csv`
 
 ## Reading data from excel using readxl
 
@@ -143,6 +145,8 @@ After reading in the data, it's a good idea to explore the data. Use either the 
 
 *(Faraway, J. J. (2004). Linear models with R. Chapman and Hall/CRC.).*
 
+One of the most simple things you can do is inspect your data using a text editor. When text files are large, it's a good idea to get an editor that can handle large files. I suggest [Sublime Text Editor](https://www.sublimetext.com/). This editor can handle much larger files than you can open (as text) in Rstudio. Keep the file open while you're cleaning it!
+
 ### Head and tail
 
 ```{r}
@@ -162,7 +166,7 @@ Get a quick summary
 summary(data)
 ```
 
-### glimpse
+### Glimpse
 
 The function glimpse gives you also a quick overview:
 
@@ -170,7 +174,7 @@ The function glimpse gives you also a quick overview:
 glimpse(data)
 ```
 
-### skim
+### Skim
 
 And what about this beautiful exploratory tool?
 
@@ -227,6 +231,7 @@ data['years_since_graduation'] <- 2022 - data$Year
 The function `mutate` is the `Tidyverse`-approach to creating new variables. Let's use the pizza data for this demo.
 
 ```{r}
+url<-'https://raw.githubusercontent.com/dvanderelst-python-class/python-class/fall2022/11_Pandas_Statistics/data/pizzasize.csv'
 data <- read_csv(url)
 ```
 

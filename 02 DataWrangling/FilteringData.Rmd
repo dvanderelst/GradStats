@@ -17,10 +17,10 @@ Download the following data files to your computer:
 
 -   `transit-data.xlsx`
 -   `Titanic.csv`
--   `Cars.txt`
+-   `cars.txt`
 -   `films.dat`
 
-## dplyr
+## dplyr: Selecting rows and columns
 
 dplyr uses two functions to select columns and filter rows: `select()` and `filter()`.
 
@@ -36,7 +36,9 @@ data <- read_excel("data/transit-data.xlsx", sheet = 'transport data', skip=1)
 colnames(data) <- make.names(colnames(data))
 ```
 
-## Selecting columns
+### Selecting variables
+
+#### Single variable
 
 Selecting columns is very straightforward.
 
@@ -44,6 +46,17 @@ Selecting columns is very straightforward.
 subset <- select(data, date, sender.latitude)
 head(subset)
 ```
+
+#### Multiple variables
+
+Selecting multiple columns
+
+```{r}
+subset <- select(data, date, c(sender.latitude, sender.longitude))
+head(subset)
+```
+
+#### Unselecting variables
 
 You can also unselect columns
 
@@ -54,7 +67,11 @@ colnames(subset)
 
 ```
 
-## Filtering on criteria
+#### Other functions to select variable names
+
+<https://dplyr.tidyverse.org/reference/select.html>
+
+### Filtering data using criteria
 
 ```{r}
 subset <- filter(data, sender.latitude < 50)
@@ -95,7 +112,7 @@ subset <- filter(data, sender.location %in% selected_locations)
 unique(subset$sender.location)
 ```
 
-## Ordering rows
+### Ordering rows
 
 You can use `arrange` to order the rows.
 
@@ -106,7 +123,6 @@ head(subset1, n = 15)
 ```
 
 Arranging in descending order? No problem.
-
 
 ```{r}
 subset1 <-select(data, sender.location, sender.latitude)
@@ -123,9 +139,9 @@ subset1 <-arrange(subset1, desc(rounded), sender.location)
 head(subset1, n = 15)
 ```
 
-## Exercises
+### Exercises
 
-### Exercise: Titanic Data
+#### Exercise: Titanic Data
 
 Read in the `Titanic.csv` data and perform the following operations:
 
@@ -133,7 +149,7 @@ Read in the `Titanic.csv` data and perform the following operations:
 -   How many first class passengers were female?
 -   How many female passengers survived?
 
-### Exercise: Car data
+#### Exercise: Car data
 
 Read in the `cars.txt` data and perform the following operations:
 
@@ -145,7 +161,7 @@ The data file contains variables describing a number of cars.
 -   Which cars use over 50% more fuel on the city than they do in the highway?
 -   Which cars have an action radius of over 400 miles on the highway?
 
-### Exercise: Film data
+#### Exercise: Film data
 
 Use the following data file: `films.dat` (in the data folder). This file lists the title, year of release, length in minutes, number of cast members listed, rating, and number of lines of description are recorded for a simple random sample of 100 movies.
 

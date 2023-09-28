@@ -23,6 +23,8 @@ Download the following data sets:
 
 ## Loading the tidyverse
 
+As always, let's load the tidyverse...
+
 ```{r}
 library(tidyverse)
 ```
@@ -35,7 +37,7 @@ One of the most simple things you can do is inspect your data using a text edito
 
 ### Detecting outliers
 
-Outliers (as errors) can be most easily identified using graphs. However, some textual output might be useful as well.
+Outliers (as errors) can be most easily identified using graphs (See later). However, some textual output might be useful as well.
 
 Let's read in some data (see `codebook.txt` for info about the variables).
 
@@ -49,7 +51,7 @@ People have clearly made errors when entering their ages:
 summary(depression_data$age)
 ```
 
-The histogram looks weird because of the very few, very high ages. We *could* try to fix these by assuming, for example, that `1998` is the birth year and not the age. We will do this later.
+The histogram looks weird because of the very few, very high ages. We *could* try to fix these by assuming, for example, that `1998` is the birth year and not the age. For now, let's just remove these entries.
 
 ```{r}
 hist(depression_data$age)

@@ -1,6 +1,6 @@
 Reading Data
 ================
-Last Updated: 26, September, 2023 at 08:44
+Last Updated: 28, September, 2023 at 08:49
 
 - <a href="#before-we-begin" id="toc-before-we-begin">Before we begin…</a>
 - <a href="#reading-data-from-excel-using-readxl"
@@ -25,8 +25,8 @@ Last Updated: 26, September, 2023 at 08:44
 - <a href="#exploring-data" id="toc-exploring-data">Exploring data</a>
   - <a href="#head-and-tail" id="toc-head-and-tail">Head and tail</a>
   - <a href="#summary" id="toc-summary">Summary</a>
-  - <a href="#glimpse" id="toc-glimpse">glimpse</a>
-  - <a href="#skim" id="toc-skim">skim</a>
+  - <a href="#glimpse" id="toc-glimpse">Glimpse</a>
+  - <a href="#skim" id="toc-skim">Skim</a>
 - <a href="#addressing-a-single-variable"
   id="toc-addressing-a-single-variable">Addressing a single variable</a>
 - <a href="#creating-new-variables"
@@ -57,6 +57,8 @@ Download the following data files to your computer:
 
 - `transit-data.xlsx`
 - `pakistan_intellectual_capital.csv`
+- `cars.txt`
+- `wages1833.csv`
 
 ## Reading data from excel using readxl
 
@@ -270,6 +272,13 @@ are graphical summaries.”*
 
 *(Faraway, J. J. (2004). Linear models with R. Chapman and Hall/CRC.).*
 
+One of the most simple things you can do is inspect your data using a
+text editor. When text files are large, it’s a good idea to get an
+editor that can handle large files. I suggest [Sublime Text
+Editor](https://www.sublimetext.com/). This editor can handle much
+larger files than you can open (as text) in Rstudio. Keep the file open
+while you’re cleaning it!
+
 ### Head and tail
 
 ``` r
@@ -367,7 +376,7 @@ summary(data)
     ##  Max.   :2011                                                              
     ##  NA's   :4
 
-### glimpse
+### Glimpse
 
 The function glimpse gives you also a quick overview:
 
@@ -391,7 +400,7 @@ glimpse(data)
     ## $ `Area of Specialization/Research Interests` <chr> "Software Engineering & DB…
     ## $ `Other Information`                         <lgl> NA, NA, NA, NA, NA, NA, NA…
 
-### skim
+### Skim
 
 And what about this beautiful exploratory tool?
 
@@ -572,6 +581,7 @@ The function `mutate` is the `Tidyverse`-approach to creating new
 variables. Let’s use the pizza data for this demo.
 
 ``` r
+url<-'https://raw.githubusercontent.com/dvanderelst-python-class/python-class/fall2022/11_Pandas_Statistics/data/pizzasize.csv'
 data <- read_csv(url)
 ```
 

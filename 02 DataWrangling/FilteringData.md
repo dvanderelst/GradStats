@@ -1,21 +1,17 @@
 Filtering Data
 ================
-Last Updated: 26, September, 2023 at 08:47
+Last Updated: 28, September, 2023 at 08:48
 
 - <a href="#before-we-begin" id="toc-before-we-begin">Before we begin…</a>
-- <a href="#dplyr" id="toc-dplyr">dplyr</a>
-- <a href="#selecting-columns" id="toc-selecting-columns">Selecting
+- <a href="#dplyr-selecting-rows-and-columns"
+  id="toc-dplyr-selecting-rows-and-columns">dplyr: Selecting rows and
   columns</a>
-- <a href="#filtering-on-criteria"
-  id="toc-filtering-on-criteria">Filtering on criteria</a>
-- <a href="#ordering-rows" id="toc-ordering-rows">Ordering rows</a>
-- <a href="#exercises" id="toc-exercises">Exercises</a>
-  - <a href="#exercise-titanic-data"
-    id="toc-exercise-titanic-data">Exercise: Titanic Data</a>
-  - <a href="#exercise-car-data" id="toc-exercise-car-data">Exercise: Car
-    data</a>
-  - <a href="#exercise-film-data" id="toc-exercise-film-data">Exercise: Film
-    data</a>
+  - <a href="#selecting-variables" id="toc-selecting-variables">Selecting
+    variables</a>
+  - <a href="#filtering-data-using-criteria"
+    id="toc-filtering-data-using-criteria">Filtering data using criteria</a>
+  - <a href="#ordering-rows" id="toc-ordering-rows">Ordering rows</a>
+  - <a href="#exercises" id="toc-exercises">Exercises</a>
 
 ## Before we begin…
 
@@ -23,10 +19,10 @@ Download the following data files to your computer:
 
 - `transit-data.xlsx`
 - `Titanic.csv`
-- `Cars.txt`
+- `cars.txt`
 - `films.dat`
 
-## dplyr
+## dplyr: Selecting rows and columns
 
 dplyr uses two functions to select columns and filter rows: `select()`
 and `filter()`.
@@ -56,7 +52,9 @@ data <- read_excel("data/transit-data.xlsx", sheet = 'transport data', skip=1)
 colnames(data) <- make.names(colnames(data))
 ```
 
-## Selecting columns
+### Selecting variables
+
+#### Single variable
 
 Selecting columns is very straightforward.
 
@@ -74,6 +72,27 @@ head(subset)
     ## 4 5752             51.0
     ## 5 5757             51.0
     ## 6 5765             51.0
+
+#### Multiple variables
+
+Selecting multiple columns
+
+``` r
+subset <- select(data, date, c(sender.latitude, sender.longitude))
+head(subset)
+```
+
+    ## # A tibble: 6 × 3
+    ##   date  sender.latitude sender.longitude
+    ##   <chr>           <dbl>            <dbl>
+    ## 1 5729             51.0             14.0
+    ## 2 5741             51.0             14.0
+    ## 3 5743             51.0             14.0
+    ## 4 5752             51.0             14.0
+    ## 5 5757             51.0             14.0
+    ## 6 5765             51.0             14.0
+
+#### Unselecting variables
 
 You can also unselect columns
 
@@ -94,7 +113,11 @@ colnames(subset)
     ## [4] "receiver.location"  "receiver.latitude"  "receiver.longitude"
     ## [7] "date"
 
-## Filtering on criteria
+#### Other functions to select variable names
+
+<https://dplyr.tidyverse.org/reference/select.html>
+
+### Filtering data using criteria
 
 ``` r
 subset <- filter(data, sender.latitude < 50)
@@ -139,14 +162,14 @@ You can string queries together using `&`, `|`, and others. See
 hist(data$sender.longitude, breaks=25)
 ```
 
-![](FilteringData_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](FilteringData_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 ``` r
 subset <- filter(data, sender.longitude < -50 | sender.longitude > 100)
 hist(subset$sender.longitude,breaks=25)
 ```
 
-![](FilteringData_files/figure-gfm/unnamed-chunk-7-2.png)<!-- -->
+![](FilteringData_files/figure-gfm/unnamed-chunk-8-2.png)<!-- -->
 
 Let’s use the NOT operator to filter out one of the locations.
 
@@ -436,7 +459,7 @@ unique(subset$sender.location)
 
     ## [1] "USA, Wellington (KS)" "USA, Rochester (NY)"  "USA, Brownfield (TX)"
 
-## Ordering rows
+### Ordering rows
 
 You can use `arrange` to order the rows.
 
@@ -520,9 +543,9 @@ head(subset1, n = 15)
     ## 14 CAN, Dodsland (ON)                       51.8      52
     ## 15 GBR, London (Schiff Sorrento)            51.5      52
 
-## Exercises
+### Exercises
 
-### Exercise: Titanic Data
+#### Exercise: Titanic Data
 
 Read in the `Titanic.csv` data and perform the following operations:
 
@@ -530,7 +553,7 @@ Read in the `Titanic.csv` data and perform the following operations:
 - How many first class passengers were female?
 - How many female passengers survived?
 
-### Exercise: Car data
+#### Exercise: Car data
 
 Read in the `cars.txt` data and perform the following operations:
 
@@ -543,7 +566,7 @@ The data file contains variables describing a number of cars.
   highway?
 - Which cars have an action radius of over 400 miles on the highway?
 
-### Exercise: Film data
+#### Exercise: Film data
 
 Use the following data file: `films.dat` (in the data folder). This file
 lists the title, year of release, length in minutes, number of cast
