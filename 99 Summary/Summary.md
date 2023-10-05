@@ -1,74 +1,45 @@
 Summary
 ================
-Last Updated: 13, October, 2022 at 08:30
+Last Updated: 05, October, 2023 at 08:35
 
--   <a href="#resource-cheat-sheets"
-    id="toc-resource-cheat-sheets">Resource: cheat Sheets</a>
--   <a href="#r-basics" id="toc-r-basics">R Basics</a>
-    -   <a href="#the-if-statement-example"
-        id="toc-the-if-statement-example">The <code>if</code> statement:
-        example</a>
-    -   <a href="#the-for-loop-example" id="toc-the-for-loop-example">The
-        <code>for</code> loop: example</a>
-    -   <a href="#the-while-loop-example" id="toc-the-while-loop-example">The
-        <code>while</code> loop: example</a>
--   <a href="#reading-data" id="toc-reading-data">Reading data</a>
-    -   <a href="#reading-data-from-excel-using-readxl"
-        id="toc-reading-data-from-excel-using-readxl">Reading data from excel
-        using readxl</a>
--   <a href="#reading-data-from-text-files"
-    id="toc-reading-data-from-text-files">Reading data from text files</a>
-    -   <a href="#reading-comma-separated-files"
-        id="toc-reading-comma-separated-files">Reading comma separated files</a>
-    -   <a href="#reading-tab-separated-files"
-        id="toc-reading-tab-separated-files">Reading tab separated files</a>
-    -   <a href="#reading-files-seperated-by-specific-charactor"
-        id="toc-reading-files-seperated-by-specific-charactor">Reading files
-        seperated by specific charactor</a>
--   <a
-    href="#some-interesting-options-when-using-read_csv-read_tsv-or-read_delim"
-    id="toc-some-interesting-options-when-using-read_csv-read_tsv-or-read_delim">Some
-    interesting options when using <code>read_csv()</code>,
-    <code>read_tsv()</code>, or <code>read_delim()</code></a>
-    -   <a href="#no-column-names" id="toc-no-column-names">No column names?</a>
-    -   <a href="#specifying-missing-data"
-        id="toc-specifying-missing-data">Specifying missing data</a>
--   <a href="#data-cleaning-and-data-operations"
-    id="toc-data-cleaning-and-data-operations">Data cleaning and data
-    operations</a>
-    -   <a href="#renaming-variables-to-r-acceptable-format"
-        id="toc-renaming-variables-to-r-acceptable-format">Renaming variables to
-        R acceptable format</a>
-    -   <a href="#creating-new-variables-using-mutate"
-        id="toc-creating-new-variables-using-mutate">Creating new variables
-        using <code>mutate()</code></a>
-    -   <a href="#selecting-columns-using-select"
-        id="toc-selecting-columns-using-select">Selecting columns using
-        <code>select()</code></a>
-    -   <a href="#filtering-using-filter"
-        id="toc-filtering-using-filter">Filtering using
-        <code>filter()</code></a>
-    -   <a
-        href="#splitting-and-uniting-variable-values-using-separate-and-unite"
-        id="toc-splitting-and-uniting-variable-values-using-separate-and-unite">Splitting
-        and uniting variable values using <code>separate()</code> and
-        <code>unite()</code></a>
-    -   <a href="#string-manipulation-using-the-stringr-library"
-        id="toc-string-manipulation-using-the-stringr-library">String
-        manipulation using the <code>stringr</code> library</a>
-    -   <a href="#grouping-and-summarizing-data-using-group_by-and-summarize"
-        id="toc-grouping-and-summarizing-data-using-group_by-and-summarize">Grouping
-        and summarizing data using <code>group_by()</code> and
-        <code>summarize()</code></a>
-    -   <a href="#converting-to-wide-format-using-pivot_wider"
-        id="toc-converting-to-wide-format-using-pivot_wider">Converting to wide
-        format using <code>pivot_wider()</code></a>
-    -   <a href="#making-data-longer-melting-data-using-pivot_longer"
-        id="toc-making-data-longer-melting-data-using-pivot_longer">Making data
-        longer (melting data) using <code>pivot_longer()</code></a>
-    -   <a href="#merging-data-using-the-_join-functions"
-        id="toc-merging-data-using-the-_join-functions">Merging data using the
-        <code>_join()</code> functions</a>
+- [Resource: cheat Sheets](#resource-cheat-sheets)
+- [R Basics](#r-basics)
+  - [The `if` statement: example](#the-if-statement-example)
+  - [The `for` loop: example](#the-for-loop-example)
+  - [The `while` loop: example](#the-while-loop-example)
+- [Reading data](#reading-data)
+  - [Reading data from excel using
+    readxl](#reading-data-from-excel-using-readxl)
+- [Reading data from text files](#reading-data-from-text-files)
+  - [Reading comma separated files](#reading-comma-separated-files)
+  - [Reading tab separated files](#reading-tab-separated-files)
+  - [Reading files seperated by specific
+    charactor](#reading-files-seperated-by-specific-charactor)
+- [Some interesting options when using `read_csv()`, `read_tsv()`, or
+  `read_delim()`](#some-interesting-options-when-using-read_csv-read_tsv-or-read_delim)
+  - [No column names?](#no-column-names)
+  - [Specifying missing data](#specifying-missing-data)
+- [Data cleaning and data
+  operations](#data-cleaning-and-data-operations)
+  - [Renaming variables to R acceptable
+    format](#renaming-variables-to-r-acceptable-format)
+  - [Creating new variables using
+    `mutate()`](#creating-new-variables-using-mutate)
+  - [Selecting columns using
+    `select()`](#selecting-columns-using-select)
+  - [Filtering using `filter()`](#filtering-using-filter)
+  - [Splitting and uniting variable values using `separate()` and
+    `unite()`](#splitting-and-uniting-variable-values-using-separate-and-unite)
+  - [String manipulation using the `stringr`
+    library](#string-manipulation-using-the-stringr-library)
+  - [Grouping and summarizing data using `group_by()` and
+    `summarize()`](#grouping-and-summarizing-data-using-group_by-and-summarize)
+  - [Converting to wide format using
+    `pivot_wider()`](#converting-to-wide-format-using-pivot_wider)
+  - [Making data longer (melting data) using
+    `pivot_longer()`](#making-data-longer-melting-data-using-pivot_longer)
+  - [Merging data using the `_join()`
+    functions](#merging-data-using-the-_join-functions)
 
 ## Resource: cheat Sheets
 
@@ -100,11 +71,11 @@ for (x in my_vector) {
 }
 ```
 
-    ## [1] 0.248841
-    ## [1] 0.7612925
-    ## [1] 1.565843
-    ## [1] 2.818966
-    ## [1] 2.06748
+    ## [1] 2.59073
+    ## [1] 2.554221
+    ## [1] 0.01657979
+    ## [1] 1.813157
+    ## [1] 0.3160183
 
 One very common use of the `for` loop is to iterate a bit of code
 exactly n times.
@@ -152,10 +123,10 @@ library(tidyverse)
 ```
 
     ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
-    ## ✔ ggplot2 3.3.6     ✔ purrr   0.3.4
-    ## ✔ tibble  3.1.8     ✔ dplyr   1.0.9
-    ## ✔ tidyr   1.2.0     ✔ stringr 1.4.0
-    ## ✔ readr   2.1.2     ✔ forcats 0.5.2
+    ## ✔ ggplot2 3.4.0      ✔ purrr   0.3.5 
+    ## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
+    ## ✔ tidyr   1.2.1      ✔ stringr 1.4.1 
+    ## ✔ readr   2.1.3      ✔ forcats 0.5.2 
     ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
@@ -451,7 +422,6 @@ summaries
     ##  9 Compact Nissan                181
     ## 10 Compact Oldsmobile            188
     ## # … with 71 more rows
-    ## # ℹ Use `print(n = ...)` to see more rows
 
 You can ask for more than one summary statistic.
 
@@ -481,7 +451,6 @@ summaries
     ##  9 Compact Nissan                181        181      NA
     ## 10 Compact Oldsmobile            188        188      NA
     ## # … with 71 more rows
-    ## # ℹ Use `print(n = ...)` to see more rows
 
 ### Converting to wide format using `pivot_wider()`
 
@@ -550,7 +519,6 @@ head(relig_income, 5)
     ## # … with 2 more variables: `>150k` <dbl>, `Don't know/refused` <dbl>, and
     ## #   abbreviated variable names ¹​`$10-20k`, ²​`$20-30k`, ³​`$30-40k`, ⁴​`$40-50k`,
     ## #   ⁵​`$50-75k`, ⁶​`$75-100k`, ⁷​`$100-150k`
-    ## # ℹ Use `colnames()` to see all variable names
 
 This data is in a wider format. But we can easily melt it to a long
 format.

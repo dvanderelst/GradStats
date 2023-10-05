@@ -11,15 +11,15 @@ output:
 
 Download the following data sets:
 
-+ `raw_depression.csv`
-+ `cars.txt`
-+ `DEMO_J.XPT`
-+ `INQ_J.XPT`
-+ `DUQ_J.XPT`
-+ `ssadisability.csv`
-+ `coal.csv`
-+ `vot.csv`
-+ `airline-safety.csv`
+-   `raw_depression.csv`
+-   `cars.txt`
+-   `DEMO_J.XPT`
+-   `INQ_J.XPT`
+-   `DUQ_J.XPT`
+-   `ssadisability.csv`
+-   `coal.csv`
+-   `vot.csv`
+-   `airline-safety.csv`
 
 ## Loading the tidyverse
 
@@ -129,11 +129,25 @@ patient_data$Hospital.Referral.Region.Description[711]
 patient_data$Hospital.Referral.Region.Description[1930]
 ```
 
+Let's look at an example of the results.
+
+```{r}
+test$state[710]
+test$city[710]
+```
+
 ```{r}
 test <- separate(patient_data, Hospital.Referral.Region.Description, into=c('state', 'city'), sep=' - ', remove = FALSE)
 ```
 
-No warnings anymore! Note, you can use regular expression for the `sep` argument: [see here.](https://cran.r-project.org/web/packages/stringr/vignettes/regular-expressions.html)
+No warnings anymore! Let's look at an example of the results again
+
+```{r}
+test$state[710]
+test$city[710]
+```
+
+Note, you can use regular expression for the `sep` argument: [see here.](https://cran.r-project.org/web/packages/stringr/vignettes/regular-expressions.html)
 
 ### Combining columns
 
@@ -160,7 +174,7 @@ We have to load `stringr` separately.
 library(stringr)
 ```
 
-Let's convert the majors to lower case. Notice that strings that are not coner
+Let's convert the majors to lower case.
 
 ```{r}
 head(depression_data$major, 10)
@@ -178,13 +192,13 @@ bio_students <- filter(depression_data, bio)
 That matched also biomedical and biochemistry students. Let's detect those using a regex (See <https://regex101.com/> for a regex construction tool).
 
 ```{r}
-depression_data$other <- !str_detect(depression_data$major, 'chem|med|phys|tech')
+depression_data$not_other <- !str_detect(depression_data$major, 'chem|med|phys|tech')
 ```
 
 Let's combine our columns
 
 ```{r}
-depression_data <- mutate(depression_data, selection = other * bio)
+depression_data <- mutate(depression_data, selection = not_other * bio)
 bio_students <- filter(depression_data, selection==1)
 ```
 
@@ -256,12 +270,14 @@ dim(summaries2)
 
 ### Converting to wide format
 
-The result can be reshaped into a wide format. While this format is often not suited for plotting or analysis, it might make it easier to look at the data. Here is a quick visual:
+The result can be reshaped into a wide format. *While this format is often not suited for plotting or analysis*, it might make it easier to look at the data. Here is a quick visual:
 
-![](images/pivot_wider_new.png)
+![](images/pivot_wider_new.png) + `names_from`: the variable you wish to appear as columns + `values_from`: the variable you wish to use to fill the fill the table
+
+Note: The function also takes other arguments to handle more complex cases, see <https://tidyr.tidyverse.org/reference/pivot_wider.html>
 
 ```{r}
-wide <- pivot_wider(summaries, id_cols = make, names_from  = type, values_from = mean.length)
+wide <- pivot_wider(summaries, names_from  = type, values_from = mean.length)
 head(wide)
 ```
 
@@ -337,11 +353,54 @@ library(gapminder)
 gap_data <- gapminder
 ```
 
--   Filter the data for the Americas in 2007. Retain only the `lifeExp` variable and deselect all other variables.
+### Questions A
+
+Starting from the original `gap_data`,
+
+-   Filter the data for the Americas in 2007.
 -   Create the variable `gdp`, defined as the product of `pop` and `gdpPercap`.
--   Identify the observation (combination of county, continent, and year) with lowest gdp per person.
--   Identify all observations with above average life expectancy, stratified for each continent.
--   Compute the mean life expectancy for each year per continent.
+
+### Questions B
+
+Starting from the original `gap_data`,
+
+-   Compute the mean life expectancy for each year per continent.  
+-   Identify all observations with above average life expectancy, stratified for each continent and year.
+
+### Solution A
+
+```{r}
+head(gap_data)
+```
+
+```{r}
+colnames(gap_data)
+```
+
+```{r}
+americas <- filter(gap_data, continent == 'Americas')
+americas <- mutate(americas, gdp = (gdpPercap * pop)/1000000)
+
+```
+
+### Solution B
+
+```{r}
+grouped <- group_by(gap_data, continent, year)
+summaries <- summarise(grouped, mean.lifeExp = mean(lifeExp))
+summaries
+```
+
+```{r}
+merged <- full_join(gap_data, summaries, by=c('continent', 'year'))
+head(merged)
+```
+
+```{r}
+merged <- mutate(merged, above.mean = lifeExp > mean.lifeExp)
+head(merged)
+```
+
 
 ## Example: Social Security Applications
 
@@ -366,10 +425,6 @@ longer_format <- pivot_longer(ss, cols=Oct_Total:Sept_Total, names_to = 'period_
 ```
 
 This is better. But not perfect yet.
-
-```{r}
-count
-```
 
 ### Using `separate()`
 
@@ -486,8 +541,3 @@ These data (`vot.csv`) were taken from [here](https://www.jvcasillas.com/untidyd
 I took these data (`airline-safety.csv`) from [here](https://github.com/fivethirtyeight/data/blob/master/airline-safety/airline-safety.csv). This is data on airline safety from 1985-1999 and 2000-2014. As you can see in the data, the column names can be considered as variables indicating the period and the specific statistic for the period (number of incidents and fatalities).
 
 **Try rearranging the data to contain a column `period` listing either 1985-1999 or 2000-2014. The data should contain four further columns: `avail_seat_km_per_week`, `incidents`, `fatal_accidents` and `fatalities`.**
-
-
-
-
-

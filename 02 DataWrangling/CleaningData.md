@@ -1,81 +1,49 @@
 Cleaning Data
 ================
-Last Updated: 26, September, 2023 at 08:53
+Last Updated: 05, October, 2023 at 09:21
 
-- <a href="#before-we-start" id="toc-before-we-start">Before we start…</a>
-- <a href="#loading-the-tidyverse" id="toc-loading-the-tidyverse">Loading
-  the tidyverse</a>
-- <a href="#some-simple-operations" id="toc-some-simple-operations">Some
-  simple operations</a>
-  - <a href="#opening-large-text-files"
-    id="toc-opening-large-text-files">Opening large text files</a>
-  - <a href="#detecting-outliers" id="toc-detecting-outliers">Detecting
-    outliers</a>
-  - <a href="#missing-data" id="toc-missing-data">Missing data</a>
-  - <a href="#separating-a-column" id="toc-separating-a-column">Separating a
-    column</a>
-  - <a href="#combining-columns" id="toc-combining-columns">Combining
-    columns</a>
-  - <a href="#strings-using-stringr" id="toc-strings-using-stringr">Strings
-    using <code>stringr</code></a>
-- <a href="#reorganizing-data" id="toc-reorganizing-data">Reorganizing
-  data</a>
-  - <a href="#loading-some-data" id="toc-loading-some-data">Loading some
-    data</a>
-  - <a href="#grouping-and-summarizing-data"
-    id="toc-grouping-and-summarizing-data">Grouping and summarizing data</a>
-  - <a href="#further-processing" id="toc-further-processing">Further
-    processing</a>
-  - <a href="#note-on-dropping-non-existing-levels"
-    id="toc-note-on-dropping-non-existing-levels">Note on dropping
-    non-existing levels</a>
-  - <a href="#converting-to-wide-format"
-    id="toc-converting-to-wide-format">Converting to wide format</a>
-  - <a href="#making-data-longer-melting-data"
-    id="toc-making-data-longer-melting-data">Making data longer (melting
-    data)</a>
-- <a href="#merging-data" id="toc-merging-data">Merging data</a>
-  - <a href="#reading-in-the-data" id="toc-reading-in-the-data">Reading in
-    the data</a>
-  - <a href="#merging-the-data" id="toc-merging-the-data">Merging the
-    data</a>
-- <a href="#exercise-global-health-data"
-  id="toc-exercise-global-health-data">Exercise: Global Health Data</a>
-- <a href="#example-social-security-applications"
-  id="toc-example-social-security-applications">Example: Social Security
-  Applications</a>
-  - <a href="#a-reminder-on-pivot_longer"
-    id="toc-a-reminder-on-pivot_longer">A reminder on
-    <code>pivot_longer()</code></a>
-  - <a href="#using-pivot_longer" id="toc-using-pivot_longer">Using
-    <code>pivot_longer()</code></a>
-  - <a href="#using-separate" id="toc-using-separate">Using
-    <code>separate()</code></a>
-  - <a href="#creating-an-other-column"
-    id="toc-creating-an-other-column">Creating an <code>Other</code>
-    column</a>
-  - <a href="#convert-fiscal_year-to-year"
-    id="toc-convert-fiscal_year-to-year">Convert <code>Fiscal_Year</code> to
-    year</a>
-  - <a href="#create-a-date-variable" id="toc-create-a-date-variable">Create
-    a date variable</a>
-  - <a href="#plots" id="toc-plots">Plots</a>
-- <a href="#example-coal-data" id="toc-example-coal-data">Example: Coal
-  data</a>
-  - <a href="#change-the-first-variable-name"
-    id="toc-change-the-first-variable-name">Change the first variable
-    name</a>
-  - <a href="#convert-to-a-long-data-format"
-    id="toc-convert-to-a-long-data-format">Convert to a long data format</a>
-  - <a href="#separate-regions-and-countries"
-    id="toc-separate-regions-and-countries">Separate regions and
-    countries</a>
-- <a href="#further-exercises" id="toc-further-exercises">Further
-  exercises</a>
-  - <a href="#voice-onset-data" id="toc-voice-onset-data">Voice-onset
-    data</a>
-  - <a href="#airline-safety-data" id="toc-airline-safety-data">Airline
-    safety data</a>
+- [Before we start…](#before-we-start)
+- [Loading the tidyverse](#loading-the-tidyverse)
+- [Some simple operations](#some-simple-operations)
+  - [Opening large text files](#opening-large-text-files)
+  - [Detecting outliers](#detecting-outliers)
+  - [Missing data](#missing-data)
+  - [Separating a column](#separating-a-column)
+  - [Combining columns](#combining-columns)
+  - [Strings using `stringr`](#strings-using-stringr)
+- [Reorganizing data](#reorganizing-data)
+  - [Loading some data](#loading-some-data)
+  - [Grouping and summarizing data](#grouping-and-summarizing-data)
+  - [Further processing](#further-processing)
+  - [Note on dropping non-existing
+    levels](#note-on-dropping-non-existing-levels)
+  - [Converting to wide format](#converting-to-wide-format)
+  - [Making data longer (melting
+    data)](#making-data-longer-melting-data)
+- [Merging data](#merging-data)
+  - [Reading in the data](#reading-in-the-data)
+  - [Merging the data](#merging-the-data)
+- [Exercise: Global Health Data](#exercise-global-health-data)
+  - [Questions A](#questions-a)
+  - [Questions B](#questions-b)
+  - [Solution A](#solution-a)
+  - [Solution B](#solution-b)
+- [Example: Social Security
+  Applications](#example-social-security-applications)
+  - [A reminder on `pivot_longer()`](#a-reminder-on-pivot_longer)
+  - [Using `pivot_longer()`](#using-pivot_longer)
+  - [Using `separate()`](#using-separate)
+  - [Creating an `Other` column](#creating-an-other-column)
+  - [Convert `Fiscal_Year` to year](#convert-fiscal_year-to-year)
+  - [Create a date variable](#create-a-date-variable)
+  - [Plots](#plots)
+- [Example: Coal data](#example-coal-data)
+  - [Change the first variable name](#change-the-first-variable-name)
+  - [Convert to a long data format](#convert-to-a-long-data-format)
+  - [Separate regions and countries](#separate-regions-and-countries)
+- [Further exercises](#further-exercises)
+  - [Voice-onset data](#voice-onset-data)
+  - [Airline safety data](#airline-safety-data)
 
 ## Before we start…
 
@@ -92,6 +60,8 @@ Download the following data sets:
 - `airline-safety.csv`
 
 ## Loading the tidyverse
+
+As always, let’s load the tidyverse…
 
 ``` r
 library(tidyverse)
@@ -119,8 +89,8 @@ while you’re cleaning it!
 
 ### Detecting outliers
 
-Outliers (as errors) can be most easily identified using graphs.
-However, some textual output might be useful as well.
+Outliers (as errors) can be most easily identified using graphs (See
+later). However, some textual output might be useful as well.
 
 Let’s read in some data (see `codebook.txt` for info about the
 variables).
@@ -149,7 +119,7 @@ summary(depression_data$age)
 
 The histogram looks weird because of the very few, very high ages. We
 *could* try to fix these by assuming, for example, that `1998` is the
-birth year and not the age. We will do this later.
+birth year and not the age. For now, let’s just remove these entries.
 
 ``` r
 hist(depression_data$age)
@@ -380,12 +350,39 @@ patient_data$Hospital.Referral.Region.Description[1930]
 
     ## [1] "NC - Winston-Salem"
 
+Let’s look at an example of the results.
+
+``` r
+test$state[710]
+```
+
+    ## [1] "NC "
+
+``` r
+test$city[710]
+```
+
+    ## [1] " Winston"
+
 ``` r
 test <- separate(patient_data, Hospital.Referral.Region.Description, into=c('state', 'city'), sep=' - ', remove = FALSE)
 ```
 
-No warnings anymore! Note, you can use regular expression for the `sep`
-argument: [see
+No warnings anymore! Let’s look at an example of the results again
+
+``` r
+test$state[710]
+```
+
+    ## [1] "NC"
+
+``` r
+test$city[710]
+```
+
+    ## [1] "Winston-Salem"
+
+Note, you can use regular expression for the `sep` argument: [see
 here.](https://cran.r-project.org/web/packages/stringr/vignettes/regular-expressions.html)
 
 ### Combining columns
@@ -430,8 +427,7 @@ We have to load `stringr` separately.
 library(stringr)
 ```
 
-Let’s convert the majors to lower case. Notice that strings that are not
-coner
+Let’s convert the majors to lower case.
 
 ``` r
 head(depression_data$major, 10)
@@ -466,13 +462,13 @@ those using a regex (See <https://regex101.com/> for a regex
 construction tool).
 
 ``` r
-depression_data$other <- !str_detect(depression_data$major, 'chem|med|phys|tech')
+depression_data$not_other <- !str_detect(depression_data$major, 'chem|med|phys|tech')
 ```
 
 Let’s combine our columns
 
 ``` r
-depression_data <- mutate(depression_data, selection = other * bio)
+depression_data <- mutate(depression_data, selection = not_other * bio)
 bio_students <- filter(depression_data, selection==1)
 ```
 
@@ -637,26 +633,31 @@ dim(summaries2)
 
 ### Converting to wide format
 
-The result can be reshaped into a wide format. While this format is
-often not suited for plotting or analysis, it might make it easier to
+The result can be reshaped into a wide format. *While this format is
+often not suited for plotting or analysis*, it might make it easier to
 look at the data. Here is a quick visual:
 
-![](images/pivot_wider_new.png)
+![](images/pivot_wider_new.png) + `names_from`: the variable you wish to
+appear as columns + `values_from`: the variable you wish to use to fill
+the fill the table
+
+Note: The function also takes other arguments to handle more complex
+cases, see <https://tidyr.tidyverse.org/reference/pivot_wider.html>
 
 ``` r
-wide <- pivot_wider(summaries, id_cols = make, names_from  = type, values_from = mean.length)
+wide <- pivot_wider(summaries, names_from  = type, values_from = mean.length)
 head(wide)
 ```
 
-    ## # A tibble: 6 × 7
-    ##   make      Compact Large Midsize Small Sporty   Van
-    ##   <chr>       <dbl> <dbl>   <dbl> <dbl>  <dbl> <dbl>
-    ## 1 Audi          180    NA     193    NA    NA     NA
-    ## 2 Chevrolet     183   214     198    NA   186    186
-    ## 3 Chrysler      183   203      NA    NA    NA     NA
-    ## 4 Dodge         181    NA     192   173   180    175
-    ## 5 Ford          177   212     192   156   180.   176
-    ## 6 Honda         185    NA      NA   173   175     NA
+    ## # A tibble: 6 × 9
+    ##   make      max.length std_rpm Compact Large Midsize Small Sporty   Van
+    ##   <chr>          <dbl>   <dbl>   <dbl> <dbl>   <dbl> <dbl>  <dbl> <dbl>
+    ## 1 Audi             180      NA     180    NA      NA    NA     NA    NA
+    ## 2 Chevrolet        184       0     183    NA      NA    NA     NA    NA
+    ## 3 Chrysler         183      NA     183    NA      NA    NA     NA    NA
+    ## 4 Dodge            181      NA     181    NA      NA    NA     NA    NA
+    ## 5 Ford             177      NA     177    NA      NA    NA     NA    NA
+    ## 6 Honda            185      NA     185    NA      NA    NA     NA    NA
 
 ### Making data longer (melting data)
 
@@ -773,15 +774,108 @@ library(gapminder)
 gap_data <- gapminder
 ```
 
-- Filter the data for the Americas in 2007. Retain only the `lifeExp`
-  variable and deselect all other variables.
+### Questions A
+
+Starting from the original `gap_data`,
+
+- Filter the data for the Americas in 2007.
 - Create the variable `gdp`, defined as the product of `pop` and
   `gdpPercap`.
-- Identify the observation (combination of county, continent, and year)
-  with lowest gdp per person.
+
+### Questions B
+
+Starting from the original `gap_data`,
+
+- Compute the mean life expectancy for each year per continent.  
 - Identify all observations with above average life expectancy,
-  stratified for each continent.
-- Compute the mean life expectancy for each year per continent.
+  stratified for each continent and year.
+
+### Solution A
+
+``` r
+head(gap_data)
+```
+
+    ## # A tibble: 6 × 6
+    ##   country     continent  year lifeExp      pop gdpPercap
+    ##   <fct>       <fct>     <int>   <dbl>    <int>     <dbl>
+    ## 1 Afghanistan Asia       1952    28.8  8425333      779.
+    ## 2 Afghanistan Asia       1957    30.3  9240934      821.
+    ## 3 Afghanistan Asia       1962    32.0 10267083      853.
+    ## 4 Afghanistan Asia       1967    34.0 11537966      836.
+    ## 5 Afghanistan Asia       1972    36.1 13079460      740.
+    ## 6 Afghanistan Asia       1977    38.4 14880372      786.
+
+``` r
+colnames(gap_data)
+```
+
+    ## [1] "country"   "continent" "year"      "lifeExp"   "pop"       "gdpPercap"
+
+``` r
+americas <- filter(gap_data, continent == 'Americas')
+americas <- mutate(americas, gdp = (gdpPercap * pop)/1000000)
+```
+
+### Solution B
+
+``` r
+grouped <- group_by(gap_data, continent, year)
+summaries <- summarise(grouped, mean.lifeExp = mean(lifeExp))
+```
+
+    ## `summarise()` has grouped output by 'continent'. You can override using the
+    ## `.groups` argument.
+
+``` r
+summaries
+```
+
+    ## # A tibble: 60 × 3
+    ## # Groups:   continent [5]
+    ##    continent  year mean.lifeExp
+    ##    <fct>     <int>        <dbl>
+    ##  1 Africa     1952         39.1
+    ##  2 Africa     1957         41.3
+    ##  3 Africa     1962         43.3
+    ##  4 Africa     1967         45.3
+    ##  5 Africa     1972         47.5
+    ##  6 Africa     1977         49.6
+    ##  7 Africa     1982         51.6
+    ##  8 Africa     1987         53.3
+    ##  9 Africa     1992         53.6
+    ## 10 Africa     1997         53.6
+    ## # … with 50 more rows
+
+``` r
+merged <- full_join(gap_data, summaries, by=c('continent', 'year'))
+head(merged)
+```
+
+    ## # A tibble: 6 × 7
+    ##   country     continent  year lifeExp      pop gdpPercap mean.lifeExp
+    ##   <fct>       <fct>     <int>   <dbl>    <int>     <dbl>        <dbl>
+    ## 1 Afghanistan Asia       1952    28.8  8425333      779.         46.3
+    ## 2 Afghanistan Asia       1957    30.3  9240934      821.         49.3
+    ## 3 Afghanistan Asia       1962    32.0 10267083      853.         51.6
+    ## 4 Afghanistan Asia       1967    34.0 11537966      836.         54.7
+    ## 5 Afghanistan Asia       1972    36.1 13079460      740.         57.3
+    ## 6 Afghanistan Asia       1977    38.4 14880372      786.         59.6
+
+``` r
+merged <- mutate(merged, above.mean = lifeExp > mean.lifeExp)
+head(merged)
+```
+
+    ## # A tibble: 6 × 8
+    ##   country     continent  year lifeExp      pop gdpPercap mean.lifeExp above.mean
+    ##   <fct>       <fct>     <int>   <dbl>    <int>     <dbl>        <dbl> <lgl>     
+    ## 1 Afghanistan Asia       1952    28.8  8425333      779.         46.3 FALSE     
+    ## 2 Afghanistan Asia       1957    30.3  9240934      821.         49.3 FALSE     
+    ## 3 Afghanistan Asia       1962    32.0 10267083      853.         51.6 FALSE     
+    ## 4 Afghanistan Asia       1967    34.0 11537966      836.         54.7 FALSE     
+    ## 5 Afghanistan Asia       1972    36.1 13079460      740.         57.3 FALSE     
+    ## 6 Afghanistan Asia       1977    38.4 14880372      786.         59.6 FALSE
 
 ## Example: Social Security Applications
 
@@ -862,17 +956,6 @@ longer_format <- pivot_longer(ss, cols=Oct_Total:Sept_Total, names_to = 'period_
 ```
 
 This is better. But not perfect yet.
-
-``` r
-count
-```
-
-    ## function (x, ..., wt = NULL, sort = FALSE, name = NULL) 
-    ## {
-    ##     UseMethod("count")
-    ## }
-    ## <bytecode: 0x557673ae41b0>
-    ## <environment: namespace:dplyr>
 
 ### Using `separate()`
 
@@ -965,7 +1048,7 @@ data_2012 <- filter(long_again, Year == 2012)
 ggplot(data_2012) + aes(x=date, y = Count, group=Source, color=Source) + geom_line()
 ```
 
-![](CleaningData_files/figure-gfm/unnamed-chunk-46-1.png)<!-- -->
+![](CleaningData_files/figure-gfm/unnamed-chunk-53-1.png)<!-- -->
 
 ``` r
 ggplot(long_again) + aes(x=Month, y = Count, group=Source, color=Source) + geom_line() + facet_grid(~Year)
@@ -973,7 +1056,7 @@ ggplot(long_again) + aes(x=Month, y = Count, group=Source, color=Source) + geom_
 
     ## Warning: Removed 2 rows containing missing values (`geom_line()`).
 
-![](CleaningData_files/figure-gfm/unnamed-chunk-47-1.png)<!-- -->
+![](CleaningData_files/figure-gfm/unnamed-chunk-54-1.png)<!-- -->
 
 ## Example: Coal data
 
