@@ -1,6 +1,6 @@
 Cleaning Data
 ================
-Last Updated: 05, October, 2023 at 09:21
+Last Updated: 10, October, 2023 at 08:45
 
 - [Before we start…](#before-we-start)
 - [Loading the tidyverse](#loading-the-tidyverse)
@@ -18,16 +18,17 @@ Last Updated: 05, October, 2023 at 09:21
   - [Note on dropping non-existing
     levels](#note-on-dropping-non-existing-levels)
   - [Converting to wide format](#converting-to-wide-format)
+  - [Example: Titanic data](#example-titanic-data)
   - [Making data longer (melting
     data)](#making-data-longer-melting-data)
 - [Merging data](#merging-data)
   - [Reading in the data](#reading-in-the-data)
   - [Merging the data](#merging-the-data)
-- [Exercise: Global Health Data](#exercise-global-health-data)
+- [Example: Global Health Data](#example-global-health-data)
   - [Questions A](#questions-a)
   - [Questions B](#questions-b)
-  - [Solution A](#solution-a)
-  - [Solution B](#solution-b)
+  - [Solutions A](#solutions-a)
+  - [Solutions B](#solutions-b)
 - [Example: Social Security
   Applications](#example-social-security-applications)
   - [A reminder on `pivot_longer()`](#a-reminder-on-pivot_longer)
@@ -58,6 +59,7 @@ Download the following data sets:
 - `coal.csv`
 - `vot.csv`
 - `airline-safety.csv`
+- `Titanic.csv`
 
 ## Loading the tidyverse
 
@@ -637,27 +639,85 @@ The result can be reshaped into a wide format. *While this format is
 often not suited for plotting or analysis*, it might make it easier to
 look at the data. Here is a quick visual:
 
-![](images/pivot_wider_new.png) + `names_from`: the variable you wish to
-appear as columns + `values_from`: the variable you wish to use to fill
-the fill the table
+![](images/pivot_wider_new.png)
 
-Note: The function also takes other arguments to handle more complex
-cases, see <https://tidyr.tidyverse.org/reference/pivot_wider.html>
+- **`names_from`: the variable you wish to appear as columns**
+- **`values_from`: the variable you wish to use to fill the fill the
+  table**
+- **`id_cols`: the variables you wish to use as row identifiers**
+
+The function also takes other arguments to handle more complex cases,
+see <https://tidyr.tidyverse.org/reference/pivot_wider.html>
 
 ``` r
-wide <- pivot_wider(summaries, names_from  = type, values_from = mean.length)
+wide <- pivot_wider(summaries, id_cols = make, names_from  = type, values_from = mean.length)
 head(wide)
 ```
 
-    ## # A tibble: 6 × 9
-    ##   make      max.length std_rpm Compact Large Midsize Small Sporty   Van
-    ##   <chr>          <dbl>   <dbl>   <dbl> <dbl>   <dbl> <dbl>  <dbl> <dbl>
-    ## 1 Audi             180      NA     180    NA      NA    NA     NA    NA
-    ## 2 Chevrolet        184       0     183    NA      NA    NA     NA    NA
-    ## 3 Chrysler         183      NA     183    NA      NA    NA     NA    NA
-    ## 4 Dodge            181      NA     181    NA      NA    NA     NA    NA
-    ## 5 Ford             177      NA     177    NA      NA    NA     NA    NA
-    ## 6 Honda            185      NA     185    NA      NA    NA     NA    NA
+    ## # A tibble: 6 × 7
+    ##   make      Compact Large Midsize Small Sporty   Van
+    ##   <chr>       <dbl> <dbl>   <dbl> <dbl>  <dbl> <dbl>
+    ## 1 Audi          180    NA     193    NA    NA     NA
+    ## 2 Chevrolet     183   214     198    NA   186    186
+    ## 3 Chrysler      183   203      NA    NA    NA     NA
+    ## 4 Dodge         181    NA     192   173   180    175
+    ## 5 Ford          177   212     192   156   180.   176
+    ## 6 Honda         185    NA      NA   173   175     NA
+
+### Example: Titanic data
+
+``` r
+titanic <-read_csv('data/Titanic.csv', na='*')
+```
+
+    ## New names:
+    ## Rows: 1313 Columns: 7
+    ## ── Column specification
+    ## ──────────────────────────────────────────────────────── Delimiter: "," chr
+    ## (4): Name, PClass, Age, Sex dbl (3): ...1, Survived, SexCode
+    ## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+    ## Specify the column types or set `show_col_types = FALSE` to quiet this message.
+    ## • `` -> `...1`
+
+``` r
+grouped <- group_by(titanic, PClass, Sex)
+survival <- summarise(grouped, proportion = mean(Survived), survived = sum(Survived), total = length(Survived))
+```
+
+    ## `summarise()` has grouped output by 'PClass'. You can override using the
+    ## `.groups` argument.
+
+``` r
+survival
+```
+
+    ## # A tibble: 7 × 5
+    ## # Groups:   PClass [4]
+    ##   PClass Sex    proportion survived total
+    ##   <chr>  <chr>       <dbl>    <dbl> <int>
+    ## 1 1st    female      0.937      134   143
+    ## 2 1st    male        0.330       59   179
+    ## 3 2nd    female      0.879       94   107
+    ## 4 2nd    male        0.145       25   172
+    ## 5 3rd    female      0.377       80   212
+    ## 6 3rd    male        0.116       58   499
+    ## 7 <NA>   male        0            0     1
+
+You could make the result into a wide table.
+
+``` r
+survival_wide <- pivot_wider(survival,  names_from = Sex, id_cols = PClass, values_from = proportion)
+survival_wide
+```
+
+    ## # A tibble: 4 × 3
+    ## # Groups:   PClass [4]
+    ##   PClass female  male
+    ##   <chr>   <dbl> <dbl>
+    ## 1 1st     0.937 0.330
+    ## 2 2nd     0.879 0.145
+    ## 3 3rd     0.377 0.116
+    ## 4 <NA>   NA     0
 
 ### Making data longer (melting data)
 
@@ -687,23 +747,7 @@ This data is in a wider format. But we can easily melt it to a long
 format.
 
 ``` r
-new <- pivot_longer(relig_income, cols = !religion)
-head(new, 5)
-```
-
-    ## # A tibble: 5 × 3
-    ##   religion name    value
-    ##   <chr>    <chr>   <dbl>
-    ## 1 Agnostic <$10k      27
-    ## 2 Agnostic $10-20k    34
-    ## 3 Agnostic $20-30k    60
-    ## 4 Agnostic $30-40k    81
-    ## 5 Agnostic $40-50k    76
-
-You can specify names for the new columns while melting.
-
-``` r
-new <- pivot_longer(relig_income, !religion, names_to = "income", values_to = "count")
+new <- pivot_longer(relig_income, cols = !religion, names_to = "income", values_to = "count")
 head(new, 5)
 ```
 
@@ -765,7 +809,7 @@ right tibble. In the image below, the merge is done by the variable
 
 ![](images/join.png)
 
-## Exercise: Global Health Data
+## Example: Global Health Data
 
 Use the following data for this exercise:
 
@@ -790,7 +834,7 @@ Starting from the original `gap_data`,
 - Identify all observations with above average life expectancy,
   stratified for each continent and year.
 
-### Solution A
+### Solutions A
 
 ``` r
 head(gap_data)
@@ -817,7 +861,7 @@ americas <- filter(gap_data, continent == 'Americas')
 americas <- mutate(americas, gdp = (gdpPercap * pop)/1000000)
 ```
 
-### Solution B
+### Solutions B
 
 ``` r
 grouped <- group_by(gap_data, continent, year)
@@ -1048,7 +1092,7 @@ data_2012 <- filter(long_again, Year == 2012)
 ggplot(data_2012) + aes(x=date, y = Count, group=Source, color=Source) + geom_line()
 ```
 
-![](CleaningData_files/figure-gfm/unnamed-chunk-53-1.png)<!-- -->
+![](CleaningData_files/figure-gfm/unnamed-chunk-54-1.png)<!-- -->
 
 ``` r
 ggplot(long_again) + aes(x=Month, y = Count, group=Source, color=Source) + geom_line() + facet_grid(~Year)
@@ -1056,7 +1100,7 @@ ggplot(long_again) + aes(x=Month, y = Count, group=Source, color=Source) + geom_
 
     ## Warning: Removed 2 rows containing missing values (`geom_line()`).
 
-![](CleaningData_files/figure-gfm/unnamed-chunk-54-1.png)<!-- -->
+![](CleaningData_files/figure-gfm/unnamed-chunk-55-1.png)<!-- -->
 
 ## Example: Coal data
 

@@ -20,6 +20,7 @@ Download the following data sets:
 -   `coal.csv`
 -   `vot.csv`
 -   `airline-safety.csv`
+-   `Titanic.csv`
 
 ## Loading the tidyverse
 
@@ -209,7 +210,6 @@ bio_students <- filter(depression_data, selection==1)
 ```{r}
 car_data <- read_delim('data/cars.txt', delim = ' ')
 ```
-
 ### Grouping and summarizing data
 
 The `group_by()` function takes a tibble and returns the same tibble, but with some extra information so that any subsequent function acts on each unique combination defined in the `group_by()`.
@@ -237,6 +237,7 @@ You can ask for more than one summary statistic.
 summaries <- summarise(grouped, mean.length = mean(length), max.length = max(length), std_rpm = sd(rpm))
 summaries
 ```
+
 
 ### Further processing
 
@@ -272,14 +273,37 @@ dim(summaries2)
 
 The result can be reshaped into a wide format. *While this format is often not suited for plotting or analysis*, it might make it easier to look at the data. Here is a quick visual:
 
-![](images/pivot_wider_new.png) + `names_from`: the variable you wish to appear as columns + `values_from`: the variable you wish to use to fill the fill the table
+![](images/pivot_wider_new.png) 
 
-Note: The function also takes other arguments to handle more complex cases, see <https://tidyr.tidyverse.org/reference/pivot_wider.html>
++ **`names_from`: the variable you wish to appear as columns**
++ **`values_from`: the variable you wish to use to fill the fill the table**
++ **`id_cols`: the variables you wish to use as row identifiers**
+
+The function also takes other arguments to handle more complex cases, see <https://tidyr.tidyverse.org/reference/pivot_wider.html>
 
 ```{r}
-wide <- pivot_wider(summaries, names_from  = type, values_from = mean.length)
+wide <- pivot_wider(summaries, id_cols = make, names_from  = type, values_from = mean.length)
 head(wide)
 ```
+
+
+
+### Example: Titanic data
+
+```{r}
+titanic <-read_csv('data/Titanic.csv', na='*')
+grouped <- group_by(titanic, PClass, Sex)
+survival <- summarise(grouped, proportion = mean(Survived), survived = sum(Survived), total = length(Survived))
+survival
+```
+
+You could make the result into a wide table.
+
+```{r}
+survival_wide <- pivot_wider(survival,  names_from = Sex, id_cols = PClass, values_from = proportion)
+survival_wide
+```
+
 
 ### Making data longer (melting data)
 
@@ -296,14 +320,7 @@ head(relig_income, 5)
 This data is in a wider format. But we can easily melt it to a long format.
 
 ```{r}
-new <- pivot_longer(relig_income, cols = !religion)
-head(new, 5)
-```
-
-You can specify names for the new columns while melting.
-
-```{r}
-new <- pivot_longer(relig_income, !religion, names_to = "income", values_to = "count")
+new <- pivot_longer(relig_income, cols = !religion, names_to = "income", values_to = "count")
 head(new, 5)
 ```
 
@@ -344,7 +361,7 @@ Other related operations are illustrated in the image below. The various operati
 
 ![](images/join.png)
 
-## Exercise: Global Health Data
+## Example: Global Health Data
 
 Use the following data for this exercise:
 
@@ -367,7 +384,7 @@ Starting from the original `gap_data`,
 -   Compute the mean life expectancy for each year per continent.  
 -   Identify all observations with above average life expectancy, stratified for each continent and year.
 
-### Solution A
+### Solutions A
 
 ```{r}
 head(gap_data)
@@ -383,7 +400,7 @@ americas <- mutate(americas, gdp = (gdpPercap * pop)/1000000)
 
 ```
 
-### Solution B
+### Solutions B
 
 ```{r}
 grouped <- group_by(gap_data, continent, year)
