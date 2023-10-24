@@ -1,0 +1,45 @@
+---
+title: "Individual Coefficients"
+date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
+output:
+  github_document:
+    html_preview: true
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+data<-read_csv('data/vik_table_9_2.csv')
+data$X1X2<- data$X1 * data$X2
+```
+
+Fit three models
+
+```{r}
+model1<-lm(Y~X1 * X2, data = data)
+model2<-lm(Y~X1 + X2, data = data)
+model3<-lm(Y~X2 + X1X2, data = data)
+```
+
+Summary of model 1
+
+```{r}
+summary(model1)
+```
+
+Compare model 2 and 3 with model 1
+
+```{r}
+anova(model1,model2)
+anova(model1,model3)
+```
+
+
+
+
+
+

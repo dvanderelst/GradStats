@@ -1,0 +1,104 @@
+---
+title: "Simple Example of Linear Model"
+date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
+output:
+  github_document:
+    html_preview: true
+    toc: true
+---
+
+**This file lists the examples used in the slides.**
+
+# A first example
+
+Before starting download the following data sets:
+
++ `vik_table_9_2.csv`
++ `body.csv`
+
+## Read and create data data
+
+```{r}
+data<-read.csv('data/vik_table_9_2.csv')
+
+# Let's create two variables that could represent the age and weight of penguins
+data$age<- 15 - data$X1
+data$weight<-data$Y + 45
+plot(data$age, data$weight)
+```
+
+## Run a simple linear model
+
+```{r}
+model1<-lm(weight ~ age, data=data) # fit this model: weight = B0 + B1 * age + error
+summary(model1)
+```
+
+## Get the F value components
+
+```{r}
+anova(model1)
+```
+
+# Explicit model comparison
+
+## Simple model
+
+First, run the simple model...
+
+```{r}
+data$average_weight <- mean(data$weight) # Create a new variable which is the average of all weights
+simple_model <- lm(weight ~ average_weight, data = data)
+summary(simple_model)
+```
+## More complex model
+
+Let's run the more complex model (again)...
+
+```{r}
+complex_model<-lm(weight ~ age, data=data)
+```
+
+## Compare the models
+
+Compare the following output with that of the of the complex model.
+
+```{r}
+anova(simple_model, complex_model)
+```
+
+```{r}
+anova(complex_model)
+```
+
+
+# Second example
+
+```{r}
+data <- read.csv('data/body.csv')
+data<-data[1:20,]
+head(data)
+```
+
+## Relationship between two variables: correlation
+
+```{r}
+correlation_test<-cor.test(data$Wrist, data$Age)
+correlation_test
+```
+
+```{r}
+correlation_test$estimate**2
+```
+
+
+## Relationship between two variables: linear model
+
+Notice how the t-test for the parameter for `x` gives the same results as the t-test for the correlation test.
+
+```{r}
+model2<-lm(data$Wrist~data$Age)
+summary(model2)
+```
+
+

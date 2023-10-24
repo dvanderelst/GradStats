@@ -1,35 +1,47 @@
 Simple Example of Linear Model
 ================
-Last Updated: 24, September, 2023 at 10:16
+Last Updated: 24, October, 2023 at 09:06
 
-- <a href="#a-first-example" id="toc-a-first-example">A first example</a>
-  - <a href="#read-and-create-data-data"
-    id="toc-read-and-create-data-data">Read and create data data</a>
-  - <a href="#run-the-linear-model" id="toc-run-the-linear-model">Run the
-    linear model</a>
-  - <a href="#get-the-f-value-components"
-    id="toc-get-the-f-value-components">Get the F value components</a>
-- <a href="#second-example" id="toc-second-example">Second example</a>
-- <a href="#correlation" id="toc-correlation">Correlation</a>
+- [A first example](#a-first-example)
+  - [Read and create data data](#read-and-create-data-data)
+  - [Run a simple linear model](#run-a-simple-linear-model)
+  - [Get the F value components](#get-the-f-value-components)
+- [Explicit model comparison](#explicit-model-comparison)
+  - [Simple model](#simple-model)
+  - [More complex model](#more-complex-model)
+  - [Compare the models](#compare-the-models)
+- [Second example](#second-example)
+  - [Relationship between two variables:
+    correlation](#relationship-between-two-variables-correlation)
+  - [Relationship between two variables: linear
+    model](#relationship-between-two-variables-linear-model)
+
+**This file lists the examples used in the slides.**
 
 # A first example
+
+Before starting download the following data sets:
+
+- `vik_table_9_2.csv`
+- `body.csv`
 
 ## Read and create data data
 
 ``` r
 data<-read.csv('data/vik_table_9_2.csv')
-data$age<-110 - data$X1
-data$weight<-data$Y
 
+# Let's create two variables that could represent the age and weight of penguins
+data$age<- 15 - data$X1
+data$weight<-data$Y + 45
 plot(data$age, data$weight)
 ```
 
 ![](SimpleExamples_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
 
-## Run the linear model
+## Run a simple linear model
 
 ``` r
-model1<-lm(weight ~ age, data=data)
+model1<-lm(weight ~ age, data=data) # fit this model: weight = B0 + B1 * age + error
 summary(model1)
 ```
 
@@ -43,7 +55,7 @@ summary(model1)
     ## 
     ## Coefficients:
     ##             Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept) -75.0607    12.6298  -5.943 0.000143 ***
+    ## (Intercept)  43.6308     1.2031  36.267 6.04e-12 ***
     ## age           0.7757     0.1208   6.421 7.63e-05 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
@@ -56,6 +68,74 @@ summary(model1)
 
 ``` r
 anova(model1)
+```
+
+    ## Analysis of Variance Table
+    ## 
+    ## Response: weight
+    ##           Df Sum Sq Mean Sq F value    Pr(>F)    
+    ## age        1 64.383  64.383  41.227 7.627e-05 ***
+    ## Residuals 10 15.617   1.562                      
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+# Explicit model comparison
+
+## Simple model
+
+First, run the simple model…
+
+``` r
+data$average_weight <- mean(data$weight) # Create a new variable which is the average of all weights
+simple_model <- lm(weight ~ average_weight, data = data)
+summary(simple_model)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = weight ~ average_weight, data = data)
+    ## 
+    ## Residuals:
+    ##    Min     1Q Median     3Q    Max 
+    ##  -4.00  -2.25   0.00   2.25   4.00 
+    ## 
+    ## Coefficients: (1 not defined because of singularities)
+    ##                Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)     51.0000     0.7785   65.51  1.3e-15 ***
+    ## average_weight       NA         NA      NA       NA    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 2.697 on 11 degrees of freedom
+
+## More complex model
+
+Let’s run the more complex model (again)…
+
+``` r
+complex_model<-lm(weight ~ age, data=data)
+```
+
+## Compare the models
+
+Compare the following output with that of the of the complex model.
+
+``` r
+anova(simple_model, complex_model)
+```
+
+    ## Analysis of Variance Table
+    ## 
+    ## Model 1: weight ~ average_weight
+    ## Model 2: weight ~ age
+    ##   Res.Df    RSS Df Sum of Sq      F    Pr(>F)    
+    ## 1     11 80.000                                  
+    ## 2     10 15.617  1    64.383 41.227 7.627e-05 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+``` r
+anova(complex_model)
 ```
 
     ## Analysis of Variance Table
@@ -97,6 +177,37 @@ head(data)
     ## 5 38.6  24.4  18.0  22   78.8  187.2      1
     ## 6 36.1  23.5  16.9  21   74.8  181.5      1
 
+## Relationship between two variables: correlation
+
+``` r
+correlation_test<-cor.test(data$Wrist, data$Age)
+correlation_test
+```
+
+    ## 
+    ##  Pearson's product-moment correlation
+    ## 
+    ## data:  data$Wrist and data$Age
+    ## t = 1.0465, df = 18, p-value = 0.3092
+    ## alternative hypothesis: true correlation is not equal to 0
+    ## 95 percent confidence interval:
+    ##  -0.2271038  0.6166544
+    ## sample estimates:
+    ##       cor 
+    ## 0.2394848
+
+``` r
+correlation_test$estimate**2
+```
+
+    ##        cor 
+    ## 0.05735295
+
+## Relationship between two variables: linear model
+
+Notice how the t-test for the parameter for `x` gives the same results
+as the t-test for the correlation test.
+
 ``` r
 model2<-lm(data$Wrist~data$Age)
 summary(model2)
@@ -120,13 +231,3 @@ summary(model2)
     ## Residual standard error: 0.8297 on 18 degrees of freedom
     ## Multiple R-squared:  0.05735,    Adjusted R-squared:  0.004984 
     ## F-statistic: 1.095 on 1 and 18 DF,  p-value: 0.3092
-
-# Correlation
-
-``` r
-correlation_test <- cor.test(data$Wrist, data$Age)
-correlation_test$estimate**2
-```
-
-    ##        cor 
-    ## 0.05735295

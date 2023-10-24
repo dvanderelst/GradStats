@@ -11,23 +11,31 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+# Before we start...
+
+Download the following data sets:
+
++ `vik_table_9_2.csv`
++ `body.csv`
+
 # Functions we will use
 
 + `lm`, to fit a linear model
 + `summary`, to get the results from a linear model
-+ `anova`, to get more results from a linear model
++ `anova`, to get more results from a linear model (or to compare models)
 + `predict`, to predict new values
 + `abline`, to plot a regression line
 
+# First example: body data
 
-# Read Data
+## Read Data
 
 ```{r}
 library(tidyverse)
 data <- read_csv('data/body.csv')
 ```
 
-# Run simple regression model
+## Run simple regression model
 
 ```{r}
 plot(data$Biiliac,data$Height)
@@ -41,12 +49,12 @@ result <- lm(Height ~ Biiliac, data = data)
 summary(result)
 ```
 
-If we wish to know how the F-value was calculate we can ask for the anova table.
+If we wish to know how the F-value was calculated we can ask for the anova table.
 
 ```{r}
 anova(result)
 ```
-# Compare with correlation
+## Compare with correlation
 
 ```{r}
 correlation <- cor.test(data$Height, data$Biiliac)
@@ -54,7 +62,9 @@ correlation
 correlation$estimate^2
 ```
 
-# Get the predicted values
+## Get the predicted values
+
+### For the existing independent variable values
 
 ```{r}
 fitted <- fitted.values(result)
@@ -62,21 +72,25 @@ plot(data$Biiliac,data$Height)
 points(data$Biiliac, fitted, col='red')
 ```
 
+### For new independent variable values
+
 More general prediction:
 
 ```{r}
 
-new_indepent_values <- c(10,15, 20, 25, 30, 35, 40)
-new_data <- data.frame(Biiliac = new_indepent_values)
+new_independent_values <- c(10,15, 20, 25, 30, 35, 40)
+new_data <- data.frame(Biiliac = new_independent_values)
 
 predicted <- predict(result, newdata=new_data)
 
-plot(new_indepent_values,predicted, col='green', cex=2, pch=16)
+plot(data$Biiliac, data$Height, col='black')
+points(new_independent_values,predicted, col='blue', cex=2, pch=16)
 points(data$Biiliac, fitted, col='red')
-points(data$Biiliac, data$Height, col='black')
+
 
 ```
-# Second example
+
+## Second example: Vik data
 
 ```{r}
 vik_data <- read_csv('data/vik_table_9_2.csv')
@@ -86,22 +100,12 @@ plot(vik_data$X1, vik_data$Y)
 result <- lm(Y ~ X1, data=vik_data)
 summary(result)
 ```
-# Easier regression line
+
+## Easier regression line
 
 ```{r}
 plot(vik_data$X1, vik_data$Y)
 abline(result, col='red')
 ```
 
-# Third example
-
-Notice how the t-test for the parameter for `x` gives the same results as the t-test for the correlation test.
-
-```{r}
-x <- rnorm(100)
-y <- rnorm(100)
-result <- lm(y ~ x)
-summary(result)
-cor.test(x,y)
-```
 
