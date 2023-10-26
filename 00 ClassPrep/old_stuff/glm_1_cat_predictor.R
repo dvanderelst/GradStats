@@ -30,7 +30,7 @@ data<-melt(data)
 colnames(data) <- c('sample', 'y')
 data$sample<-factor(data$sample)
 
-model <- lm(y ~ sample, data=data)
+model <- lm(data$y ~ data$sample)
 
 print(summary(model))
 
