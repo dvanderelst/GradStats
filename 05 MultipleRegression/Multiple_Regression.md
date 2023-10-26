@@ -3,48 +3,37 @@ Multiple Regression
 Dieter
 2022-08-26
 
-- <a href="#read-in-some-data" id="toc-read-in-some-data">Read in some
-  data</a>
-- <a href="#revisit-the-simple-linear-model"
-  id="toc-revisit-the-simple-linear-model">Revisit the simple linear
-  model</a>
-  - <a href="#manual-calculation-of-the-f-value"
-    id="toc-manual-calculation-of-the-f-value">Manual calculation of the F
-    value</a>
-- <a href="#intro-to-the-multiple-linear-regression"
-  id="toc-intro-to-the-multiple-linear-regression">Intro to the multiple
-  linear regression</a>
-  - <a href="#a-first-example" id="toc-a-first-example">A first example</a>
-  - <a href="#confidence-intervals" id="toc-confidence-intervals">Confidence
-    intervals</a>
-  - <a href="#manual-calculation-of-the-f-value-1"
-    id="toc-manual-calculation-of-the-f-value-1">Manual calculation of the F
-    value</a>
-  - <a href="#visuzalizing-the-fitted-model"
-    id="toc-visuzalizing-the-fitted-model">Visuzalizing the fitted model</a>
-  - <a href="#manually-running-the-omnibus-test"
-    id="toc-manually-running-the-omnibus-test">Manually running the omnibus
-    test</a>
-  - <a href="#manually-calculating-the-f-ratio-for-the-omnibus-test"
-    id="toc-manually-calculating-the-f-ratio-for-the-omnibus-test">Manually
-    calculating the F ratio for the omnibus test</a>
-- <a href="#model-comparison" id="toc-model-comparison">Model
-  comparison</a>
-  - <a href="#a-simple-and-a-complex-model"
-    id="toc-a-simple-and-a-complex-model">A simple and a complex model</a>
-  - <a href="#what-if-the-models-only-differ-by-one-variable"
-    id="toc-what-if-the-models-only-differ-by-one-variable">What if the
-    models only differ by one variable</a>
-- <a href="#interactions" id="toc-interactions">Interactions</a>
-  - <a href="#using-non-zeroed-data" id="toc-using-non-zeroed-data">Using
-    non-zeroed data</a>
-  - <a href="#using-zeroed-data" id="toc-using-zeroed-data">Using zeroed
-    data</a>
-- <a href="#step" id="toc-step">Step</a>
-  - <a href="#using-the-murder-data" id="toc-using-the-murder-data">Using
-    the Murder data</a>
-  - <a href="#using-the-body-data" id="toc-using-the-body-data">Using the
-    body data</a>
+- [Data used](#data-used)
+- [Read in some data](#read-in-some-data)
+- [Revisit the simple linear model](#revisit-the-simple-linear-model)
+  - [Manual calculation of the F
+    value](#manual-calculation-of-the-f-value)
+- [Intro to the multiple linear
+  regression](#intro-to-the-multiple-linear-regression)
+  - [A first example](#a-first-example)
+  - [Confidence intervals](#confidence-intervals)
+  - [Manual calculation of the F
+    value](#manual-calculation-of-the-f-value-1)
+  - [Visuzalizing the fitted model](#visuzalizing-the-fitted-model)
+  - [Manually running the omnibus
+    test](#manually-running-the-omnibus-test)
+  - [Manually calculating the F ratio for the omnibus
+    test](#manually-calculating-the-f-ratio-for-the-omnibus-test)
+- [Model comparison](#model-comparison)
+  - [A simple and a complex model](#a-simple-and-a-complex-model)
+  - [What if the models only differ by one
+    variable](#what-if-the-models-only-differ-by-one-variable)
+- [Interactions](#interactions)
+  - [Using non-zeroed data](#using-non-zeroed-data)
+  - [Using zeroed data](#using-zeroed-data)
+- [Step](#step)
+  - [Using the Murder data](#using-the-murder-data)
+  - [Using the body data](#using-the-body-data)
+
+## Data used
+
+- `body.csv`
+- `vik_table_9_2.csv`
 
 ## Read in some data
 
@@ -52,16 +41,14 @@ Dieter
 library(tidyverse)
 ```
 
-    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-    ## ✔ dplyr     1.1.0     ✔ readr     2.1.4
-    ## ✔ forcats   1.0.0     ✔ stringr   1.5.0
-    ## ✔ ggplot2   3.4.1     ✔ tibble    3.2.0
-    ## ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
-    ## ✔ purrr     1.0.1     
+    ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
+    ## ✔ ggplot2 3.4.0      ✔ purrr   0.3.5 
+    ## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
+    ## ✔ tidyr   1.2.1      ✔ stringr 1.4.1 
+    ## ✔ readr   2.1.3      ✔ forcats 0.5.2 
     ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
-    ## ℹ Use the ]8;;http://conflicted.r-lib.org/conflicted package]8;; to force all conflicts to become errors
 
 ``` r
 body_data <-read_csv('data/body.csv')
@@ -179,13 +166,13 @@ head(vik_data)
     ## 6      6     5     7     9
 
 ``` r
-model <- lm(vik_data$Y ~ vik_data$X1 + vik_data$X2)
+model <- lm(Y ~ X1 + X2, data=vik_data)
 summary(model)
 ```
 
     ## 
     ## Call:
-    ## lm(formula = vik_data$Y ~ vik_data$X1 + vik_data$X2)
+    ## lm(formula = Y ~ X1 + X2, data = vik_data)
     ## 
     ## Residuals:
     ##      Min       1Q   Median       3Q      Max 
@@ -194,8 +181,8 @@ summary(model)
     ## Coefficients:
     ##             Estimate Std. Error t value Pr(>|t|)    
     ## (Intercept)   9.2014     1.5185   6.060 0.000188 ***
-    ## vik_data$X1  -0.7085     0.1481  -4.783 0.000997 ***
-    ## vik_data$X2   0.1209     0.1486   0.813 0.436963    
+    ## X1           -0.7085     0.1481  -4.783 0.000997 ***
+    ## X2            0.1209     0.1486   0.813 0.436963    
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
@@ -205,14 +192,16 @@ summary(model)
 
 ### Confidence intervals
 
+We can get the confidence intervals for the estimated coefficients.
+
 ``` r
 confint(model)
 ```
 
     ##                  2.5 %     97.5 %
     ## (Intercept)  5.7663394 12.6364198
-    ## vik_data$X1 -1.0435258 -0.3734124
-    ## vik_data$X2 -0.2153328  0.4571416
+    ## X1          -1.0435258 -0.3734124
+    ## X2          -0.2153328  0.4571416
 
 ### Manual calculation of the F value
 
@@ -220,7 +209,6 @@ confint(model)
 predicted <- predict(model)
 mn_predicted <-mean(predicted)
 resids <- model$residuals
-
 
 captured_variance <- sum((predicted - mn_predicted)^2)
 uncaptured_variance <- sum((resids)^2)
@@ -270,11 +258,11 @@ I fit the full model and the base model (which is usually only done
 implicitly).
 
 ``` r
-mean_y <- mean(vik_data$Y)
-mean_y <- rep(mean_y, length(vik_data$Y))
+vik_data$mean_y <- mean(vik_data$Y)
 
-model_base <- lm(vik_data$Y ~ mean_y)
-model_full <- lm(vik_data$Y ~ vik_data$X1 + vik_data$X2)
+
+model_base <- lm(Y ~ mean_y, data=vik_data)
+model_full <- lm(Y ~ X1 + X2, data=vik_data)
 ```
 
 Let’s look at the full model’s F value.
@@ -285,7 +273,7 @@ summary(model_full)
 
     ## 
     ## Call:
-    ## lm(formula = vik_data$Y ~ vik_data$X1 + vik_data$X2)
+    ## lm(formula = Y ~ X1 + X2, data = vik_data)
     ## 
     ## Residuals:
     ##      Min       1Q   Median       3Q      Max 
@@ -294,8 +282,8 @@ summary(model_full)
     ## Coefficients:
     ##             Estimate Std. Error t value Pr(>|t|)    
     ## (Intercept)   9.2014     1.5185   6.060 0.000188 ***
-    ## vik_data$X1  -0.7085     0.1481  -4.783 0.000997 ***
-    ## vik_data$X2   0.1209     0.1486   0.813 0.436963    
+    ## X1           -0.7085     0.1481  -4.783 0.000997 ***
+    ## X2            0.1209     0.1486   0.813 0.436963    
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
@@ -314,8 +302,8 @@ anova(model_base, model_full)
 
     ## Analysis of Variance Table
     ## 
-    ## Model 1: vik_data$Y ~ mean_y
-    ## Model 2: vik_data$Y ~ vik_data$X1 + vik_data$X2
+    ## Model 1: Y ~ mean_y
+    ## Model 2: Y ~ X1 + X2
     ##   Res.Df    RSS Df Sum of Sq      F    Pr(>F)    
     ## 1     11 80.000                                  
     ## 2      9 14.547  2    65.453 20.247 0.0004663 ***

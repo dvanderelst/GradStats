@@ -9,6 +9,10 @@ output:
     toc: true
     toc_depth: 4
 ---
+## Data used
+
++ `body.csv`
++ `vik_table_9_2.csv`
 
 ## Read in some data
 
@@ -58,11 +62,13 @@ head(vik_data)
 ```
 
 ```{r}
-model <- lm(vik_data$Y ~ vik_data$X1 + vik_data$X2)
+model <- lm(Y ~ X1 + X2, data=vik_data)
 summary(model)
 ```
 
 ### Confidence intervals
+
+We can get the confidence intervals for the estimated coefficients.
 
 ```{r}
 confint(model)
@@ -74,7 +80,6 @@ confint(model)
 predicted <- predict(model)
 mn_predicted <-mean(predicted)
 resids <- model$residuals
-
 
 captured_variance <- sum((predicted - mn_predicted)^2)
 uncaptured_variance <- sum((resids)^2)
@@ -111,11 +116,11 @@ manual_f
 I fit the full model and the base model (which is usually only done implicitly).
 
 ```{r}
-mean_y <- mean(vik_data$Y)
-mean_y <- rep(mean_y, length(vik_data$Y))
+vik_data$mean_y <- mean(vik_data$Y)
 
-model_base <- lm(vik_data$Y ~ mean_y)
-model_full <- lm(vik_data$Y ~ vik_data$X1 + vik_data$X2)
+
+model_base <- lm(Y ~ mean_y, data=vik_data)
+model_full <- lm(Y ~ X1 + X2, data=vik_data)
 ```
 
 Let's look at the full model's F value.
