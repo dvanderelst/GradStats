@@ -9,6 +9,10 @@ output:
     toc: true
     toc_depth: 4
 ---
+## Data used
+
++ `body.csv`
++ `vik_table_9_2.csv`
 
 ## Read in some data
 
@@ -58,11 +62,13 @@ head(vik_data)
 ```
 
 ```{r}
-model <- lm(vik_data$Y ~ vik_data$X1 + vik_data$X2)
+model <- lm(Y ~ X1 + X2, data=vik_data)
 summary(model)
 ```
 
 ### Confidence intervals
+
+We can get the confidence intervals for the estimated coefficients.
 
 ```{r}
 confint(model)
@@ -75,7 +81,6 @@ predicted <- predict(model)
 mn_predicted <-mean(predicted)
 resids <- model$residuals
 
-
 captured_variance <- sum((predicted - mn_predicted)^2)
 uncaptured_variance <- sum((resids)^2)
 
@@ -86,7 +91,7 @@ uncaptured_variance
 manual_f
 ```
 
-### Visuzalizing the fitted model
+### Visualizing the fitted model
 
 ```{r}
 # library(plotly)
@@ -111,11 +116,11 @@ manual_f
 I fit the full model and the base model (which is usually only done implicitly).
 
 ```{r}
-mean_y <- mean(vik_data$Y)
-mean_y <- rep(mean_y, length(vik_data$Y))
+vik_data$mean_y <- mean(vik_data$Y)
 
-model_base <- lm(vik_data$Y ~ mean_y)
-model_full <- lm(vik_data$Y ~ vik_data$X1 + vik_data$X2)
+
+model_base <- lm(Y ~ mean_y, data=vik_data)
+model_full <- lm(Y ~ X1 + X2, data=vik_data)
 ```
 
 Let's look at the full model's F value.
@@ -192,14 +197,30 @@ anova(simple_model, complex_model)
 
 ## Interactions
 
-### Using non-zeroed data
+### Model without interaction
 
 ```{r}
 library(gapminder)
 gap <- gapminder
+model <- lm(lifeExp ~ gdpPercap + year, data = gap)
+summary(model)
+```
+### Model with interaction
+
+```{r}
 model <- lm(lifeExp ~ gdpPercap * year, data = gap)
 summary(model)
 ```
+
+This gives the same result:
+
+```{r}
+gap$multi <- gap$gdpPercap * gap$year
+model <- lm(lifeExp ~ gdpPercap + year + multi, data = gap)
+summary(model)
+```
+
+
 
 ```{r}
 range(gap$gdpPercap)
