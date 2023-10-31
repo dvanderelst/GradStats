@@ -1,29 +1,24 @@
 One-Way Anova
 ================
-Last Updated: 10, November, 2022 at 08:54
+Last Updated: 30, October, 2023 at 16:43
 
--   <a href="#fake" id="toc-fake">Fake</a>
-    -   <a href="#make-some-population-data"
-        id="toc-make-some-population-data">Make some population data</a>
-    -   <a href="#sample-from-the-populations"
-        id="toc-sample-from-the-populations">Sample from the populations</a>
-    -   <a href="#run-classic-anova" id="toc-run-classic-anova">Run classic
-        ANOVA</a>
-    -   <a href="#run-glm" id="toc-run-glm">Run GLM</a>
-    -   <a href="#change-contrasts" id="toc-change-contrasts">Change
-        contrasts</a>
-        -   <a href="#deviation-contrasts" id="toc-deviation-contrasts">Deviation
-            contrasts</a>
-        -   <a href="#compare-with-data" id="toc-compare-with-data">Compare with
-            data</a>
--   <a href="#real-data-feet" id="toc-real-data-feet">Real data: feet</a>
--   <a href="#real-data-flies" id="toc-real-data-flies">Real data: flies</a>
+- [Fake data](#fake-data)
+  - [Make some population data](#make-some-population-data)
+  - [Sample from the populations](#sample-from-the-populations)
+  - [Run classic ANOVA](#run-classic-anova)
+  - [Run LM](#run-lm)
+  - [Change contrasts](#change-contrasts)
+    - [Helmert coding](#helmert-coding)
+    - [Compare with data](#compare-with-data)
+    - [Faux](#faux)
+- [Real data: feet](#real-data-feet)
+- [Real data: flies (A warning!)](#real-data-flies-a-warning)
 
 ``` r
 library(reshape)
 ```
 
-# Fake
+# Fake data
 
 ## Make some population data
 
@@ -65,25 +60,25 @@ data$sample<-factor(data$sample)
 head(data)
 ```
 
-    ##   sample   weight
-    ## 1 france 9.132046
-    ## 2 france 8.866993
-    ## 3 france 6.467537
-    ## 4 france 6.521154
-    ## 5 france 8.832558
-    ## 6 france 5.692038
+    ##   sample    weight
+    ## 1 france  6.549549
+    ## 2 france  7.326938
+    ## 3 france  3.014669
+    ## 4 france 11.922262
+    ## 5 france  9.482891
+    ## 6 france  7.412375
 
 ``` r
 tail(data)
 ```
 
     ##    sample    weight
-    ## 40  japan  6.029728
-    ## 41  japan  6.027024
-    ## 42  japan 10.800846
-    ## 43  japan  8.361775
-    ## 44  japan  4.057559
-    ## 45  japan  6.117828
+    ## 40  japan  3.811695
+    ## 41  japan  4.690628
+    ## 42  japan 10.057104
+    ## 43  japan  7.401513
+    ## 44  japan  8.489356
+    ## 45  japan  6.683846
 
 ``` r
 boxplot(weight ~ sample, data = data)
@@ -99,12 +94,12 @@ summary(result)
 ```
 
     ##             Df Sum Sq Mean Sq F value   Pr(>F)    
-    ## sample       2  100.9   50.43   15.39 9.71e-06 ***
-    ## Residuals   42  137.7    3.28                     
+    ## sample       2  99.29   49.65   10.42 0.000211 ***
+    ## Residuals   42 200.10    4.76                     
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-## Run GLM
+## Run LM
 
 ``` r
 result <- lm(weight ~ sample, data = data)
@@ -117,32 +112,31 @@ summary(result)
     ## 
     ## Residuals:
     ##     Min      1Q  Median      3Q     Max 
-    ## -5.0299 -0.7675  0.0969  1.1159  4.1190 
+    ## -4.7904 -1.2555 -0.2597  1.4471  4.7372 
     ## 
     ## Coefficients:
     ##               Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)     8.0162     0.4675  17.148  < 2e-16 ***
-    ## samplesenegal   2.2911     0.6611   3.466  0.00123 ** 
-    ## samplejapan    -1.3343     0.6611  -2.018  0.04998 *  
+    ## (Intercept)     7.8051     0.5636  13.849   <2e-16 ***
+    ## samplesenegal   2.0539     0.7970   2.577   0.0136 *  
+    ## samplejapan    -1.5741     0.7970  -1.975   0.0549 .  
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 1.811 on 42 degrees of freedom
-    ## Multiple R-squared:  0.4228, Adjusted R-squared:  0.3954 
-    ## F-statistic: 15.39 on 2 and 42 DF,  p-value: 9.707e-06
+    ## Residual standard error: 2.183 on 42 degrees of freedom
+    ## Multiple R-squared:  0.3317, Adjusted R-squared:  0.2998 
+    ## F-statistic: 10.42 on 2 and 42 DF,  p-value: 0.0002114
 
 ## Change contrasts
 
-<https://stats.oarc.ucla.edu/r/library/r-library-contrast-coding-systems-for-categorical-variables/>
+### Helmert coding
 
-### Deviation contrasts
+Here, I use Helmert coding (from R). Helmert coding compares each level
+of a categorical variable to the mean of the subsequent levels.
 
-Here, I use deviation coding: This coding system compares the mean of
-the dependent variable for a given level to the overall mean of the
-dependent variable.
+Compare this to the slides.
 
 ``` r
-contrasts(data$sample) <- contr.sum(n = 3)
+contrasts(data$sample) <- contr.helmert(n = 3)
 result <- lm(weight ~ sample, data = data)
 summary(result)
 ```
@@ -153,129 +147,129 @@ summary(result)
     ## 
     ## Residuals:
     ##     Min      1Q  Median      3Q     Max 
-    ## -5.0299 -0.7675  0.0969  1.1159  4.1190 
+    ## -4.7904 -1.2555 -0.2597  1.4471  4.7372 
     ## 
     ## Coefficients:
     ##             Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)   8.3351     0.2699  30.883  < 2e-16 ***
-    ## sample1      -0.3190     0.3817  -0.836    0.408    
-    ## sample2       1.9722     0.3817   5.167 6.18e-06 ***
+    ## (Intercept)   7.9650     0.3254  24.479  < 2e-16 ***
+    ## sample1       1.0270     0.3985   2.577 0.013570 *  
+    ## sample2      -0.8670     0.2301  -3.768 0.000506 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 1.811 on 42 degrees of freedom
-    ## Multiple R-squared:  0.4228, Adjusted R-squared:  0.3954 
-    ## F-statistic: 15.39 on 2 and 42 DF,  p-value: 9.707e-06
+    ## Residual standard error: 2.183 on 42 degrees of freedom
+    ## Multiple R-squared:  0.3317, Adjusted R-squared:  0.2998 
+    ## F-statistic: 10.42 on 2 and 42 DF,  p-value: 0.0002114
 
 ``` r
 data
 ```
 
     ##     sample    weight
-    ## 1   france  9.132046
-    ## 2   france  8.866993
-    ## 3   france  6.467537
-    ## 4   france  6.521154
-    ## 5   france  8.832558
-    ## 6   france  5.692038
-    ## 7   france  7.935718
-    ## 8   france 10.211630
-    ## 9   france  6.008655
-    ## 10  france  7.309716
-    ## 11  france  7.637482
-    ## 12  france  8.520361
-    ## 13  france  9.652237
-    ## 14  france  8.741230
-    ## 15  france  8.713195
-    ## 16 senegal 12.150618
-    ## 17 senegal  5.277399
-    ## 18 senegal 12.727207
-    ## 19 senegal 13.047310
-    ## 20 senegal  8.416281
-    ## 21 senegal  9.801193
-    ## 22 senegal 10.664118
-    ## 23 senegal 10.404217
-    ## 24 senegal  9.825719
-    ## 25 senegal 11.230005
-    ## 26 senegal  8.544779
-    ## 27 senegal 12.765590
-    ## 28 senegal  6.651629
-    ## 29 senegal 12.010281
-    ## 30 senegal 11.093289
-    ## 31   japan  7.973793
-    ## 32   japan  7.853446
-    ## 33   japan  7.334599
-    ## 34   japan  5.593767
-    ## 35   japan  4.502954
-    ## 36   japan  5.914364
-    ## 37   japan  6.501367
-    ## 38   japan  6.066000
-    ## 39   japan  7.093355
-    ## 40   japan  6.029728
-    ## 41   japan  6.027024
-    ## 42   japan 10.800846
-    ## 43   japan  8.361775
-    ## 44   japan  4.057559
-    ## 45   japan  6.117828
+    ## 1   france  6.549549
+    ## 2   france  7.326938
+    ## 3   france  3.014669
+    ## 4   france 11.922262
+    ## 5   france  9.482891
+    ## 6   france  7.412375
+    ## 7   france  7.526032
+    ## 8   france  8.646374
+    ## 9   france  5.746758
+    ## 10  france 12.542250
+    ## 11  france  6.619016
+    ## 12  france  6.046784
+    ## 13  france  6.882043
+    ## 14  france  8.274752
+    ## 15  france  9.083369
+    ## 16 senegal 10.018104
+    ## 17 senegal 11.638199
+    ## 18 senegal  7.379708
+    ## 19 senegal  7.463891
+    ## 20 senegal  8.326967
+    ## 21 senegal 12.715429
+    ## 22 senegal 11.352607
+    ## 23 senegal  9.599256
+    ## 24 senegal 11.316091
+    ## 25 senegal  6.299320
+    ## 26 senegal 11.230249
+    ## 27 senegal 10.240627
+    ## 28 senegal  6.478472
+    ## 29 senegal 12.519620
+    ## 30 senegal 11.306023
+    ## 31   japan  8.525588
+    ## 32   japan  5.445072
+    ## 33   japan  5.478760
+    ## 34   japan  5.902820
+    ## 35   japan  2.221520
+    ## 36   japan  7.553931
+    ## 37   japan  6.406123
+    ## 38   japan  5.155624
+    ## 39   japan  5.640705
+    ## 40   japan  3.811695
+    ## 41   japan  4.690628
+    ## 42   japan 10.057104
+    ## 43   japan  7.401513
+    ## 44   japan  8.489356
+    ## 45   japan  6.683846
 
 ``` r
 model.matrix(result)
 ```
 
     ##    (Intercept) sample1 sample2
-    ## 1            1       1       0
-    ## 2            1       1       0
-    ## 3            1       1       0
-    ## 4            1       1       0
-    ## 5            1       1       0
-    ## 6            1       1       0
-    ## 7            1       1       0
-    ## 8            1       1       0
-    ## 9            1       1       0
-    ## 10           1       1       0
-    ## 11           1       1       0
-    ## 12           1       1       0
-    ## 13           1       1       0
-    ## 14           1       1       0
-    ## 15           1       1       0
-    ## 16           1       0       1
-    ## 17           1       0       1
-    ## 18           1       0       1
-    ## 19           1       0       1
-    ## 20           1       0       1
-    ## 21           1       0       1
-    ## 22           1       0       1
-    ## 23           1       0       1
-    ## 24           1       0       1
-    ## 25           1       0       1
-    ## 26           1       0       1
-    ## 27           1       0       1
-    ## 28           1       0       1
-    ## 29           1       0       1
-    ## 30           1       0       1
-    ## 31           1      -1      -1
-    ## 32           1      -1      -1
-    ## 33           1      -1      -1
-    ## 34           1      -1      -1
-    ## 35           1      -1      -1
-    ## 36           1      -1      -1
-    ## 37           1      -1      -1
-    ## 38           1      -1      -1
-    ## 39           1      -1      -1
-    ## 40           1      -1      -1
-    ## 41           1      -1      -1
-    ## 42           1      -1      -1
-    ## 43           1      -1      -1
-    ## 44           1      -1      -1
-    ## 45           1      -1      -1
+    ## 1            1      -1      -1
+    ## 2            1      -1      -1
+    ## 3            1      -1      -1
+    ## 4            1      -1      -1
+    ## 5            1      -1      -1
+    ## 6            1      -1      -1
+    ## 7            1      -1      -1
+    ## 8            1      -1      -1
+    ## 9            1      -1      -1
+    ## 10           1      -1      -1
+    ## 11           1      -1      -1
+    ## 12           1      -1      -1
+    ## 13           1      -1      -1
+    ## 14           1      -1      -1
+    ## 15           1      -1      -1
+    ## 16           1       1      -1
+    ## 17           1       1      -1
+    ## 18           1       1      -1
+    ## 19           1       1      -1
+    ## 20           1       1      -1
+    ## 21           1       1      -1
+    ## 22           1       1      -1
+    ## 23           1       1      -1
+    ## 24           1       1      -1
+    ## 25           1       1      -1
+    ## 26           1       1      -1
+    ## 27           1       1      -1
+    ## 28           1       1      -1
+    ## 29           1       1      -1
+    ## 30           1       1      -1
+    ## 31           1       0       2
+    ## 32           1       0       2
+    ## 33           1       0       2
+    ## 34           1       0       2
+    ## 35           1       0       2
+    ## 36           1       0       2
+    ## 37           1       0       2
+    ## 38           1       0       2
+    ## 39           1       0       2
+    ## 40           1       0       2
+    ## 41           1       0       2
+    ## 42           1       0       2
+    ## 43           1       0       2
+    ## 44           1       0       2
+    ## 45           1       0       2
     ## attr(,"assign")
     ## [1] 0 1 1
     ## attr(,"contrasts")
     ## attr(,"contrasts")$sample
     ##         [,1] [,2]
-    ## france     1    0
-    ## senegal    0    1
-    ## japan     -1   -1
+    ## france    -1   -1
+    ## senegal    1   -1
+    ## japan      0    2
 
 ### Compare with data
 
@@ -285,24 +279,91 @@ result$coefficients
 ```
 
     ## (Intercept)     sample1     sample2 
-    ##   8.3351242  -0.3189541   1.9721847
+    ##   7.9649980   1.0269500  -0.8670228
 
 ``` r
 all_data <- c(france, senegal, japan)
 grand_mean <- mean(all_data)
-mean_senegal <- mean(senegal)
 mean_france <- mean(france)
+mean_senegal <- mean(senegal)
+mean_japan <- mean(japan)
 
-delta1 <- mean_france - grand_mean
-delta2 <- mean_senegal - grand_mean
-
-
-# Japan is reference == assumed to be grand mean
-
-c(grand_mean, delta1, delta2)
+c(grand_mean, mean_france, mean_senegal, mean_japan)
 ```
 
-    ## [1]  8.3351242 -0.3189541  1.9721847
+    ## [1] 7.964998 7.805071 9.858971 6.230952
+
+In the Helmert coding (The R version)…
+
+- The intercept is the grand mean
+- Beta1 is 0.5 X the difference between France and Senegal
+- Beta2 is 1/3 X the difference between Japan and the mean of Senegal
+  and France
+
+``` r
+intercept <- grand_mean
+beta1 <- (mean_senegal - mean_france) / 2
+beta2 <- (mean_japan - (mean_senegal + mean_france) / 2) / 3
+c(intercept, beta1, beta2)
+```
+
+    ## [1]  7.9649980  1.0269500 -0.8670228
+
+``` r
+result$coefficients
+```
+
+    ## (Intercept)     sample1     sample2 
+    ##   7.9649980   1.0269500  -0.8670228
+
+### Faux
+
+``` r
+library(faux)
+```
+
+    ## 
+    ## ************
+    ## Welcome to faux. For support and examples visit:
+    ## https://debruine.github.io/faux/
+    ## - Get and set global package options with: faux_options()
+    ## ************
+
+``` r
+helmert <- contr_code_helmert(c(1,2,3))
+helmert <- contrasts(helmert)
+
+contrasts(data$sample)  <- helmert
+
+result <- lm(weight ~ sample, data = data)
+summary(result)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = weight ~ sample, data = data)
+    ## 
+    ## Residuals:
+    ##     Min      1Q  Median      3Q     Max 
+    ## -4.7904 -1.2555 -0.2597  1.4471  4.7372 
+    ## 
+    ## Coefficients:
+    ##              Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)    7.9650     0.3254  24.479  < 2e-16 ***
+    ## sample.2-1     2.0539     0.7970   2.577 0.013570 *  
+    ## sample.3-1.2  -2.6011     0.6902  -3.768 0.000506 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 2.183 on 42 degrees of freedom
+    ## Multiple R-squared:  0.3317, Adjusted R-squared:  0.2998 
+    ## F-statistic: 10.42 on 2 and 42 DF,  p-value: 0.0002114
+
+``` r
+c(grand_mean, mean_france, mean_senegal, mean_japan)
+```
+
+    ## [1] 7.964998 7.805071 9.858971 6.230952
 
 # Real data: feet
 
@@ -311,10 +372,10 @@ library(tidyverse)
 ```
 
     ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
-    ## ✔ ggplot2 3.3.6     ✔ purrr   0.3.4
-    ## ✔ tibble  3.1.8     ✔ dplyr   1.0.9
-    ## ✔ tidyr   1.2.0     ✔ stringr 1.4.0
-    ## ✔ readr   2.1.2     ✔ forcats 0.5.2
+    ## ✔ ggplot2 3.4.0      ✔ purrr   0.3.5 
+    ## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
+    ## ✔ tidyr   1.2.1      ✔ stringr 1.4.1 
+    ## ✔ readr   2.1.3      ✔ forcats 0.5.2 
     ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
     ## ✖ tidyr::expand() masks reshape::expand()
     ## ✖ dplyr::filter() masks stats::filter()
@@ -376,9 +437,9 @@ summary(model)
 boxplot(FootLength ~ Sex, data = feet)
 ```
 
-![](OneWayAnova_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](OneWayAnova_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
-# Real data: flies
+# Real data: flies (A warning!)
 
 <http://jse.amstat.org/datasets/fruitfly.txt>
 
@@ -409,6 +470,7 @@ head(flies)
     ## 6     6        8     0        39   0.76    83
 
 ``` r
+# Don't do this!!
 model <- lm(LONGEVITY ~ TYPE, data = flies)
 summary(model)
 ```
@@ -433,7 +495,33 @@ summary(model)
     ## F-statistic: 1.765 on 1 and 123 DF,  p-value: 0.1864
 
 ``` r
+## Do this!!
+model <- lm(LONGEVITY ~ as.factor(TYPE), data = flies)
+summary(model)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = LONGEVITY ~ as.factor(TYPE), data = flies)
+    ## 
+    ## Residuals:
+    ##    Min     1Q Median     3Q    Max 
+    ## -31.74 -13.74   0.26  11.44  33.26 
+    ## 
+    ## Coefficients:
+    ##                  Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)        64.080      2.233  28.701  < 2e-16 ***
+    ## as.factor(TYPE)1  -16.340      3.158  -5.175 9.08e-07 ***
+    ## as.factor(TYPE)9   -0.520      3.867  -0.134    0.893    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 15.79 on 122 degrees of freedom
+    ## Multiple R-squared:  0.2051, Adjusted R-squared:  0.1921 
+    ## F-statistic: 15.74 on 2 and 122 DF,  p-value: 8.305e-07
+
+``` r
 boxplot(LONGEVITY ~ TYPE, data = flies)
 ```
 
-![](OneWayAnova_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](OneWayAnova_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->

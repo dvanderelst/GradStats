@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(reshape)
 ```
 
-# Fake
+# Fake data
 
 ## Make some population data
 
@@ -65,7 +65,7 @@ result <- aov(weight ~ sample, data = data)
 summary(result)
 ```
 
-## Run GLM
+## Run LM
 
 ```{r}
 result <- lm(weight ~ sample, data = data)
@@ -74,14 +74,14 @@ summary(result)
 
 ## Change contrasts
 
-<https://stats.oarc.ucla.edu/r/library/r-library-contrast-coding-systems-for-categorical-variables/>
+### Helmert coding
 
-### Deviation contrasts
+Here, I use Helmert coding (from R). Helmert coding compares each level of a categorical variable to the mean of the subsequent levels.
 
-Here, I use deviation coding: This coding system compares the mean of the dependent variable for a given level to the overall mean of the dependent variable.
+Compare this to the slides.
 
 ```{r}
-contrasts(data$sample) <- contr.sum(n = 3)
+contrasts(data$sample) <- contr.helmert(n = 3)
 result <- lm(weight ~ sample, data = data)
 summary(result)
 ```
@@ -96,21 +96,52 @@ model.matrix(result)
 ```{r}
 # Fitted coefficients
 result$coefficients
+```
+
+
+```{r}
+
 
 all_data <- c(france, senegal, japan)
 grand_mean <- mean(all_data)
-mean_senegal <- mean(senegal)
 mean_france <- mean(france)
+mean_senegal <- mean(senegal)
+mean_japan <- mean(japan)
 
-delta1 <- mean_france - grand_mean
-delta2 <- mean_senegal - grand_mean
-
-
-# Japan is reference == assumed to be grand mean
-
-c(grand_mean, delta1, delta2)
-
+c(grand_mean, mean_france, mean_senegal, mean_japan)
 ```
+
+In the Helmert coding (The R version)...
+
++  The intercept is the grand mean
++  Beta1 is 0.5 X the difference between France and Senegal
++  Beta2 is 1/3 X the difference between Japan and the mean of Senegal and France
+
+```{r}
+intercept <- grand_mean
+beta1 <- (mean_senegal - mean_france) / 2
+beta2 <- (mean_japan - (mean_senegal + mean_france) / 2) / 3
+c(intercept, beta1, beta2)
+
+result$coefficients
+```
+
+
+### Faux
+
+```{r}
+library(faux)
+helmert <- contr_code_helmert(c(1,2,3))
+helmert <- contrasts(helmert)
+
+contrasts(data$sample)  <- helmert
+
+result <- lm(weight ~ sample, data = data)
+summary(result)
+c(grand_mean, mean_france, mean_senegal, mean_japan)
+```
+
+
 
 
 # Real data: feet
@@ -130,7 +161,7 @@ summary(model)
 boxplot(FootLength ~ Sex, data = feet)
 ```
 
-# Real data: flies
+# Real data: flies (A warning!)
 
 <http://jse.amstat.org/datasets/fruitfly.txt>
 
@@ -138,7 +169,11 @@ boxplot(FootLength ~ Sex, data = feet)
 flies <- read_csv('data/flies.csv')
 head(flies)
 
+# Don't do this!!
 model <- lm(LONGEVITY ~ TYPE, data = flies)
+summary(model)
+## Do this!!
+model <- lm(LONGEVITY ~ as.factor(TYPE), data = flies)
 summary(model)
 ```
 

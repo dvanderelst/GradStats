@@ -1,20 +1,20 @@
 ANCOVA
 ================
-Last Updated: 13, November, 2022 at 15:28
+Last Updated: 30, October, 2023 at 16:48
 
--   <a href="#one-way-ancova" id="toc-one-way-ancova">One-way ancova</a>
--   <a href="#ancova" id="toc-ancova">Ancova</a>
--   <a href="#compare-models" id="toc-compare-models">Compare models</a>
+- [One-way anova](#one-way-anova)
+- [Ancova](#ancova)
+- [Compare models](#compare-models)
 
 ``` r
 library(tidyverse)
 ```
 
     ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
-    ## ✔ ggplot2 3.3.6     ✔ purrr   0.3.4
-    ## ✔ tibble  3.1.8     ✔ dplyr   1.0.9
-    ## ✔ tidyr   1.2.0     ✔ stringr 1.4.0
-    ## ✔ readr   2.1.2     ✔ forcats 0.5.2
+    ## ✔ ggplot2 3.4.0      ✔ purrr   0.3.5 
+    ## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
+    ## ✔ tidyr   1.2.1      ✔ stringr 1.4.1 
+    ## ✔ readr   2.1.3      ✔ forcats 0.5.2 
     ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
@@ -27,7 +27,7 @@ library(readxl)
 data <- read_excel('data/vik_table_17_2.xlsx')
 ```
 
-# One-way ancova
+# One-way anova
 
 ``` r
 model1 <- lm(weight ~ sex, data = data)

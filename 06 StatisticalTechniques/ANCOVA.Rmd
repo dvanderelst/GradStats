@@ -20,7 +20,7 @@ library(readxl)
 data <- read_excel('data/vik_table_17_2.xlsx')
 ```
 
-# One-way ancova
+# One-way anova
 
 ```{r}
 model1 <- lm(weight ~ sex, data = data)
