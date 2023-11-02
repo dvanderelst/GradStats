@@ -1,6 +1,6 @@
-ANCOVA
+The LM with categorical and continuous predictors predictors (ANCOVA)
 ================
-Last Updated: 30, October, 2023 at 16:48
+Last Updated: 02, November, 2023 at 09:21
 
 - [One-way anova](#one-way-anova)
 - [Ancova](#ancova)
