@@ -11,7 +11,7 @@ output:
 
 Programming is basically (1) storing data, (2) performing operations on this data.
 
-We will store data in so-called variables. We use functions to perform operations on the data.
+We will store data in so-called `variables`. We use `functions` to perform operations on the data. We will also learn about `flow control` which allows us to execute code depending on conditions or to repeat code. Finally, `objects` combine data and functions.
 
 ## Basic operations: R as a calculator
 
@@ -69,7 +69,7 @@ Try to use descriptive names for variables. And try to stick to a naming convent
 i_like_snake_case <- 'snake_case'
 otherPeopleUseCamelCase <- 'CamelCase'
 some.people.use.periods <- 'periods.are.allowed'
-And_aFew.People_RENOUNCEconvention <- 'Madness, Madness, I tell you!'
+And_aFew.People_DONTLIKEconventions <- 'Madness, Madness, I tell you!'
 ```
 
 From R for Data Science:
@@ -82,15 +82,20 @@ Also, it is important that you use names that are not keywords or functions in R
 #length <- 15 ## THIS IS A BAD IDEA
 ```
 
+### Trick 1: Using the up and down keys
+
+You can use the up and down keys to navigate through the history of commands you've entered. This is a very useful feature.
+
 ### The vector
 
 R is another basic variable in R. It's the simplest type of variable that actually allows you to store something recognizable as 'data'. We will spend some time on vectors as they are a good place to start to work with relatively simple data. Also, understanding how to work with vectors makes working with more complex data easier. Much of the operations you can do on vectors, which are 1D, can also be done on 2D data frames.
 
 #### Creating a vector manually
 
+
 ```{r}
-a_vector <- c(1, 5, 4, 9, 0)
-another_one <- c(1, 5.4, TRUE, "hello")
+a_vector <- c(1, 5, 4, 9, 0) # Technically an atomic vector
+another_one <- c(1, 5.4, TRUE, "hello") # Technically, this is a list
 ```
 
 #### Creating a vector using the `:` operator
@@ -143,11 +148,12 @@ selected <- some_other_vector[binary_vector]
 selected
 ```
 
-## A trick
+## Another trick
 
 Before we go on, I want to share a simple trick. Using an IDE like Rstudio makes life easier (or at least it should). One of the benefits of the IDE is tab-completion.
 
 [DEMO GOES HERE]
+
 
 ## Functions
 
@@ -170,7 +176,7 @@ How do we know which arguments a function can take? Using the help:
 ?seq
 ```
 
-Some very simple functions that might be usefull.
+Some very simple functions that might be useful.
 
 ```{r}
 a <- max(output)
@@ -180,7 +186,7 @@ d <- ceiling(output)
 e <- sd(output)
 ```
 
-Here is a function which returns more complex data. At this point, you're not suposed to know what this funtion does (it fits a regression line). The point is that it returns complex data with multiple fields.
+Here is a function which returns more complex data. At this point, you're not supposed to know what this function does (it fits a regression line). The point is that it returns complex data with multiple fields.
 
 ```{r}
 x <- runif(100)

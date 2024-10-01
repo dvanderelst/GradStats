@@ -1,58 +1,46 @@
 Basic Programming
 ================
-Last Updated: 19, September, 2023 at 08:16
+Last Updated: 01, October, 2024 at 09:17
 
-- <a href="#basics-of-programming-variables-and-functions"
-  id="toc-basics-of-programming-variables-and-functions">Basics of
-  programming: variables and functions</a>
-- <a href="#basic-operations-r-as-a-calculator"
-  id="toc-basic-operations-r-as-a-calculator">Basic operations: R as a
-  calculator</a>
-- <a href="#logical-operations" id="toc-logical-operations">Logical
-  operations</a>
-- <a href="#storing-data-in-variables"
-  id="toc-storing-data-in-variables">Storing data in variables</a>
-  - <a href="#assigning-data-to-a-variable"
-    id="toc-assigning-data-to-a-variable">Assigning data to a variable</a>
-  - <a href="#note-on-naming-variables"
-    id="toc-note-on-naming-variables">Note on naming variables</a>
-  - <a href="#the-vector" id="toc-the-vector">The vector</a>
-- <a href="#a-trick" id="toc-a-trick">A trick</a>
-- <a href="#functions" id="toc-functions">Functions</a>
-- <a href="#flow-control-in-r" id="toc-flow-control-in-r">Flow control in
-  R</a>
-  - <a href="#overview" id="toc-overview">Overview</a>
-  - <a href="#the-if-statement" id="toc-the-if-statement">The
-    <code>if</code> statement</a>
-  - <a href="#overview-of-if-statements"
-    id="toc-overview-of-if-statements">Overview of <code>if</code>
-    statements</a>
-  - <a href="#the-for-loop" id="toc-the-for-loop">The <code>for</code>
-    loop</a>
-  - <a href="#the-while-loop" id="toc-the-while-loop">The <code>while</code>
-    loop</a>
-  - <a href="#the-break-keyword" id="toc-the-break-keyword">The
-    <code>break</code> keyword</a>
-- <a href="#exercises" id="toc-exercises">Exercises</a>
-- <a href="#note-on-vector-preallocation"
-  id="toc-note-on-vector-preallocation">Note on vector preallocation</a>
-- <a href="#working-with-text-the-paste-function"
-  id="toc-working-with-text-the-paste-function">Working with text: the
-  paste() function</a>
-- <a href="#solutions-to-exercises"
-  id="toc-solutions-to-exercises">Solutions to exercises</a>
-  - <a href="#one" id="toc-one">One</a>
-  - <a href="#two" id="toc-two">Two</a>
-  - <a href="#three" id="toc-three">Three</a>
-  - <a href="#four" id="toc-four">Four</a>
+- [Basics of programming: variables and
+  functions](#basics-of-programming-variables-and-functions)
+- [Basic operations: R as a
+  calculator](#basic-operations-r-as-a-calculator)
+- [Logical operations](#logical-operations)
+- [Storing data in variables](#storing-data-in-variables)
+  - [Assigning data to a variable](#assigning-data-to-a-variable)
+  - [Note on naming variables](#note-on-naming-variables)
+  - [Trick 1: Using the up and down
+    keys](#trick-1-using-the-up-and-down-keys)
+  - [The vector](#the-vector)
+- [Another trick](#another-trick)
+- [Functions](#functions)
+- [Flow control in R](#flow-control-in-r)
+  - [Overview](#overview)
+  - [The `if` statement](#the-if-statement)
+  - [Overview of `if` statements](#overview-of-if-statements)
+  - [The `for` loop](#the-for-loop)
+  - [The `while` loop](#the-while-loop)
+  - [The `break` keyword](#the-break-keyword)
+- [Exercises](#exercises)
+- [Note on vector preallocation](#note-on-vector-preallocation)
+- [Working with text: the paste()
+  function](#working-with-text-the-paste-function)
+- [Solutions to exercises](#solutions-to-exercises)
+  - [One](#one)
+  - [Two](#two)
+  - [Three](#three)
+  - [Four](#four)
 
 ## Basics of programming: variables and functions
 
 Programming is basically (1) storing data, (2) performing operations on
 this data.
 
-We will store data in so-called variables. We use functions to perform
-operations on the data.
+We will store data in so-called `variables`. We use `functions` to
+perform operations on the data. We will also learn about `flow control`
+which allows us to execute code depending on conditions or to repeat
+code. Finally, `objects` combine data and functions.
 
 ## Basic operations: R as a calculator
 
@@ -141,7 +129,7 @@ to read.
 i_like_snake_case <- 'snake_case'
 otherPeopleUseCamelCase <- 'CamelCase'
 some.people.use.periods <- 'periods.are.allowed'
-And_aFew.People_RENOUNCEconvention <- 'Madness, Madness, I tell you!'
+And_aFew.People_DONTLIKEconventions <- 'Madness, Madness, I tell you!'
 ```
 
 From R for Data Science:
@@ -157,6 +145,11 @@ functions in R. For example, the following is a bad idea:
 #length <- 15 ## THIS IS A BAD IDEA
 ```
 
+### Trick 1: Using the up and down keys
+
+You can use the up and down keys to navigate through the history of
+commands you’ve entered. This is a very useful feature.
+
 ### The vector
 
 R is another basic variable in R. It’s the simplest type of variable
@@ -170,8 +163,8 @@ data frames.
 #### Creating a vector manually
 
 ``` r
-a_vector <- c(1, 5, 4, 9, 0)
-another_one <- c(1, 5.4, TRUE, "hello")
+a_vector <- c(1, 5, 4, 9, 0) # Technically an atomic vector
+another_one <- c(1, 5.4, TRUE, "hello") # Technically, this is a list
 ```
 
 #### Creating a vector using the `:` operator
@@ -230,7 +223,7 @@ selected
 
     ## [1] 15.38462 23.07692 61.53846 69.23077 84.61538
 
-## A trick
+## Another trick
 
 Before we go on, I want to share a simple trick. Using an IDE like
 Rstudio makes life easier (or at least it should). One of the benefits
@@ -263,7 +256,7 @@ How do we know which arguments a function can take? Using the help:
 ?seq
 ```
 
-Some very simple functions that might be usefull.
+Some very simple functions that might be useful.
 
 ``` r
 a <- max(output)
@@ -274,8 +267,9 @@ e <- sd(output)
 ```
 
 Here is a function which returns more complex data. At this point,
-you’re not suposed to know what this funtion does (it fits a regression
-line). The point is that it returns complex data with multiple fields.
+you’re not supposed to know what this function does (it fits a
+regression line). The point is that it returns complex data with
+multiple fields.
 
 ``` r
 x <- runif(100)
@@ -290,7 +284,7 @@ print(result)
     ## 
     ## Coefficients:
     ## (Intercept)            x  
-    ##      10.062        4.773
+    ##      10.163        4.474
 
 ## Flow control in R
 
@@ -449,11 +443,11 @@ for (x in my_vector) {
 }
 ```
 
-    ## [1] 2.032775
-    ## [1] 0.5913866
-    ## [1] 2.348192
-    ## [1] 2.960569
-    ## [1] 1.886622
+    ## [1] 1.327979
+    ## [1] 1.705484
+    ## [1] 1.876179
+    ## [1] 1.705205
+    ## [1] 2.286506
 
 Just to drive the point home, another example:
 
@@ -578,7 +572,7 @@ endTime <- Sys.time()
 print(sprintf('Duration: %.2f', endTime - startTime))
 ```
 
-    ## [1] "Duration: 0.45"
+    ## [1] "Duration: 0.62"
 
 This piece of code preallocates a vector and is more efficient.
 
@@ -611,18 +605,18 @@ summary(result)
     ## 
     ## Residuals:
     ##      Min       1Q   Median       3Q      Max 
-    ## -2.49740 -0.82421 -0.00404  0.71551  2.35197 
+    ## -2.43057 -0.66420  0.04382  0.68239  2.52847 
     ## 
     ## Coefficients:
     ##             Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)  10.0918     0.2070   48.76   <2e-16 ***
-    ## x             4.8906     0.3805   12.85   <2e-16 ***
+    ## (Intercept)  10.1311     0.1888   53.66   <2e-16 ***
+    ## x             4.6832     0.3240   14.45   <2e-16 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 1.035 on 98 degrees of freedom
-    ## Multiple R-squared:  0.6276, Adjusted R-squared:  0.6238 
-    ## F-statistic: 165.2 on 1 and 98 DF,  p-value: < 2.2e-16
+    ## Residual standard error: 0.9815 on 98 degrees of freedom
+    ## Multiple R-squared:  0.6807, Adjusted R-squared:  0.6775 
+    ## F-statistic: 208.9 on 1 and 98 DF,  p-value: < 2.2e-16
 
 ``` r
 test1 <- paste(10000)
@@ -637,28 +631,28 @@ print(test1)
 print(test2)
 ```
 
-    ## [1] "10.0917948171233, 4.89055976162593"
+    ## [1] "10.1311255749049, 4.68319629780412"
 
 ``` r
 print(test3)
 ```
 
-    ## [1] "The coefficients are: 10.0917948171233, 4.89055976162593"
+    ## [1] "The coefficients are: 10.1311255749049, 4.68319629780412"
 
 ``` r
 for (x in 1:10) {print(test3)}
 ```
 
-    ## [1] "The coefficients are: 10.0917948171233, 4.89055976162593"
-    ## [1] "The coefficients are: 10.0917948171233, 4.89055976162593"
-    ## [1] "The coefficients are: 10.0917948171233, 4.89055976162593"
-    ## [1] "The coefficients are: 10.0917948171233, 4.89055976162593"
-    ## [1] "The coefficients are: 10.0917948171233, 4.89055976162593"
-    ## [1] "The coefficients are: 10.0917948171233, 4.89055976162593"
-    ## [1] "The coefficients are: 10.0917948171233, 4.89055976162593"
-    ## [1] "The coefficients are: 10.0917948171233, 4.89055976162593"
-    ## [1] "The coefficients are: 10.0917948171233, 4.89055976162593"
-    ## [1] "The coefficients are: 10.0917948171233, 4.89055976162593"
+    ## [1] "The coefficients are: 10.1311255749049, 4.68319629780412"
+    ## [1] "The coefficients are: 10.1311255749049, 4.68319629780412"
+    ## [1] "The coefficients are: 10.1311255749049, 4.68319629780412"
+    ## [1] "The coefficients are: 10.1311255749049, 4.68319629780412"
+    ## [1] "The coefficients are: 10.1311255749049, 4.68319629780412"
+    ## [1] "The coefficients are: 10.1311255749049, 4.68319629780412"
+    ## [1] "The coefficients are: 10.1311255749049, 4.68319629780412"
+    ## [1] "The coefficients are: 10.1311255749049, 4.68319629780412"
+    ## [1] "The coefficients are: 10.1311255749049, 4.68319629780412"
+    ## [1] "The coefficients are: 10.1311255749049, 4.68319629780412"
 
 # Solutions to exercises
 
@@ -699,13 +693,13 @@ while(value < 1)
 print(value)
 ```
 
-    ## [1] 2.137287
+    ## [1] 1.136889
 
 ``` r
 print(counter)
 ```
 
-    ## [1] 10
+    ## [1] 3
 
 Option 2
 
@@ -720,13 +714,13 @@ while(TRUE)
 print(value)
 ```
 
-    ## [1] 1.191993
+    ## [1] 1.567067
 
 ``` r
 print(counter)
 ```
 
-    ## [1] 10
+    ## [1] 8
 
 ## Three
 
@@ -744,7 +738,7 @@ for(i in 1:repeats)
 outcomes
 ```
 
-    ##  [1] "T" "T" "H" "H" "T" "T" "T" "H" "T" "H" "T" "T" "H" "H" "H" "T" "T" "T" "H"
+    ##  [1] "T" "H" "H" "H" "T" "T" "H" "T" "T" "H" "T" "H" "H" "H" "H" "T" "T" "H" "H"
     ## [20] "H"
 
 You could do this in one line (but that was not the exercise).
@@ -755,8 +749,8 @@ outcomes <- sample(c('H','T'), repeats, replace = TRUE)
 outcomes
 ```
 
-    ##  [1] "T" "H" "H" "H" "T" "H" "H" "H" "H" "H" "T" "T" "H" "T" "T" "T" "H" "T" "T"
-    ## [20] "T"
+    ##  [1] "T" "T" "T" "T" "T" "H" "T" "T" "T" "T" "T" "H" "H" "H" "T" "H" "H" "T" "H"
+    ## [20] "H"
 
 ## Four
 
