@@ -1,57 +1,50 @@
 Reading Data
 ================
-Last Updated: 03, October, 2023 at 09:12
+Last Updated: 03, October, 2024 at 09:16
 
-- <a href="#before-we-begin" id="toc-before-we-begin">Before we begin…</a>
-- <a href="#reading-data-from-excel-using-readxl"
-  id="toc-reading-data-from-excel-using-readxl">Reading data from excel
-  using readxl</a>
-- <a href="#reading-data-from-a-comma-separated-text-file"
-  id="toc-reading-data-from-a-comma-separated-text-file">Reading data from
-  a comma separated text file</a>
-- <a href="#tibbles" id="toc-tibbles">Tibbles</a>
-- <a href="#some-interesting-options-when-using-read_csv"
-  id="toc-some-interesting-options-when-using-read_csv">Some interesting
-  options when using <code>read_csv()</code></a>
-  - <a href="#no-column-names-no-problem"
-    id="toc-no-column-names-no-problem">No column names? No problem!</a>
-  - <a href="#specifying-missing-data"
-    id="toc-specifying-missing-data">Specifying missing data</a>
-  - <a href="#reading-from-url" id="toc-reading-from-url">Reading from
-    URL</a>
-- <a href="#reading-files-not-seperated-by-commas"
-  id="toc-reading-files-not-seperated-by-commas">Reading files not
-  seperated by commas</a>
-- <a href="#exploring-data" id="toc-exploring-data">Exploring data</a>
-  - <a href="#head-and-tail" id="toc-head-and-tail">Head and tail</a>
-  - <a href="#summary" id="toc-summary">Summary</a>
-  - <a href="#glimpse" id="toc-glimpse">Glimpse</a>
-  - <a href="#skim" id="toc-skim">Skim</a>
-- <a href="#addressing-a-single-variable"
-  id="toc-addressing-a-single-variable">Addressing a single variable</a>
-- <a href="#creating-new-variables"
-  id="toc-creating-new-variables">Creating new variables</a>
-- <a href="#creating-new-variables-using-mutate"
-  id="toc-creating-new-variables-using-mutate">Creating new variables
-  using <code>mutate</code></a>
-- <a href="#exercises" id="toc-exercises">Exercises</a>
-  - <a href="#exercise-1" id="toc-exercise-1">Exercise 1</a>
-  - <a href="#exercise-2" id="toc-exercise-2">Exercise 2</a>
+- [Before we begin…](#before-we-begin)
+- [Using the tidyverse vs built-in data reading
+  functions](#using-the-tidyverse-vs-built-in-data-reading-functions)
+  - [Default function](#default-function)
+  - [The tidyverse way](#the-tidyverse-way)
+- [Reading data from excel using
+  readxl](#reading-data-from-excel-using-readxl)
+- [Reading data from a comma separated text
+  file](#reading-data-from-a-comma-separated-text-file)
+- [Tibbles](#tibbles)
+- [Some interesting options when using
+  `read_csv()`](#some-interesting-options-when-using-read_csv)
+  - [No column names? No problem!](#no-column-names-no-problem)
+  - [Specifying missing data](#specifying-missing-data)
+  - [Reading from URL](#reading-from-url)
+- [Reading files not seperated by
+  commas](#reading-files-not-seperated-by-commas)
+- [Exploring data](#exploring-data)
+  - [Head and tail](#head-and-tail)
+  - [Summary](#summary)
+  - [Glimpse](#glimpse)
+  - [Skim](#skim)
+- [Addressing a single variable](#addressing-a-single-variable)
+- [Creating new variables](#creating-new-variables)
+- [Creating new variables using
+  `mutate`](#creating-new-variables-using-mutate)
+- [Exercises](#exercises)
+  - [Exercise 1](#exercise-1)
+  - [Exercise 2](#exercise-2)
+  - [Exercise 3](#exercise-3)
 
 ``` r
 library(tidyverse)
 ```
 
-    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-    ## ✔ dplyr     1.1.0     ✔ readr     2.1.4
-    ## ✔ forcats   1.0.0     ✔ stringr   1.5.0
-    ## ✔ ggplot2   3.4.1     ✔ tibble    3.2.0
-    ## ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
-    ## ✔ purrr     1.0.1     
+    ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
+    ## ✔ ggplot2 3.4.0      ✔ purrr   0.3.5 
+    ## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
+    ## ✔ tidyr   1.2.1      ✔ stringr 1.4.1 
+    ## ✔ readr   2.1.3      ✔ forcats 0.5.2 
     ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
-    ## ℹ Use the ]8;;http://conflicted.r-lib.org/conflicted package]8;; to force all conflicts to become errors
 
 ## Before we begin…
 
@@ -61,6 +54,75 @@ Download the following data files to your computer:
 - `pakistan_intellectual_capital.csv`
 - `cars.txt`
 - `wages1833.csv`
+
+## Using the tidyverse vs built-in data reading functions
+
+### Default function
+
+In base R, the default function for reading tabular data from a CSV file
+is `read.csv()`. This function is widely used, but it has some quirks:
+
+- Automatic conversion of strings to factors: By default, `read.csv()`
+  automatically converts character columns to factors, which can cause
+  issues if you’re not expecting categorical data. You can disable this
+  behavior by setting `stringsAsFactors = FALSE`.
+
+- Column name handling: Column names are automatically adjusted to be
+  syntactically valid variable names. For example, spaces are replaced
+  with periods (.), which can make column names harder to read.
+
+- Performance: While `read.csv()` is perfectly fine for smaller
+  datasets, it can be slower when working with larger files.
+
+Example usage:
+
+``` r
+data <- read.csv("data/pakistan_intellectual_capital.csv")
+```
+
+### The tidyverse way
+
+The tidyverse provides its own functions to read data. For example, the
+nearly-equivalent function to `read.csv()` is `read_csv()` (from the
+`readr` package). **Notice the small difference in the function name!**
+
+The tidyverse provides a more user-friendly function for reading CSV
+files: read_csv() from the readr package. It addresses many of the
+limitations of read.csv() and offers a more intuitive experience for
+modern data analysis:
+
+- Type guessing: `read_csv()` automatically guesses the types of columns
+  (e.g., numeric, character, date) but does not convert them to factors
+  unless specified.
+- Handling of column names: Column names are left as-is, without
+  modification. This keeps names readable, especially when they contain
+  spaces or special characters.
+- Faster performance: `read_csv()` is optimized for speed and can handle
+  larger datasets more efficiently than `read.csv()`. This performance
+  difference becomes noticeable for very large datasets (e.g., over 1
+  GB).
+- Tibble output: The result of `read_csv()` is a tibble, which has
+  advantages over a data.frame, such as better printing in the console
+  and more intuitive column subsetting.
+
+Example usage:
+
+``` r
+data <- read_csv("data/pakistan_intellectual_capital.csv")
+```
+
+    ## New names:
+    ## Rows: 1142 Columns: 13
+    ## ── Column specification
+    ## ──────────────────────────────────────────────────────── Delimiter: "," chr
+    ## (10): Teacher Name, University Currently Teaching, Department, Province ... dbl
+    ## (3): ...1, S#, Year
+    ## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+    ## Specify the column types or set `show_col_types = FALSE` to quiet this message.
+    ## • `` -> `...1`
+
+**Throughout this class, I will try to use the tidyverse functions for
+reading data.**
 
 ## Reading data from excel using readxl
 
@@ -113,9 +175,11 @@ We need to skip the first line of the data.
 more_data <- read_excel("data/transit-data.xlsx", sheet = 'transport data', skip=1)
 ```
 
-The column names are human readable but not very handy for coding.
-**Indeed, in general, only dots and underscores should be used in
-variable names.** There is a quick way to solve this.
+The column names are human readable but not very handy for coding. There
+is a quick way to solve this.
+
+Tip: Only use underscores or dots in column names. This will make your
+life easier when coding.
 
 ``` r
 colnames(more_data) <- make.names(colnames(more_data))
@@ -124,9 +188,9 @@ colnames(more_data) <- make.names(colnames(more_data))
 ## Reading data from a comma separated text file
 
 R has functions for reading in text files. However, the functions
-provided by tidyverse are more powerful. When reading in data, R reports
-on the column types. Information about the different types and their
-labels can be found here: [Column
+provided by tidyverse are often more powerful. When reading in data, R
+reports on the column types. Information about the different types and
+their labels can be found here: [Column
 Types](https://tibble.tidyverse.org/articles/types.html)
 
 *Note: The default report on the column types is a bit disorganized in
@@ -148,9 +212,18 @@ data <- read_csv('data/pakistan_intellectual_capital.csv', n_max=10)
 
 ## Tibbles
 
-Reading in data using tidyverse functions generates tibbles, instead of
-R’s traditional `data.frame`. These are a newer version of the classic
-data frame with features tweaked to make life a bit easier.
+Reading in data using tidyverse functions generates `tibbles`, instead
+of R’s traditional `data.frame`. These are a newer version of the
+classic data frame with features tweaked to make life a bit easier.
+
+- **Printing**: Tibbles print more concisely than `data.frames`. They
+  show a preview of the data, while data.frames show the entire dataset
+  in the console.
+- **Subsetting**: When you subset a data.frame with `mydata[1]`, the
+  result is still a data.frame, whereas in a tibble, subsetting a column
+  with `mydata[[1]]` or `mydata$column_name` returns a vector directly.
+- **Casting**: Tibbles preserve the type of data you provide. A
+  `data.frame`, might coerce data into factors.
 
 ``` r
 print(class(data))
@@ -640,6 +713,47 @@ data
     ## 10  678.
     ## # … with 240 more rows
 
+Tip: You can use `mutate` to created categories in your data.
+
+``` r
+data <- read_delim("data/cars.txt", delim = " ")
+```
+
+    ## Rows: 93 Columns: 26
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: " "
+    ## chr  (6): make, model, type, cylinders, rearseat, luggage
+    ## dbl (20): min_price, mid_price, max_price, mpg_city, mpg_hgw, airbag, drive,...
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+``` r
+data <- mutate(data, mpg_difference = mpg_hgw - mpg_city,
+         fuel_efficiency_category = case_when(
+           mpg_difference < 5 ~ "Efficient",
+           mpg_difference >= 5 & mpg_difference <= 10 ~ "Moderate",
+           mpg_difference > 10 ~ "Inefficient"
+         ))
+head(data)
+```
+
+    ## # A tibble: 6 × 28
+    ##   make  model type  min_p…¹ mid_p…² max_p…³ mpg_c…⁴ mpg_hgw airbag drive cylin…⁵
+    ##   <chr> <chr> <chr>   <dbl>   <dbl>   <dbl>   <dbl>   <dbl>  <dbl> <dbl> <chr>  
+    ## 1 Acura Inte… Small    12.9    15.9    18.8      25      31      0     1 4      
+    ## 2 Acura Lege… Mids…    29.2    33.9    38.7      18      25      2     1 6      
+    ## 3 Audi  90    Comp…    25.9    29.1    32.3      20      26      1     1 6      
+    ## 4 Audi  100   Mids…    30.8    37.7    44.6      19      26      2     1 6      
+    ## 5 BMW   535i  Mids…    23.7    30      36.2      22      30      1     0 4      
+    ## 6 Buick Cent… Mids…    14.2    15.7    17.3      22      31      1     1 4      
+    ## # … with 17 more variables: engine <dbl>, horsepower <dbl>, rpm <dbl>,
+    ## #   rpmile <dbl>, manual <dbl>, tank <dbl>, passengers <dbl>, length <dbl>,
+    ## #   wheelbase <dbl>, width <dbl>, uturn <dbl>, rearseat <chr>, luggage <chr>,
+    ## #   weight <dbl>, domestic <dbl>, mpg_difference <dbl>,
+    ## #   fuel_efficiency_category <chr>, and abbreviated variable names ¹​min_price,
+    ## #   ²​mid_price, ³​max_price, ⁴​mpg_city, ⁵​cylinders
+
 ## Exercises
 
 ### Exercise 1
@@ -683,6 +797,17 @@ Write a script that does the following:
 
 - Adds a new variable `diff_pct` that gives the difference in average
   wage between the male and female workers expressed as a percentage of
-  the female wage.
+  the female wage. The `diff_pct` will give a positive number if males
+  earn more on average, and a negative number if females earn more.
 
   $$diff_pct = 100 \times \frac{mwage - fwage}{fwage}$$
+
+### Exercise 3
+
+Read in the `wages1833.csv` data file using the `read_csv()` function.
+Create a new column called age_group, which categorizes workers into the
+following groups based on their age:
+
+- “Child”: Age \< 14
+- “Young”: 14 \<= Age \<= 20
+- “Adult”: Age \> 20

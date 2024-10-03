@@ -24,6 +24,44 @@ Download the following data files to your computer:
 -   `cars.txt`
 -   `wages1833.csv`
 
+## Using the tidyverse vs built-in data reading functions
+
+
+### Default function
+
+In base R, the default function for reading tabular data from a CSV file is `read.csv()`. This function is widely used, but it has some quirks:
+
++ Automatic conversion of strings to factors: By default, `read.csv()` automatically converts character columns to factors, which can cause issues if you're not expecting categorical data. You can disable this behavior by setting `stringsAsFactors = FALSE`.
+
++ Column name handling: Column names are automatically adjusted to be syntactically valid variable names. For example, spaces are replaced with periods (.), which can make column names harder to read.
+
++ Performance: While `read.csv()` is perfectly fine for smaller datasets, it can be slower when working with larger files.
+
+Example usage:
+
+```{r}
+data <- read.csv("data/pakistan_intellectual_capital.csv")
+```
+
+### The tidyverse way
+
+The tidyverse provides its own functions to read data. For example, the nearly-equivalent function to `read.csv()` is `read_csv()` (from the `readr` package). **Notice the small difference in the function name!**
+
+The tidyverse provides a more user-friendly function for reading CSV files: read_csv() from the readr package. It addresses many of the limitations of read.csv() and offers a more intuitive experience for modern data analysis:
+
++ Type guessing: `read_csv()` automatically guesses the types of columns (e.g., numeric, character, date) but does not convert them to factors unless specified.
++ Handling of column names: Column names are left as-is, without modification. This keeps names readable, especially when they contain spaces or special characters.
++ Faster performance: `read_csv()` is optimized for speed and can handle larger datasets more efficiently than `read.csv()`. This performance difference becomes noticeable for very large datasets (e.g., over 1 GB).
++ Tibble output: The result of `read_csv()` is a tibble, which has advantages over a data.frame, such as better printing in the console and more intuitive column subsetting.
+
+Example usage:
+
+```{r}  
+data <- read_csv("data/pakistan_intellectual_capital.csv")
+```
+
+**Throughout this class, I will try to use the tidyverse functions for reading data.**
+
 ## Reading data from excel using readxl
 
 Excel spreadsheets are often used and easy ways to store data.
@@ -66,7 +104,9 @@ We need to skip the first line of the data.
 more_data <- read_excel("data/transit-data.xlsx", sheet = 'transport data', skip=1)
 ```
 
-The column names are human readable but not very handy for coding. **Indeed, in general, only dots and underscores should be used in variable names.** There is a quick way to solve this.
+The column names are human readable but not very handy for coding. There is a quick way to solve this.
+
+Tip: Only use underscores or dots in column names. This will make your life easier when coding.
 
 ```{r}
 colnames(more_data) <- make.names(colnames(more_data))
@@ -74,7 +114,7 @@ colnames(more_data) <- make.names(colnames(more_data))
 
 ## Reading data from a comma separated text file
 
-R has functions for reading in text files. However, the functions provided by tidyverse are more powerful. When reading in data, R reports on the column types. Information about the different types and their labels can be found here: [Column Types](https://tibble.tidyverse.org/articles/types.html)
+R has functions for reading in text files. However, the functions provided by tidyverse are often more powerful. When reading in data, R reports on the column types. Information about the different types and their labels can be found here: [Column Types](https://tibble.tidyverse.org/articles/types.html)
 
 *Note: The default report on the column types is a bit disorganized in this view. It will look better in your console.*
 
@@ -84,7 +124,11 @@ data <- read_csv('data/pakistan_intellectual_capital.csv', n_max=10)
 
 ## Tibbles
 
-Reading in data using tidyverse functions generates tibbles, instead of R's traditional `data.frame`. These are a newer version of the classic data frame with features tweaked to make life a bit easier.
+Reading in data using tidyverse functions generates `tibbles`, instead of R's traditional `data.frame`. These are a newer version of the classic data frame with features tweaked to make life a bit easier. 
+
++ **Printing**: Tibbles print more concisely than `data.frames`. They show a preview of the data, while data.frames show the entire dataset in the console.
++ **Subsetting**: When you subset a data.frame with `mydata[1]`, the result is still a data.frame, whereas in a tibble, subsetting a column with `mydata[[1]]` or `mydata$column_name` returns a vector directly.
++ **Casting**: Tibbles preserve the type of data you provide. A `data.frame`, might coerce data into factors.
 
 ```{r}
 print(class(data))
@@ -249,6 +293,20 @@ data <- transmute(data, area = pi * (Diameter/2)^2)
 data
 ```
 
+Tip: You can use `mutate` to created categories in your data.
+
+```{r}
+data <- read_delim("data/cars.txt", delim = " ")
+data <- mutate(data, mpg_difference = mpg_hgw - mpg_city,
+         fuel_efficiency_category = case_when(
+           mpg_difference < 5 ~ "Efficient",
+           mpg_difference >= 5 & mpg_difference <= 10 ~ "Moderate",
+           mpg_difference > 10 ~ "Inefficient"
+         ))
+head(data)
+```
+
+
 ## Exercises
 
 ### Exercise 1
@@ -283,6 +341,21 @@ Write a script that does the following:
 
 -   Adds a new variable that lists the difference between the number of male and female workers
 
--   Adds a new variable `diff_pct` that gives the difference in average wage between the male and female workers expressed as a percentage of the female wage.
+-   Adds a new variable `diff_pct` that gives the difference in average wage between the male and female workers expressed as a percentage of the female wage. The `diff_pct` will give a positive number if males earn more on average, and a negative number if females earn more.
+
 
     $$diff_pct = 100 \times \frac{mwage - fwage}{fwage}$$
+    
+### Exercise 3
+
+Read in the `wages1833.csv` data file using the `read_csv()` function.
+Create a new column called age_group, which categorizes workers into the following groups based on their age:
+
++ "Child": Age < 14
++ "Young": 14 <= Age <= 20
++ "Adult": Age > 20
+
+### Exercise 4
+
+Read in the wages1833.csv file using `read_csv()`. Create a new column called `wage_difference`, which gives the absolute difference between the average male wage (`mwage`) and the average female wage (`fwage`). Create a second new column called `higher_wage`, which indicates whether males or females earned more on average in each row ("Male" or "Female"). Print the first few rows of the data.
+

@@ -1,6 +1,6 @@
 Basic Programming
 ================
-Last Updated: 01, October, 2024 at 09:17
+Last Updated: 03, October, 2024 at 08:32
 
 - [Basics of programming: variables and
   functions](#basics-of-programming-variables-and-functions)
@@ -284,7 +284,7 @@ print(result)
     ## 
     ## Coefficients:
     ## (Intercept)            x  
-    ##      10.163        4.474
+    ##       9.980        5.175
 
 ## Flow control in R
 
@@ -443,11 +443,11 @@ for (x in my_vector) {
 }
 ```
 
-    ## [1] 1.327979
-    ## [1] 1.705484
-    ## [1] 1.876179
-    ## [1] 1.705205
-    ## [1] 2.286506
+    ## [1] 1.235448
+    ## [1] 2.440518
+    ## [1] 2.75267
+    ## [1] 0.2427084
+    ## [1] 0.7390109
 
 Just to drive the point home, another example:
 
@@ -558,7 +558,8 @@ while (i < 100000) {
 
 ## Note on vector preallocation
 
-This piece of code build a vector by appending numbers to the end of it.
+This piece of code builds a vector by appending numbers to the end of
+it.
 
 ``` r
 repeats <- 10000
@@ -572,7 +573,7 @@ endTime <- Sys.time()
 print(sprintf('Duration: %.2f', endTime - startTime))
 ```
 
-    ## [1] "Duration: 0.62"
+    ## [1] "Duration: 0.47"
 
 This piece of code preallocates a vector and is more efficient.
 
@@ -588,7 +589,7 @@ endTime <- Sys.time()
 print(sprintf('Duration: %.2f', endTime - startTime))
 ```
 
-    ## [1] "Duration: 0.02"
+    ## [1] "Duration: 0.04"
 
 # Working with text: the paste() function
 
@@ -605,18 +606,18 @@ summary(result)
     ## 
     ## Residuals:
     ##      Min       1Q   Median       3Q      Max 
-    ## -2.43057 -0.66420  0.04382  0.68239  2.52847 
+    ## -2.67839 -0.78987 -0.00973  0.65513  2.77230 
     ## 
     ## Coefficients:
     ##             Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)  10.1311     0.1888   53.66   <2e-16 ***
-    ## x             4.6832     0.3240   14.45   <2e-16 ***
+    ## (Intercept)   9.9546     0.1904   52.27   <2e-16 ***
+    ## x             5.1485     0.3640   14.15   <2e-16 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 0.9815 on 98 degrees of freedom
-    ## Multiple R-squared:  0.6807, Adjusted R-squared:  0.6775 
-    ## F-statistic: 208.9 on 1 and 98 DF,  p-value: < 2.2e-16
+    ## Residual standard error: 0.9903 on 98 degrees of freedom
+    ## Multiple R-squared:  0.6713, Adjusted R-squared:  0.6679 
+    ## F-statistic: 200.1 on 1 and 98 DF,  p-value: < 2.2e-16
 
 ``` r
 test1 <- paste(10000)
@@ -631,28 +632,28 @@ print(test1)
 print(test2)
 ```
 
-    ## [1] "10.1311255749049, 4.68319629780412"
+    ## [1] "9.95460400492017, 5.14847844263705"
 
 ``` r
 print(test3)
 ```
 
-    ## [1] "The coefficients are: 10.1311255749049, 4.68319629780412"
+    ## [1] "The coefficients are: 9.95460400492017, 5.14847844263705"
 
 ``` r
 for (x in 1:10) {print(test3)}
 ```
 
-    ## [1] "The coefficients are: 10.1311255749049, 4.68319629780412"
-    ## [1] "The coefficients are: 10.1311255749049, 4.68319629780412"
-    ## [1] "The coefficients are: 10.1311255749049, 4.68319629780412"
-    ## [1] "The coefficients are: 10.1311255749049, 4.68319629780412"
-    ## [1] "The coefficients are: 10.1311255749049, 4.68319629780412"
-    ## [1] "The coefficients are: 10.1311255749049, 4.68319629780412"
-    ## [1] "The coefficients are: 10.1311255749049, 4.68319629780412"
-    ## [1] "The coefficients are: 10.1311255749049, 4.68319629780412"
-    ## [1] "The coefficients are: 10.1311255749049, 4.68319629780412"
-    ## [1] "The coefficients are: 10.1311255749049, 4.68319629780412"
+    ## [1] "The coefficients are: 9.95460400492017, 5.14847844263705"
+    ## [1] "The coefficients are: 9.95460400492017, 5.14847844263705"
+    ## [1] "The coefficients are: 9.95460400492017, 5.14847844263705"
+    ## [1] "The coefficients are: 9.95460400492017, 5.14847844263705"
+    ## [1] "The coefficients are: 9.95460400492017, 5.14847844263705"
+    ## [1] "The coefficients are: 9.95460400492017, 5.14847844263705"
+    ## [1] "The coefficients are: 9.95460400492017, 5.14847844263705"
+    ## [1] "The coefficients are: 9.95460400492017, 5.14847844263705"
+    ## [1] "The coefficients are: 9.95460400492017, 5.14847844263705"
+    ## [1] "The coefficients are: 9.95460400492017, 5.14847844263705"
 
 # Solutions to exercises
 
@@ -693,13 +694,13 @@ while(value < 1)
 print(value)
 ```
 
-    ## [1] 1.136889
+    ## [1] 1.657132
 
 ``` r
 print(counter)
 ```
 
-    ## [1] 3
+    ## [1] 1
 
 Option 2
 
@@ -714,13 +715,13 @@ while(TRUE)
 print(value)
 ```
 
-    ## [1] 1.567067
+    ## [1] 1.233584
 
 ``` r
 print(counter)
 ```
 
-    ## [1] 8
+    ## [1] 7
 
 ## Three
 
@@ -738,8 +739,8 @@ for(i in 1:repeats)
 outcomes
 ```
 
-    ##  [1] "T" "H" "H" "H" "T" "T" "H" "T" "T" "H" "T" "H" "H" "H" "H" "T" "T" "H" "H"
-    ## [20] "H"
+    ##  [1] "H" "T" "T" "H" "T" "T" "H" "T" "T" "H" "H" "H" "H" "H" "T" "H" "T" "H" "H"
+    ## [20] "T"
 
 You could do this in one line (but that was not the exercise).
 
@@ -749,7 +750,7 @@ outcomes <- sample(c('H','T'), repeats, replace = TRUE)
 outcomes
 ```
 
-    ##  [1] "T" "T" "T" "T" "T" "H" "T" "T" "T" "T" "T" "H" "H" "H" "T" "H" "H" "T" "H"
+    ##  [1] "H" "T" "T" "H" "T" "H" "T" "H" "T" "T" "T" "H" "T" "T" "T" "H" "T" "T" "H"
     ## [20] "H"
 
 ## Four

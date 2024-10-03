@@ -24,7 +24,7 @@ Download the following data sets:
 
 ## Loading the tidyverse
 
-As always, let's load the tidyverse...
+Let's load the tidyverse...
 
 ```{r}
 library(tidyverse)

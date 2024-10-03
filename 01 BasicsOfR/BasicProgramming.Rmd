@@ -367,7 +367,7 @@ while (i < 100000) {
 
 ## Note on vector preallocation
 
-This piece of code build a vector by appending numbers to the end of it.
+This piece of code builds a vector by appending numbers to the end of it.
 
 ```{r}
 repeats <- 10000
