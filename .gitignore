@@ -12,3 +12,7 @@ ClassPrep/old_stuff/
 *.xlsx#
 
 SimulateRegression/.idea/
+
+04 IntroLinearModel/Fsimulation/.idea/
+
+04 IntroLinearModel/Fsimulation/__pycache__/
