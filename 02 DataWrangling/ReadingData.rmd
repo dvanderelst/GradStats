@@ -68,9 +68,13 @@ Excel spreadsheets are often used and easy ways to store data.
 
 Explore the data in `transit-data.xlsx`. (Please note the organization of my project folder.)
 
-![](images/2022-09-27_08-38.png)library(tidyverse)
+![](images/2022-09-27_08-38.png)
 
-Note that (1) Data does not start in cell A1, (2) Data contains different date formats, and (3) the data contain weird characters.
+Note that:
+
++ The data data do not start in cell A1
++ The data contain different date formats
++ The data contain weird characters
 
 Read the first sheet of data:
 
@@ -92,7 +96,7 @@ info <-read_excel("data/transit-data.xlsx", sheet = 'info', range = 'B1:C7')
 info <-read_excel("data/transit-data.xlsx", sheet = 'info', range = cell_cols('B:C'))
 ```
 
-Let's now read the data Data in the second sheet:
+Let's now read the data in the second sheet:
 
 ```{r}
 more_data <- read_excel("data/transit-data.xlsx", sheet = 'transport data')
@@ -191,10 +195,22 @@ After reading in the data, it's a good idea to explore the data. Use either the 
 
 One of the most simple things you can do is inspect your data using a text editor. When text files are large, it's a good idea to get an editor that can handle large files. I suggest [Sublime Text Editor](https://www.sublimetext.com/). This editor can handle much larger files than you can open (as text) in Rstudio. Keep the file open while you're cleaning it!
 
+Let's read in some data:
+
+```{r}
+data <- read_csv('data/pakistan_intellectual_capital.csv') # n_max is the number of rows to read
+```
+
+
+### Column names
+
+```{r}
+colnames(data)
+```
+
 ### Head and tail
 
 ```{r}
-data <- read_csv('data/pakistan_intellectual_capital.csv', n_max=10)
 head(data)
 ```
 
@@ -230,6 +246,14 @@ skim(data)
 
 ```{r}
 skim_tee(data)
+```
+### Tabulating
+
+You can use the `janitor` package to get a quick overview of categorical variables, i.e., tabulating categorical variables. It's somewhat confusing that the `percent` column is not a percentage but a proportion.
+
+```{r}
+library(janitor)
+tabyl(data, `Province University Located`)
 ```
 
 
@@ -279,6 +303,8 @@ url<-'https://raw.githubusercontent.com/dvanderelst-python-class/python-class/fa
 data <- read_csv(url)
 ```
 
+### Mathematical Operations on Existing Columns
+
 Let's create a new column giving the surface area of each column.
 
 ```{r}
@@ -293,6 +319,8 @@ data <- transmute(data, area = pi * (Diameter/2)^2)
 data
 ```
 
+### Logical/Conditional Variables
+
 Tip: You can use `mutate` to created categories in your data.
 
 ```{r}
@@ -306,6 +334,15 @@ data <- mutate(data, mpg_difference = mpg_hgw - mpg_city,
 head(data)
 ```
 
+```{r}
+data <- mutate(data, small_engine = if_else(engine < 2, 1, 0))
+names(data)
+```
+
+```{r}
+data <- mutate(data, `small tank` = if_else(tank < 15, 1, 0))
+names(data)
+```
 
 ## Exercises
 
@@ -344,7 +381,7 @@ Write a script that does the following:
 -   Adds a new variable `diff_pct` that gives the difference in average wage between the male and female workers expressed as a percentage of the female wage. The `diff_pct` will give a positive number if males earn more on average, and a negative number if females earn more.
 
 
-    $$diff_pct = 100 \times \frac{mwage - fwage}{fwage}$$
+    $$diff_{pct} = 100 \times \frac{mwage - fwage}{fwage}$$
     
 ### Exercise 3
 

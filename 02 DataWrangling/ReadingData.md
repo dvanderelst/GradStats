@@ -1,6 +1,6 @@
 Reading Data
 ================
-Last Updated: 03, October, 2024 at 09:16
+Last Updated: 08, October, 2024 at 08:53
 
 - [Before we begin…](#before-we-begin)
 - [Using the tidyverse vs built-in data reading
@@ -20,18 +20,24 @@ Last Updated: 03, October, 2024 at 09:16
 - [Reading files not seperated by
   commas](#reading-files-not-seperated-by-commas)
 - [Exploring data](#exploring-data)
+  - [Column names](#column-names)
   - [Head and tail](#head-and-tail)
   - [Summary](#summary)
   - [Glimpse](#glimpse)
   - [Skim](#skim)
+  - [Tabulating](#tabulating)
 - [Addressing a single variable](#addressing-a-single-variable)
 - [Creating new variables](#creating-new-variables)
 - [Creating new variables using
   `mutate`](#creating-new-variables-using-mutate)
+  - [Mathematical Operations on Existing
+    Columns](#mathematical-operations-on-existing-columns)
+  - [Logical/Conditional Variables](#logicalconditional-variables)
 - [Exercises](#exercises)
   - [Exercise 1](#exercise-1)
   - [Exercise 2](#exercise-2)
   - [Exercise 3](#exercise-3)
+  - [Exercise 4](#exercise-4)
 
 ``` r
 library(tidyverse)
@@ -131,10 +137,13 @@ Excel spreadsheets are often used and easy ways to store data.
 Explore the data in `transit-data.xlsx`. (Please note the organization
 of my project folder.)
 
-![](images/2022-09-27_08-38.png)library(tidyverse)
+![](images/2022-09-27_08-38.png)
 
-Note that (1) Data does not start in cell A1, (2) Data contains
-different date formats, and (3) the data contain weird characters.
+Note that:
+
+- The data data do not start in cell A1
+- The data contain different date formats
+- The data contain weird characters
 
 Read the first sheet of data:
 
@@ -156,7 +165,7 @@ info <-read_excel("data/transit-data.xlsx", sheet = 'info', range = 'B1:C7')
 info <-read_excel("data/transit-data.xlsx", sheet = 'info', range = cell_cols('B:C'))
 ```
 
-Let’s now read the data Data in the second sheet:
+Let’s now read the data in the second sheet:
 
 ``` r
 more_data <- read_excel("data/transit-data.xlsx", sheet = 'transport data')
@@ -354,21 +363,43 @@ Editor](https://www.sublimetext.com/). This editor can handle much
 larger files than you can open (as text) in Rstudio. Keep the file open
 while you’re cleaning it!
 
-### Head and tail
+Let’s read in some data:
 
 ``` r
-data <- read_csv('data/pakistan_intellectual_capital.csv', n_max=10)
+data <- read_csv('data/pakistan_intellectual_capital.csv') # n_max is the number of rows to read
 ```
 
     ## New names:
-    ## Rows: 10 Columns: 13
+    ## Rows: 1142 Columns: 13
     ## ── Column specification
     ## ──────────────────────────────────────────────────────── Delimiter: "," chr
-    ## (9): Teacher Name, University Currently Teaching, Department, Province U... dbl
-    ## (3): ...1, S#, Year lgl (1): Other Information
+    ## (10): Teacher Name, University Currently Teaching, Department, Province ... dbl
+    ## (3): ...1, S#, Year
     ## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
     ## Specify the column types or set `show_col_types = FALSE` to quiet this message.
     ## • `` -> `...1`
+
+### Column names
+
+``` r
+colnames(data)
+```
+
+    ##  [1] "...1"                                     
+    ##  [2] "S#"                                       
+    ##  [3] "Teacher Name"                             
+    ##  [4] "University Currently Teaching"            
+    ##  [5] "Department"                               
+    ##  [6] "Province University Located"              
+    ##  [7] "Designation"                              
+    ##  [8] "Terminal Degree"                          
+    ##  [9] "Graduated from"                           
+    ## [10] "Country"                                  
+    ## [11] "Year"                                     
+    ## [12] "Area of Specialization/Research Interests"
+    ## [13] "Other Information"
+
+### Head and tail
 
 ``` r
 head(data)
@@ -385,7 +416,7 @@ head(data)
     ## 6    25    26 Nausheed … Sardar… Comput… Baloch… Lectur… MCS     Univer… Pakist…
     ## # … with 3 more variables: Year <dbl>,
     ## #   `Area of Specialization/Research Interests` <chr>,
-    ## #   `Other Information` <lgl>, and abbreviated variable names ¹​`Teacher Name`,
+    ## #   `Other Information` <chr>, and abbreviated variable names ¹​`Teacher Name`,
     ## #   ²​`University Currently Teaching`, ³​Department,
     ## #   ⁴​`Province University Located`, ⁵​Designation, ⁶​`Terminal Degree`,
     ## #   ⁷​`Graduated from`
@@ -397,15 +428,15 @@ tail(data)
     ## # A tibble: 6 × 13
     ##    ...1  `S#` Teacher …¹ Unive…² Depar…³ Provi…⁴ Desig…⁵ Termi…⁶ Gradu…⁷ Country
     ##   <dbl> <dbl> <chr>      <chr>   <chr>   <chr>   <chr>   <chr>   <chr>   <chr>  
-    ## 1    24    25 Samina Az… Sardar… Comput… Baloch… Lectur… BS      Baloch… Pakist…
-    ## 2    25    26 Nausheed … Sardar… Comput… Baloch… Lectur… MCS     Univer… Pakist…
-    ## 3    26    27 Shumaila … Sardar… Comput… Baloch… Lectur… MS      Baloch… Pakist…
-    ## 4    27    28 Mirfa Man… Sardar… Comput… Baloch… Lectur… BS      Sardar… Pakist…
-    ## 5    28    29 Saira Muj… Sardar… Comput… Baloch… Lectur… BS      Sardar… Pakist…
-    ## 6    29    30 Arifa Anw… Sardar… Comput… Baloch… Lectur… BS      Sardar… Pakist…
+    ## 1  1971  1972 Dr. Khali… Ghulam… Comput… KPK     Profes… PhD     Concor… Canada 
+    ## 2  1974  1975 Dr. Ahmar… Ghulam… Comput… KPK     Associ… PhD     JNU     South …
+    ## 3  1975  1976 Dr. Fawad… Ghulam… Comput… KPK     Associ… PhD     Grenob… France 
+    ## 4  1977  1978 Dr. Rasha… Ghulam… Comput… KPK     Assist… PhD     Florid… USA    
+    ## 5  1979  1980 Dr. Shaha… Ghulam… Comput… KPK     Assist… PhD     Ghulam… Pakist…
+    ## 6  1980  1981 Dr. Sajid… Ghulam… Comput… KPK     Assist… PhD     Seoul … South …
     ## # … with 3 more variables: Year <dbl>,
     ## #   `Area of Specialization/Research Interests` <chr>,
-    ## #   `Other Information` <lgl>, and abbreviated variable names ¹​`Teacher Name`,
+    ## #   `Other Information` <chr>, and abbreviated variable names ¹​`Teacher Name`,
     ## #   ²​`University Currently Teaching`, ³​Department,
     ## #   ⁴​`Province University Located`, ⁵​Designation, ⁶​`Terminal Degree`,
     ## #   ⁷​`Graduated from`
@@ -418,16 +449,16 @@ Get a quick summary
 summary(data)
 ```
 
-    ##       ...1             S#        Teacher Name      
-    ##  Min.   : 2.00   Min.   : 3.00   Length:10         
-    ##  1st Qu.: 5.25   1st Qu.: 6.25   Class :character  
-    ##  Median :24.50   Median :25.50   Mode  :character  
-    ##  Mean   :17.60   Mean   :18.60                     
-    ##  3rd Qu.:26.75   3rd Qu.:27.75                     
-    ##  Max.   :29.00   Max.   :30.00                     
-    ##                                                    
+    ##       ...1              S#         Teacher Name      
+    ##  Min.   :   2.0   Min.   :   3.0   Length:1142       
+    ##  1st Qu.: 689.2   1st Qu.: 690.2   Class :character  
+    ##  Median :1087.5   Median :1088.5   Mode  :character  
+    ##  Mean   :1054.4   Mean   :1055.4                     
+    ##  3rd Qu.:1476.8   3rd Qu.:1477.8                     
+    ##  Max.   :1980.0   Max.   :1981.0                     
+    ##                                                      
     ##  University Currently Teaching  Department        Province University Located
-    ##  Length:10                     Length:10          Length:10                  
+    ##  Length:1142                   Length:1142        Length:1142                
     ##  Class :character              Class :character   Class :character           
     ##  Mode  :character              Mode  :character   Mode  :character           
     ##                                                                              
@@ -435,21 +466,21 @@ summary(data)
     ##                                                                              
     ##                                                                              
     ##  Designation        Terminal Degree    Graduated from       Country         
-    ##  Length:10          Length:10          Length:10          Length:10         
+    ##  Length:1142        Length:1142        Length:1142        Length:1142       
     ##  Class :character   Class :character   Class :character   Class :character  
     ##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
     ##                                                                             
     ##                                                                             
     ##                                                                             
     ##                                                                             
-    ##       Year      Area of Specialization/Research Interests Other Information
-    ##  Min.   :2005   Length:10                                 Mode:logical     
-    ##  1st Qu.:2008   Class :character                          NA's:10          
-    ##  Median :2009   Mode  :character                                           
-    ##  Mean   :2008                                                              
-    ##  3rd Qu.:2009                                                              
-    ##  Max.   :2011                                                              
-    ##  NA's   :4
+    ##       Year      Area of Specialization/Research Interests Other Information 
+    ##  Min.   :1983   Length:1142                               Length:1142       
+    ##  1st Qu.:2008   Class :character                          Class :character  
+    ##  Median :2012   Mode  :character                          Mode  :character  
+    ##  Mean   :2010                                                               
+    ##  3rd Qu.:2014                                                               
+    ##  Max.   :2018                                                               
+    ##  NA's   :653
 
 ### Glimpse
 
@@ -459,7 +490,7 @@ The function glimpse gives you also a quick overview:
 glimpse(data)
 ```
 
-    ## Rows: 10
+    ## Rows: 1,142
     ## Columns: 13
     ## $ ...1                                        <dbl> 2, 4, 5, 6, 24, 25, 26, 27…
     ## $ `S#`                                        <dbl> 3, 5, 6, 7, 25, 26, 27, 28…
@@ -473,7 +504,7 @@ glimpse(data)
     ## $ Country                                     <chr> "Thailand", "Thailand", "T…
     ## $ Year                                        <dbl> NA, NA, NA, NA, 2005, 2008…
     ## $ `Area of Specialization/Research Interests` <chr> "Software Engineering & DB…
-    ## $ `Other Information`                         <lgl> NA, NA, NA, NA, NA, NA, NA…
+    ## $ `Other Information`                         <chr> NA, NA, NA, NA, NA, NA, NA…
 
 ### Skim
 
@@ -487,12 +518,11 @@ skim(data)
 |                                                  |      |
 |:-------------------------------------------------|:-----|
 | Name                                             | data |
-| Number of rows                                   | 10   |
+| Number of rows                                   | 1142 |
 | Number of columns                                | 13   |
 | \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_   |      |
 | Column type frequency:                           |      |
-| character                                        | 9    |
-| logical                                          | 1    |
+| character                                        | 10   |
 | numeric                                          | 3    |
 | \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ |      |
 | Group variables                                  | None |
@@ -503,29 +533,24 @@ Data summary
 
 | skim_variable                             | n_missing | complete_rate | min | max | empty | n_unique | whitespace |
 |:------------------------------------------|----------:|--------------:|----:|----:|------:|---------:|-----------:|
-| Teacher Name                              |         0 |             1 |  11 |  19 |     0 |       10 |          0 |
-| University Currently Teaching             |         0 |             1 |  25 |  38 |     0 |        2 |          0 |
-| Department                                |         0 |             1 |  16 |  21 |     0 |        2 |          0 |
-| Province University Located               |         0 |             1 |  11 |  11 |     0 |        1 |          0 |
-| Designation                               |         0 |             1 |   8 |  19 |     0 |        2 |          0 |
-| Terminal Degree                           |         0 |             1 |   2 |   3 |     0 |        4 |          0 |
-| Graduated from                            |         0 |             1 |  25 |  85 |     0 |        4 |          0 |
-| Country                                   |         0 |             1 |   8 |   8 |     0 |        2 |          0 |
-| Area of Specialization/Research Interests |         0 |             1 |   4 |  77 |     0 |       10 |          0 |
-
-**Variable type: logical**
-
-| skim_variable     | n_missing | complete_rate | mean | count |
-|:------------------|----------:|--------------:|-----:|:------|
-| Other Information |        10 |             0 |  NaN | :     |
+| Teacher Name                              |         0 |          1.00 |   5 |  40 |     0 |     1133 |          0 |
+| University Currently Teaching             |         0 |          1.00 |   7 |  71 |     0 |       63 |          0 |
+| Department                                |         0 |          1.00 |   7 |  43 |     0 |       17 |          0 |
+| Province University Located               |         0 |          1.00 |   3 |  11 |     0 |        5 |          0 |
+| Designation                               |        19 |          0.98 |   4 |  39 |     0 |       46 |          0 |
+| Terminal Degree                           |         4 |          1.00 |   2 |  30 |     0 |       41 |          0 |
+| Graduated from                            |         0 |          1.00 |   3 |  88 |     0 |      347 |          0 |
+| Country                                   |         0 |          1.00 |   2 |  18 |     0 |       35 |          0 |
+| Area of Specialization/Research Interests |       519 |          0.55 |   3 | 477 |     0 |      570 |          0 |
+| Other Information                         |      1018 |          0.11 |   8 | 132 |     0 |       51 |          0 |
 
 **Variable type: numeric**
 
-| skim_variable | n_missing | complete_rate |   mean |    sd |   p0 |     p25 |    p50 |     p75 | p100 | hist  |
-|:--------------|----------:|--------------:|-------:|------:|-----:|--------:|-------:|--------:|-----:|:------|
-| …1            |         0 |           1.0 |   17.6 | 11.62 |    2 |    5.25 |   24.5 |   26.75 |   29 | ▅▁▁▁▇ |
-| S#            |         0 |           1.0 |   18.6 | 11.62 |    3 |    6.25 |   25.5 |   27.75 |   30 | ▅▁▁▁▇ |
-| Year          |         4 |           0.6 | 2008.5 |  1.97 | 2005 | 2008.25 | 2009.0 | 2009.00 | 2011 | ▂▁▂▇▂ |
+| skim_variable | n_missing | complete_rate |    mean |     sd |   p0 |     p25 |    p50 |     p75 | p100 | hist  |
+|:--------------|----------:|--------------:|--------:|-------:|-----:|--------:|-------:|--------:|-----:|:------|
+| …1            |         0 |          1.00 | 1054.35 | 520.20 |    2 |  689.25 | 1087.5 | 1476.75 | 1980 | ▅▅▆▇▅ |
+| S#            |         0 |          1.00 | 1055.35 | 520.20 |    3 |  690.25 | 1088.5 | 1477.75 | 1981 | ▅▅▆▇▅ |
+| Year          |       653 |          0.43 | 2010.46 |   5.58 | 1983 | 2008.00 | 2012.0 | 2014.00 | 2018 | ▁▁▁▆▇ |
 
 ``` r
 skim_tee(data)
@@ -534,51 +559,77 @@ skim_tee(data)
     ## ── Data Summary ────────────────────────
     ##                            Values
     ## Name                       data  
-    ## Number of rows             10    
+    ## Number of rows             1142  
     ## Number of columns          13    
     ## _______________________          
     ## Column type frequency:           
-    ##   character                9     
-    ##   logical                  1     
+    ##   character                10    
     ##   numeric                  3     
     ## ________________________         
     ## Group variables            None  
     ## 
     ## ── Variable type: character ────────────────────────────────────────────────────
-    ##   skim_variable                             n_missing complete_rate min max
-    ## 1 Teacher Name                                      0             1  11  19
-    ## 2 University Currently Teaching                     0             1  25  38
-    ## 3 Department                                        0             1  16  21
-    ## 4 Province University Located                       0             1  11  11
-    ## 5 Designation                                       0             1   8  19
-    ## 6 Terminal Degree                                   0             1   2   3
-    ## 7 Graduated from                                    0             1  25  85
-    ## 8 Country                                           0             1   8   8
-    ## 9 Area of Specialization/Research Interests         0             1   4  77
-    ##   empty n_unique whitespace
-    ## 1     0       10          0
-    ## 2     0        2          0
-    ## 3     0        2          0
-    ## 4     0        1          0
-    ## 5     0        2          0
-    ## 6     0        4          0
-    ## 7     0        4          0
-    ## 8     0        2          0
-    ## 9     0       10          0
-    ## 
-    ## ── Variable type: logical ──────────────────────────────────────────────────────
-    ##   skim_variable     n_missing complete_rate mean count
-    ## 1 Other Information        10             0  NaN ": " 
+    ##    skim_variable                             n_missing complete_rate min max
+    ##  1 Teacher Name                                      0         1       5  40
+    ##  2 University Currently Teaching                     0         1       7  71
+    ##  3 Department                                        0         1       7  43
+    ##  4 Province University Located                       0         1       3  11
+    ##  5 Designation                                      19         0.983   4  39
+    ##  6 Terminal Degree                                   4         0.996   2  30
+    ##  7 Graduated from                                    0         1       3  88
+    ##  8 Country                                           0         1       2  18
+    ##  9 Area of Specialization/Research Interests       519         0.546   3 477
+    ## 10 Other Information                              1018         0.109   8 132
+    ##    empty n_unique whitespace
+    ##  1     0     1133          0
+    ##  2     0       63          0
+    ##  3     0       17          0
+    ##  4     0        5          0
+    ##  5     0       46          0
+    ##  6     0       41          0
+    ##  7     0      347          0
+    ##  8     0       35          0
+    ##  9     0      570          0
+    ## 10     0       51          0
     ## 
     ## ── Variable type: numeric ──────────────────────────────────────────────────────
-    ##   skim_variable n_missing complete_rate   mean    sd   p0     p25    p50    p75
-    ## 1 ...1                  0           1     17.6 11.6     2    5.25   24.5   26.8
-    ## 2 S#                    0           1     18.6 11.6     3    6.25   25.5   27.8
-    ## 3 Year                  4           0.6 2008.   1.97 2005 2008.   2009   2009  
-    ##   p100 hist 
-    ## 1   29 ▅▁▁▁▇
-    ## 2   30 ▅▁▁▁▇
-    ## 3 2011 ▂▁▂▇▂
+    ##   skim_variable n_missing complete_rate  mean     sd   p0   p25   p50   p75 p100
+    ## 1 ...1                  0         1     1054. 520.      2  689. 1088. 1477. 1980
+    ## 2 S#                    0         1     1055. 520.      3  690. 1088. 1478. 1981
+    ## 3 Year                653         0.428 2010.   5.58 1983 2008  2012  2014  2018
+    ##   hist 
+    ## 1 ▅▅▆▇▅
+    ## 2 ▅▅▆▇▅
+    ## 3 ▁▁▁▆▇
+
+### Tabulating
+
+You can use the `janitor` package to get a quick overview of categorical
+variables, i.e., tabulating categorical variables. It’s somewhat
+confusing that the `percent` column is not a percentage but a
+proportion.
+
+``` r
+library(janitor)
+```
+
+    ## 
+    ## Attaching package: 'janitor'
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     chisq.test, fisher.test
+
+``` r
+tabyl(data, `Province University Located`)
+```
+
+    ##  Province University Located   n    percent
+    ##                  Balochistan  16 0.01401051
+    ##                      Capital 247 0.21628722
+    ##                          KPK  86 0.07530648
+    ##                       Punjab 449 0.39316988
+    ##                        Sindh 344 0.30122592
 
 ## Addressing a single variable
 
@@ -590,7 +641,7 @@ summary(my_variable)
 ```
 
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
-    ##    2005    2008    2009    2008    2009    2011       4
+    ##    1983    2008    2012    2010    2014    2018     653
 
 However, this does not work if your variables names have names with a
 space (or other weird characters). This does work, however,
@@ -609,7 +660,7 @@ data['very_simple'] <- 1
 data['very_simple']
 ```
 
-    ## # A tibble: 10 × 1
+    ## # A tibble: 1,142 × 1
     ##    very_simple
     ##          <dbl>
     ##  1           1
@@ -622,6 +673,7 @@ data['very_simple']
     ##  8           1
     ##  9           1
     ## 10           1
+    ## # … with 1,132 more rows
 
 However, we can do more interesting things.
 
@@ -630,7 +682,7 @@ data['has_phd'] <- data['Terminal Degree'] == 'PhD'
 data['has_phd']
 ```
 
-    ## # A tibble: 10 × 1
+    ## # A tibble: 1,142 × 1
     ##    has_phd
     ##    <lgl>  
     ##  1 TRUE   
@@ -642,7 +694,8 @@ data['has_phd']
     ##  7 FALSE  
     ##  8 FALSE  
     ##  9 FALSE  
-    ## 10 FALSE
+    ## 10 FALSE  
+    ## # … with 1,132 more rows
 
 We can calculate new variables.
 
@@ -668,6 +721,8 @@ data <- read_csv(url)
     ## 
     ## ℹ Use `spec()` to retrieve the full column specification for this data.
     ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+### Mathematical Operations on Existing Columns
 
 Let’s create a new column giving the surface area of each column.
 
@@ -713,6 +768,8 @@ data
     ## 10  678.
     ## # … with 240 more rows
 
+### Logical/Conditional Variables
+
 Tip: You can use `mutate` to created categories in your data.
 
 ``` r
@@ -753,6 +810,48 @@ head(data)
     ## #   weight <dbl>, domestic <dbl>, mpg_difference <dbl>,
     ## #   fuel_efficiency_category <chr>, and abbreviated variable names ¹​min_price,
     ## #   ²​mid_price, ³​max_price, ⁴​mpg_city, ⁵​cylinders
+
+``` r
+data <- mutate(data, small_engine = if_else(engine < 2, 1, 0))
+names(data)
+```
+
+    ##  [1] "make"                     "model"                   
+    ##  [3] "type"                     "min_price"               
+    ##  [5] "mid_price"                "max_price"               
+    ##  [7] "mpg_city"                 "mpg_hgw"                 
+    ##  [9] "airbag"                   "drive"                   
+    ## [11] "cylinders"                "engine"                  
+    ## [13] "horsepower"               "rpm"                     
+    ## [15] "rpmile"                   "manual"                  
+    ## [17] "tank"                     "passengers"              
+    ## [19] "length"                   "wheelbase"               
+    ## [21] "width"                    "uturn"                   
+    ## [23] "rearseat"                 "luggage"                 
+    ## [25] "weight"                   "domestic"                
+    ## [27] "mpg_difference"           "fuel_efficiency_category"
+    ## [29] "small_engine"
+
+``` r
+data <- mutate(data, `small tank` = if_else(tank < 15, 1, 0))
+names(data)
+```
+
+    ##  [1] "make"                     "model"                   
+    ##  [3] "type"                     "min_price"               
+    ##  [5] "mid_price"                "max_price"               
+    ##  [7] "mpg_city"                 "mpg_hgw"                 
+    ##  [9] "airbag"                   "drive"                   
+    ## [11] "cylinders"                "engine"                  
+    ## [13] "horsepower"               "rpm"                     
+    ## [15] "rpmile"                   "manual"                  
+    ## [17] "tank"                     "passengers"              
+    ## [19] "length"                   "wheelbase"               
+    ## [21] "width"                    "uturn"                   
+    ## [23] "rearseat"                 "luggage"                 
+    ## [25] "weight"                   "domestic"                
+    ## [27] "mpg_difference"           "fuel_efficiency_category"
+    ## [29] "small_engine"             "small tank"
 
 ## Exercises
 
@@ -800,7 +899,7 @@ Write a script that does the following:
   the female wage. The `diff_pct` will give a positive number if males
   earn more on average, and a negative number if females earn more.
 
-  $$diff_pct = 100 \times \frac{mwage - fwage}{fwage}$$
+  $$diff_{pct} = 100 \times \frac{mwage - fwage}{fwage}$$
 
 ### Exercise 3
 
@@ -811,3 +910,12 @@ following groups based on their age:
 - “Child”: Age \< 14
 - “Young”: 14 \<= Age \<= 20
 - “Adult”: Age \> 20
+
+### Exercise 4
+
+Read in the wages1833.csv file using `read_csv()`. Create a new column
+called `wage_difference`, which gives the absolute difference between
+the average male wage (`mwage`) and the average female wage (`fwage`).
+Create a second new column called `higher_wage`, which indicates whether
+males or females earned more on average in each row (“Male” or
+“Female”). Print the first few rows of the data.
