@@ -1,6 +1,6 @@
 Basic Programming
 ================
-Last Updated: 03, October, 2024 at 08:32
+Last Updated: 10, October, 2024 at 08:42
 
 - [Basics of programming: variables and
   functions](#basics-of-programming-variables-and-functions)
@@ -284,7 +284,7 @@ print(result)
     ## 
     ## Coefficients:
     ## (Intercept)            x  
-    ##       9.980        5.175
+    ##       9.962        5.421
 
 ## Flow control in R
 
@@ -293,6 +293,9 @@ However, to fully exploit the power of programming, you would need to
 learn about flow control. Flow control refers to (1) executing bits of
 code depending on a condition, and (2) iteratively executing pieces of
 code.
+
+This is another introduction to [flow
+control](https://srinath-sridharan.medium.com/data-analysis-with-r-part-3-control-flow-fe13c80cc8b4).
 
 This is a short script which does one thing after another.
 
@@ -443,11 +446,11 @@ for (x in my_vector) {
 }
 ```
 
-    ## [1] 1.235448
-    ## [1] 2.440518
-    ## [1] 2.75267
-    ## [1] 0.2427084
-    ## [1] 0.7390109
+    ## [1] 2.401742
+    ## [1] 2.618635
+    ## [1] 1.918942
+    ## [1] 2.532493
+    ## [1] 2.611224
 
 Just to drive the point home, another example:
 
@@ -589,7 +592,7 @@ endTime <- Sys.time()
 print(sprintf('Duration: %.2f', endTime - startTime))
 ```
 
-    ## [1] "Duration: 0.04"
+    ## [1] "Duration: 0.02"
 
 # Working with text: the paste() function
 
@@ -605,19 +608,19 @@ summary(result)
     ## lm(formula = y ~ x)
     ## 
     ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -2.67839 -0.78987 -0.00973  0.65513  2.77230 
+    ##     Min      1Q  Median      3Q     Max 
+    ## -1.9805 -0.7845  0.0554  0.6926  2.1562 
     ## 
     ## Coefficients:
     ##             Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)   9.9546     0.1904   52.27   <2e-16 ***
-    ## x             5.1485     0.3640   14.15   <2e-16 ***
+    ## (Intercept)  10.1282     0.2008   50.45   <2e-16 ***
+    ## x             4.7509     0.3474   13.68   <2e-16 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 0.9903 on 98 degrees of freedom
-    ## Multiple R-squared:  0.6713, Adjusted R-squared:  0.6679 
-    ## F-statistic: 200.1 on 1 and 98 DF,  p-value: < 2.2e-16
+    ## Residual standard error: 1.003 on 98 degrees of freedom
+    ## Multiple R-squared:  0.6562, Adjusted R-squared:  0.6527 
+    ## F-statistic: 187.1 on 1 and 98 DF,  p-value: < 2.2e-16
 
 ``` r
 test1 <- paste(10000)
@@ -632,28 +635,28 @@ print(test1)
 print(test2)
 ```
 
-    ## [1] "9.95460400492017, 5.14847844263705"
+    ## [1] "10.1282038460885, 4.75090506782897"
 
 ``` r
 print(test3)
 ```
 
-    ## [1] "The coefficients are: 9.95460400492017, 5.14847844263705"
+    ## [1] "The coefficients are: 10.1282038460885, 4.75090506782897"
 
 ``` r
 for (x in 1:10) {print(test3)}
 ```
 
-    ## [1] "The coefficients are: 9.95460400492017, 5.14847844263705"
-    ## [1] "The coefficients are: 9.95460400492017, 5.14847844263705"
-    ## [1] "The coefficients are: 9.95460400492017, 5.14847844263705"
-    ## [1] "The coefficients are: 9.95460400492017, 5.14847844263705"
-    ## [1] "The coefficients are: 9.95460400492017, 5.14847844263705"
-    ## [1] "The coefficients are: 9.95460400492017, 5.14847844263705"
-    ## [1] "The coefficients are: 9.95460400492017, 5.14847844263705"
-    ## [1] "The coefficients are: 9.95460400492017, 5.14847844263705"
-    ## [1] "The coefficients are: 9.95460400492017, 5.14847844263705"
-    ## [1] "The coefficients are: 9.95460400492017, 5.14847844263705"
+    ## [1] "The coefficients are: 10.1282038460885, 4.75090506782897"
+    ## [1] "The coefficients are: 10.1282038460885, 4.75090506782897"
+    ## [1] "The coefficients are: 10.1282038460885, 4.75090506782897"
+    ## [1] "The coefficients are: 10.1282038460885, 4.75090506782897"
+    ## [1] "The coefficients are: 10.1282038460885, 4.75090506782897"
+    ## [1] "The coefficients are: 10.1282038460885, 4.75090506782897"
+    ## [1] "The coefficients are: 10.1282038460885, 4.75090506782897"
+    ## [1] "The coefficients are: 10.1282038460885, 4.75090506782897"
+    ## [1] "The coefficients are: 10.1282038460885, 4.75090506782897"
+    ## [1] "The coefficients are: 10.1282038460885, 4.75090506782897"
 
 # Solutions to exercises
 
@@ -694,13 +697,13 @@ while(value < 1)
 print(value)
 ```
 
-    ## [1] 1.657132
+    ## [1] 2.020867
 
 ``` r
 print(counter)
 ```
 
-    ## [1] 1
+    ## [1] 2
 
 Option 2
 
@@ -715,13 +718,13 @@ while(TRUE)
 print(value)
 ```
 
-    ## [1] 1.233584
+    ## [1] 1.343095
 
 ``` r
 print(counter)
 ```
 
-    ## [1] 7
+    ## [1] 1
 
 ## Three
 
@@ -739,8 +742,8 @@ for(i in 1:repeats)
 outcomes
 ```
 
-    ##  [1] "H" "T" "T" "H" "T" "T" "H" "T" "T" "H" "H" "H" "H" "H" "T" "H" "T" "H" "H"
-    ## [20] "T"
+    ##  [1] "T" "H" "H" "T" "T" "T" "T" "H" "T" "H" "T" "T" "T" "T" "T" "H" "T" "H" "T"
+    ## [20] "H"
 
 You could do this in one line (but that was not the exercise).
 
@@ -750,8 +753,8 @@ outcomes <- sample(c('H','T'), repeats, replace = TRUE)
 outcomes
 ```
 
-    ##  [1] "H" "T" "T" "H" "T" "H" "T" "H" "T" "T" "T" "H" "T" "T" "T" "H" "T" "T" "H"
-    ## [20] "H"
+    ##  [1] "T" "T" "T" "T" "H" "T" "T" "H" "T" "T" "T" "H" "H" "H" "H" "T" "T" "H" "H"
+    ## [20] "T"
 
 ## Four
 

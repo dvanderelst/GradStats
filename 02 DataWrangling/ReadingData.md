@@ -1,6 +1,6 @@
 Reading Data
 ================
-Last Updated: 08, October, 2024 at 08:53
+Last Updated: 10, October, 2024 at 09:03
 
 - [Before we begin…](#before-we-begin)
 - [Using the tidyverse vs built-in data reading
@@ -38,6 +38,11 @@ Last Updated: 08, October, 2024 at 08:53
   - [Exercise 2](#exercise-2)
   - [Exercise 3](#exercise-3)
   - [Exercise 4](#exercise-4)
+- [Possible solutions](#possible-solutions)
+  - [Exercise 1](#exercise-1-1)
+  - [Exercise 2](#exercise-2-1)
+  - [Exercise 3](#exercise-3-1)
+  - [Exercise 4](#exercise-4-1)
 
 ``` r
 library(tidyverse)
@@ -68,10 +73,11 @@ Download the following data files to your computer:
 In base R, the default function for reading tabular data from a CSV file
 is `read.csv()`. This function is widely used, but it has some quirks:
 
-- Automatic conversion of strings to factors: By default, `read.csv()`
-  automatically converts character columns to factors, which can cause
-  issues if you’re not expecting categorical data. You can disable this
-  behavior by setting `stringsAsFactors = FALSE`.
+- Automatic conversion of strings to factors (before R version 4.0.0):
+  By default, `read.csv()` automatically converts character columns to
+  factors, which can cause issues if you’re not expecting categorical
+  data. You can disable this behavior by setting
+  `stringsAsFactors = FALSE`.
 
 - Column name handling: Column names are automatically adjusted to be
   syntactically valid variable names. For example, spaces are replaced
@@ -93,8 +99,8 @@ nearly-equivalent function to `read.csv()` is `read_csv()` (from the
 `readr` package). **Notice the small difference in the function name!**
 
 The tidyverse provides a more user-friendly function for reading CSV
-files: read_csv() from the readr package. It addresses many of the
-limitations of read.csv() and offers a more intuitive experience for
+files: `read_csv()` from the readr package. It addresses many of the
+limitations of `read.csv()` and offers a more intuitive experience for
 modern data analysis:
 
 - Type guessing: `read_csv()` automatically guesses the types of columns
@@ -206,15 +212,15 @@ Types](https://tibble.tidyverse.org/articles/types.html)
 this view. It will look better in your console.*
 
 ``` r
-data <- read_csv('data/pakistan_intellectual_capital.csv', n_max=10)
+data <- read_csv('data/pakistan_intellectual_capital.csv')
 ```
 
     ## New names:
-    ## Rows: 10 Columns: 13
+    ## Rows: 1142 Columns: 13
     ## ── Column specification
     ## ──────────────────────────────────────────────────────── Delimiter: "," chr
-    ## (9): Teacher Name, University Currently Teaching, Department, Province U... dbl
-    ## (3): ...1, S#, Year lgl (1): Other Information
+    ## (10): Teacher Name, University Currently Teaching, Department, Province ... dbl
+    ## (3): ...1, S#, Year
     ## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
     ## Specify the column types or set `show_col_types = FALSE` to quiet this message.
     ## • `` -> `...1`
@@ -313,6 +319,32 @@ read_csv("a,b,c\n1,2,.", na = ".")
     ##       a     b c    
     ##   <dbl> <dbl> <lgl>
     ## 1     1     2 NA
+
+You can also specify multiple values that should be considered as
+missing data.
+
+``` r
+data <- read_csv("a,b,c\n1,2,.\n5,6,NA\n8,0,1", na = c("NA", "."))
+```
+
+    ## Rows: 3 Columns: 3
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## dbl (3): a, b, c
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+``` r
+head(data)
+```
+
+    ## # A tibble: 3 × 3
+    ##       a     b     c
+    ##   <dbl> <dbl> <dbl>
+    ## 1     1     2    NA
+    ## 2     5     6    NA
+    ## 3     8     0     1
 
 ### Reading from URL
 
@@ -631,6 +663,12 @@ tabyl(data, `Province University Located`)
     ##                       Punjab 449 0.39316988
     ##                        Sindh 344 0.30122592
 
+<https://chatgpt.com/c/6707c7ce-00c0-800a-b35a-a647ab7503be> The
+`janitor` package is also useful for other things, like cleaning up
+column names. This is a link to an online article that describes some of
+the uses of the package on
+[medium.com](https://medium.com/number-around-us/why-every-data-scientist-needs-the-janitor-package-da37e4dcfe24).
+
 ## Addressing a single variable
 
 A simple way to get variables from a tibble is using the `$` operator.
@@ -855,6 +893,9 @@ names(data)
 
 ## Exercises
 
+**It might be a good idea to start your first R script while working on
+these exercises.**
+
 ### Exercise 1
 
 - Read in the `cars.txt` file
@@ -917,5 +958,244 @@ Read in the wages1833.csv file using `read_csv()`. Create a new column
 called `wage_difference`, which gives the absolute difference between
 the average male wage (`mwage`) and the average female wage (`fwage`).
 Create a second new column called `higher_wage`, which indicates whether
-males or females earned more on average in each row (“Male” or
-“Female”). Print the first few rows of the data.
+males or females earned more on average in each row (“male” or
+“female”). Print the first few rows of the data.
+
+## Possible solutions
+
+### Exercise 1
+
+``` r
+data <- read_delim("data/cars.txt", delim = " ")
+```
+
+    ## Rows: 93 Columns: 26
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: " "
+    ## chr  (6): make, model, type, cylinders, rearseat, luggage
+    ## dbl (20): min_price, mid_price, max_price, mpg_city, mpg_hgw, airbag, drive,...
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+``` r
+head(data)
+```
+
+    ## # A tibble: 6 × 26
+    ##   make  model type  min_p…¹ mid_p…² max_p…³ mpg_c…⁴ mpg_hgw airbag drive cylin…⁵
+    ##   <chr> <chr> <chr>   <dbl>   <dbl>   <dbl>   <dbl>   <dbl>  <dbl> <dbl> <chr>  
+    ## 1 Acura Inte… Small    12.9    15.9    18.8      25      31      0     1 4      
+    ## 2 Acura Lege… Mids…    29.2    33.9    38.7      18      25      2     1 6      
+    ## 3 Audi  90    Comp…    25.9    29.1    32.3      20      26      1     1 6      
+    ## 4 Audi  100   Mids…    30.8    37.7    44.6      19      26      2     1 6      
+    ## 5 BMW   535i  Mids…    23.7    30      36.2      22      30      1     0 4      
+    ## 6 Buick Cent… Mids…    14.2    15.7    17.3      22      31      1     1 4      
+    ## # … with 15 more variables: engine <dbl>, horsepower <dbl>, rpm <dbl>,
+    ## #   rpmile <dbl>, manual <dbl>, tank <dbl>, passengers <dbl>, length <dbl>,
+    ## #   wheelbase <dbl>, width <dbl>, uturn <dbl>, rearseat <chr>, luggage <chr>,
+    ## #   weight <dbl>, domestic <dbl>, and abbreviated variable names ¹​min_price,
+    ## #   ²​mid_price, ³​max_price, ⁴​mpg_city, ⁵​cylinders
+
+``` r
+colnames(data)
+```
+
+    ##  [1] "make"       "model"      "type"       "min_price"  "mid_price" 
+    ##  [6] "max_price"  "mpg_city"   "mpg_hgw"    "airbag"     "drive"     
+    ## [11] "cylinders"  "engine"     "horsepower" "rpm"        "rpmile"    
+    ## [16] "manual"     "tank"       "passengers" "length"     "wheelbase" 
+    ## [21] "width"      "uturn"      "rearseat"   "luggage"    "weight"    
+    ## [26] "domestic"
+
+``` r
+data <- mutate(data, mpg_difference = mpg_hgw - mpg_city)
+head(data)
+```
+
+    ## # A tibble: 6 × 27
+    ##   make  model type  min_p…¹ mid_p…² max_p…³ mpg_c…⁴ mpg_hgw airbag drive cylin…⁵
+    ##   <chr> <chr> <chr>   <dbl>   <dbl>   <dbl>   <dbl>   <dbl>  <dbl> <dbl> <chr>  
+    ## 1 Acura Inte… Small    12.9    15.9    18.8      25      31      0     1 4      
+    ## 2 Acura Lege… Mids…    29.2    33.9    38.7      18      25      2     1 6      
+    ## 3 Audi  90    Comp…    25.9    29.1    32.3      20      26      1     1 6      
+    ## 4 Audi  100   Mids…    30.8    37.7    44.6      19      26      2     1 6      
+    ## 5 BMW   535i  Mids…    23.7    30      36.2      22      30      1     0 4      
+    ## 6 Buick Cent… Mids…    14.2    15.7    17.3      22      31      1     1 4      
+    ## # … with 16 more variables: engine <dbl>, horsepower <dbl>, rpm <dbl>,
+    ## #   rpmile <dbl>, manual <dbl>, tank <dbl>, passengers <dbl>, length <dbl>,
+    ## #   wheelbase <dbl>, width <dbl>, uturn <dbl>, rearseat <chr>, luggage <chr>,
+    ## #   weight <dbl>, domestic <dbl>, mpg_difference <dbl>, and abbreviated
+    ## #   variable names ¹​min_price, ²​mid_price, ³​max_price, ⁴​mpg_city, ⁵​cylinders
+
+``` r
+glimpse(data)
+```
+
+    ## Rows: 93
+    ## Columns: 27
+    ## $ make           <chr> "Acura", "Acura", "Audi", "Audi", "BMW", "Buick", "Buic…
+    ## $ model          <chr> "Integra", "Legend", "90", "100", "535i", "Century", "L…
+    ## $ type           <chr> "Small", "Midsize", "Compact", "Midsize", "Midsize", "M…
+    ## $ min_price      <dbl> 12.9, 29.2, 25.9, 30.8, 23.7, 14.2, 19.9, 22.6, 26.3, 3…
+    ## $ mid_price      <dbl> 15.9, 33.9, 29.1, 37.7, 30.0, 15.7, 20.8, 23.7, 26.3, 3…
+    ## $ max_price      <dbl> 18.8, 38.7, 32.3, 44.6, 36.2, 17.3, 21.7, 24.9, 26.3, 3…
+    ## $ mpg_city       <dbl> 25, 18, 20, 19, 22, 22, 19, 16, 19, 16, 16, 25, 25, 19,…
+    ## $ mpg_hgw        <dbl> 31, 25, 26, 26, 30, 31, 28, 25, 27, 25, 25, 36, 34, 28,…
+    ## $ airbag         <dbl> 0, 2, 1, 2, 1, 1, 1, 1, 1, 1, 2, 0, 1, 2, 0, 0, 0, 1, 1…
+    ## $ drive          <dbl> 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 2, 0, 0…
+    ## $ cylinders      <chr> "4", "6", "6", "6", "4", "4", "6", "6", "6", "8", "8", …
+    ## $ engine         <dbl> 1.8, 3.2, 2.8, 2.8, 3.5, 2.2, 3.8, 5.7, 3.8, 4.9, 4.6, …
+    ## $ horsepower     <dbl> 140, 200, 172, 172, 208, 110, 170, 180, 170, 200, 295, …
+    ## $ rpm            <dbl> 6300, 5500, 5500, 5500, 5700, 5200, 4800, 4000, 4800, 4…
+    ## $ rpmile         <dbl> 2890, 2335, 2280, 2535, 2545, 2565, 1570, 1320, 1690, 1…
+    ## $ manual         <dbl> 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1…
+    ## $ tank           <dbl> 13.2, 18.0, 16.9, 21.1, 21.1, 16.4, 18.0, 23.0, 18.8, 1…
+    ## $ passengers     <dbl> 5, 5, 5, 6, 4, 6, 6, 6, 5, 6, 5, 5, 5, 4, 6, 7, 8, 6, 2…
+    ## $ length         <dbl> 177, 195, 180, 193, 186, 189, 200, 216, 198, 206, 204, …
+    ## $ wheelbase      <dbl> 102, 115, 102, 106, 109, 105, 111, 116, 108, 114, 111, …
+    ## $ width          <dbl> 68, 71, 67, 70, 69, 69, 74, 78, 73, 73, 74, 66, 68, 74,…
+    ## $ uturn          <dbl> 37, 38, 37, 37, 39, 41, 42, 45, 41, 43, 44, 38, 39, 43,…
+    ## $ rearseat       <chr> "26.5", "30.0", "28.0", "31.0", "27.0", "28.0", "30.5",…
+    ## $ luggage        <chr> "11", "15", "14", "17", "13", "16", "17", "21", "14", "…
+    ## $ weight         <dbl> 2705, 3560, 3375, 3405, 3640, 2880, 3470, 4105, 3495, 3…
+    ## $ domestic       <dbl> 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+    ## $ mpg_difference <dbl> 6, 7, 6, 7, 8, 9, 9, 9, 8, 9, 9, 11, 9, 9, 8, 5, 5, 9, …
+
+### Exercise 2
+
+``` r
+data <- read_csv("data/wages1833.csv")
+```
+
+    ## New names:
+    ## Rows: 51 Columns: 6
+    ## ── Column specification
+    ## ──────────────────────────────────────────────────────── Delimiter: "," dbl
+    ## (6): ...1, age, mnum, mwage, fnum, fwage
+    ## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+    ## Specify the column types or set `show_col_types = FALSE` to quiet this message.
+    ## • `` -> `...1`
+
+``` r
+data <- mutate(data, diff = mnum - fnum, diff_pct = 100 * (mwage - fwage) / fwage)
+head(data)
+```
+
+    ## # A tibble: 6 × 8
+    ##    ...1   age  mnum mwage  fnum fwage  diff diff_pct
+    ##   <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>    <dbl>
+    ## 1     1    10   204  30.5   122    35    82  -12.9  
+    ## 2     2    11   195  37.8   198    38    -3   -0.526
+    ## 3     3    12   245  43     241    44     4   -2.27 
+    ## 4     4    13   233  50.5   233    46     0    9.78 
+    ## 5     5    14   256  56.5   236    59    20   -4.24 
+    ## 6     6    15   240  63     215    68    25   -7.35
+
+``` r
+glimpse(data)
+```
+
+    ## Rows: 51
+    ## Columns: 8
+    ## $ ...1     <dbl> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18…
+    ## $ age      <dbl> 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 2…
+    ## $ mnum     <dbl> 204, 195, 245, 233, 256, 240, 204, 141, 164, 135, 92, 180, 14…
+    ## $ mwage    <dbl> 30.5, 37.8, 43.0, 50.5, 56.5, 63.0, 83.5, 88.5, 141.0, 138.3,…
+    ## $ fnum     <dbl> 122, 198, 241, 233, 236, 215, 256, 245, 279, 251, 209, 251, 1…
+    ## $ fwage    <dbl> 35, 38, 44, 46, 59, 68, 72, 78, 90, 98, 97, 96, 102, 100, 101…
+    ## $ diff     <dbl> 82, -3, 4, 0, 20, 25, -52, -104, -115, -116, -117, -71, -47, …
+    ## $ diff_pct <dbl> -12.8571429, -0.5263158, -2.2727273, 9.7826087, -4.2372881, -…
+
+### Exercise 3
+
+``` r
+data <- read_csv("data/wages1833.csv")
+```
+
+    ## New names:
+    ## Rows: 51 Columns: 6
+    ## ── Column specification
+    ## ──────────────────────────────────────────────────────── Delimiter: "," dbl
+    ## (6): ...1, age, mnum, mwage, fnum, fwage
+    ## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+    ## Specify the column types or set `show_col_types = FALSE` to quiet this message.
+    ## • `` -> `...1`
+
+``` r
+data <- mutate(data, age_group = case_when(
+  age < 14 ~ "child",
+  age >= 14 & age <= 20 ~ "young",
+  age > 20 ~ "adult"
+))
+head(data)
+```
+
+    ## # A tibble: 6 × 7
+    ##    ...1   age  mnum mwage  fnum fwage age_group
+    ##   <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <chr>    
+    ## 1     1    10   204  30.5   122    35 child    
+    ## 2     2    11   195  37.8   198    38 child    
+    ## 3     3    12   245  43     241    44 child    
+    ## 4     4    13   233  50.5   233    46 child    
+    ## 5     5    14   256  56.5   236    59 young    
+    ## 6     6    15   240  63     215    68 young
+
+``` r
+glimpse(data)
+```
+
+    ## Rows: 51
+    ## Columns: 7
+    ## $ ...1      <dbl> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 1…
+    ## $ age       <dbl> 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, …
+    ## $ mnum      <dbl> 204, 195, 245, 233, 256, 240, 204, 141, 164, 135, 92, 180, 1…
+    ## $ mwage     <dbl> 30.5, 37.8, 43.0, 50.5, 56.5, 63.0, 83.5, 88.5, 141.0, 138.3…
+    ## $ fnum      <dbl> 122, 198, 241, 233, 236, 215, 256, 245, 279, 251, 209, 251, …
+    ## $ fwage     <dbl> 35, 38, 44, 46, 59, 68, 72, 78, 90, 98, 97, 96, 102, 100, 10…
+    ## $ age_group <chr> "child", "child", "child", "child", "young", "young", "young…
+
+### Exercise 4
+
+``` r
+data <- read_csv("data/wages1833.csv")
+```
+
+    ## New names:
+    ## Rows: 51 Columns: 6
+    ## ── Column specification
+    ## ──────────────────────────────────────────────────────── Delimiter: "," dbl
+    ## (6): ...1, age, mnum, mwage, fnum, fwage
+    ## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+    ## Specify the column types or set `show_col_types = FALSE` to quiet this message.
+    ## • `` -> `...1`
+
+``` r
+data <- mutate(data, wage_difference = abs(mwage - fwage), higher_wage = ifelse(mwage > fwage, 'male', 'female'))
+head(data)
+```
+
+    ## # A tibble: 6 × 8
+    ##    ...1   age  mnum mwage  fnum fwage wage_difference higher_wage
+    ##   <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>           <dbl> <chr>      
+    ## 1     1    10   204  30.5   122    35           4.5   female     
+    ## 2     2    11   195  37.8   198    38           0.200 female     
+    ## 3     3    12   245  43     241    44           1     female     
+    ## 4     4    13   233  50.5   233    46           4.5   male       
+    ## 5     5    14   256  56.5   236    59           2.5   female     
+    ## 6     6    15   240  63     215    68           5     female
+
+``` r
+glimpse(data)
+```
+
+    ## Rows: 51
+    ## Columns: 8
+    ## $ ...1            <dbl> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,…
+    ## $ age             <dbl> 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23…
+    ## $ mnum            <dbl> 204, 195, 245, 233, 256, 240, 204, 141, 164, 135, 92, …
+    ## $ mwage           <dbl> 30.5, 37.8, 43.0, 50.5, 56.5, 63.0, 83.5, 88.5, 141.0,…
+    ## $ fnum            <dbl> 122, 198, 241, 233, 236, 215, 256, 245, 279, 251, 209,…
+    ## $ fwage           <dbl> 35, 38, 44, 46, 59, 68, 72, 78, 90, 98, 97, 96, 102, 1…
+    ## $ wage_difference <dbl> 4.5, 0.2, 1.0, 4.5, 2.5, 5.0, 11.5, 10.5, 51.0, 40.3, …
+    ## $ higher_wage     <chr> "female", "female", "female", "male", "female", "femal…

@@ -31,7 +31,7 @@ Download the following data files to your computer:
 
 In base R, the default function for reading tabular data from a CSV file is `read.csv()`. This function is widely used, but it has some quirks:
 
-+ Automatic conversion of strings to factors: By default, `read.csv()` automatically converts character columns to factors, which can cause issues if you're not expecting categorical data. You can disable this behavior by setting `stringsAsFactors = FALSE`.
++ Automatic conversion of strings to factors (before R version 4.0.0): By default, `read.csv()` automatically converts character columns to factors, which can cause issues if you're not expecting categorical data. You can disable this behavior by setting `stringsAsFactors = FALSE`.
 
 + Column name handling: Column names are automatically adjusted to be syntactically valid variable names. For example, spaces are replaced with periods (.), which can make column names harder to read.
 
@@ -47,7 +47,7 @@ data <- read.csv("data/pakistan_intellectual_capital.csv")
 
 The tidyverse provides its own functions to read data. For example, the nearly-equivalent function to `read.csv()` is `read_csv()` (from the `readr` package). **Notice the small difference in the function name!**
 
-The tidyverse provides a more user-friendly function for reading CSV files: read_csv() from the readr package. It addresses many of the limitations of read.csv() and offers a more intuitive experience for modern data analysis:
+The tidyverse provides a more user-friendly function for reading CSV files: `read_csv()` from the readr package. It addresses many of the limitations of `read.csv()` and offers a more intuitive experience for modern data analysis:
 
 + Type guessing: `read_csv()` automatically guesses the types of columns (e.g., numeric, character, date) but does not convert them to factors unless specified.
 + Handling of column names: Column names are left as-is, without modification. This keeps names readable, especially when they contain spaces or special characters.
@@ -123,7 +123,7 @@ R has functions for reading in text files. However, the functions provided by ti
 *Note: The default report on the column types is a bit disorganized in this view. It will look better in your console.*
 
 ```{r}
-data <- read_csv('data/pakistan_intellectual_capital.csv', n_max=10)
+data <- read_csv('data/pakistan_intellectual_capital.csv')
 ```
 
 ## Tibbles
@@ -167,6 +167,15 @@ Another option that commonly needs tweaking is `na`: this specifies the value (o
 ```{r}
 read_csv("a,b,c\n1,2,.", na = ".")
 ```
+
+You can also specify multiple values that should be considered as missing data.
+
+```{r}
+data <- read_csv("a,b,c\n1,2,.\n5,6,NA\n8,0,1", na = c("NA", "."))
+head(data)
+```
+
+
 
 ### Reading from URL
 
@@ -251,11 +260,13 @@ skim_tee(data)
 
 You can use the `janitor` package to get a quick overview of categorical variables, i.e., tabulating categorical variables. It's somewhat confusing that the `percent` column is not a percentage but a proportion.
 
+
 ```{r}
 library(janitor)
 tabyl(data, `Province University Located`)
 ```
-
+https://chatgpt.com/c/6707c7ce-00c0-800a-b35a-a647ab7503be
+The `janitor` package is also useful for other things, like cleaning up column names. This is a link to an online article that describes some of the uses of the package on [medium.com](https://medium.com/number-around-us/why-every-data-scientist-needs-the-janitor-package-da37e4dcfe24).
 
 ## Addressing a single variable
 
@@ -346,6 +357,8 @@ names(data)
 
 ## Exercises
 
+**It might be a good idea to start your first R script while working on these exercises.**
+
 ### Exercise 1
 
 -   Read in the `cars.txt` file
@@ -394,5 +407,50 @@ Create a new column called age_group, which categorizes workers into the followi
 
 ### Exercise 4
 
-Read in the wages1833.csv file using `read_csv()`. Create a new column called `wage_difference`, which gives the absolute difference between the average male wage (`mwage`) and the average female wage (`fwage`). Create a second new column called `higher_wage`, which indicates whether males or females earned more on average in each row ("Male" or "Female"). Print the first few rows of the data.
+Read in the wages1833.csv file using `read_csv()`. Create a new column called `wage_difference`, which gives the absolute difference between the average male wage (`mwage`) and the average female wage (`fwage`). Create a second new column called `higher_wage`, which indicates whether males or females earned more on average in each row ("male" or "female"). Print the first few rows of the data.
+
+## Possible solutions
+
+### Exercise 1
+
+```{r}
+data <- read_delim("data/cars.txt", delim = " ")
+head(data)
+colnames(data)
+data <- mutate(data, mpg_difference = mpg_hgw - mpg_city)
+head(data)
+glimpse(data)
+```
+
+### Exercise 2
+
+```{r}
+data <- read_csv("data/wages1833.csv")
+data <- mutate(data, diff = mnum - fnum, diff_pct = 100 * (mwage - fwage) / fwage)
+head(data)
+glimpse(data)
+```
+
+### Exercise 3
+
+```{r}
+data <- read_csv("data/wages1833.csv")
+data <- mutate(data, age_group = case_when(
+  age < 14 ~ "child",
+  age >= 14 & age <= 20 ~ "young",
+  age > 20 ~ "adult"
+))
+head(data)
+glimpse(data)
+```
+
+### Exercise 4
+
+```{r}
+data <- read_csv("data/wages1833.csv")
+data <- mutate(data, wage_difference = abs(mwage - fwage), higher_wage = ifelse(mwage > fwage, 'male', 'female'))
+head(data)
+glimpse(data)
+```
+              
 

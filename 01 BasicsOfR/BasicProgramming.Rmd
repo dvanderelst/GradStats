@@ -199,6 +199,8 @@ print(result)
 
 You could write all R scripts as a serial statements of functions. However, to fully exploit the power of programming, you would need to learn about flow control. Flow control refers to (1) executing bits of code depending on a condition, and (2) iteratively executing pieces of code.
 
+This is another introduction to [flow control](https://srinath-sridharan.medium.com/data-analysis-with-r-part-3-control-flow-fe13c80cc8b4).
+
 This is a short script which does one thing after another.
 
 ```{r}
