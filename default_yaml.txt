@@ -1,7 +1,0 @@
-title: "Basic Programming"
-author: "Dieter"
-date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
-output:
-  github_document:
-    html_preview: true
-    toc: true
