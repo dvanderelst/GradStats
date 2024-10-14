@@ -6,8 +6,8 @@ def generate_readme_md(course_root, github_repo_url, branch, included_numbers):
     readme_content = "# Course Tutorials\n\n"
     readme_content += "This page contains links to all class notes and R scripts organized by section.\n\n"
     
-    # Regular expression to match numbers at the start of a file name
-    num_prefix_pattern = re.compile(r'^(\d+)\s')
+    # Regular expression to match numbers at the start of a file name followed by space or hyphen
+    num_prefix_pattern = re.compile(r'^\d+[\s-]')
 
     # Walk through the course folder
     for section_folder in sorted(os.listdir(course_root)):
@@ -31,22 +31,22 @@ def generate_readme_md(course_root, github_repo_url, branch, included_numbers):
                     # Check if the file starts with a number
                     match = num_prefix_pattern.match(file)
                     if match:
-                        numbered_md_files.append((int(match.group(1)), file))  # Store number and file name
+                        numbered_md_files.append(file)  # Store file name
                     else:
                         non_numbered_md_files.append(file)
                 elif file.endswith(".R"):
                     r_files.append(file)
 
             # Sort numbered markdown files by their prefix number
-            numbered_md_files.sort(key=lambda x: x[0])
+            numbered_md_files.sort()
 
             # Add numbered markdown files to the section
             if numbered_md_files:
                 readme_content += "**Class Notes (Markdown files):**\n"
-                for _, file in numbered_md_files:
+                for file in numbered_md_files:
                     file_path = os.path.join(section_folder, file)
                     # Remove number prefixes and replace hyphens with spaces
-                    tutorial_name = re.sub(r'^\d+\s', '', file).replace(".md", "").replace("-", " ").title()
+                    tutorial_name = re.sub(r'^\d+[\s-]', '', file).replace(".md", "").replace("-", " ").title()
                     readme_content += f"- [{tutorial_name}]({file_path})\n"
             
             # Add non-numbered markdown files
@@ -55,7 +55,7 @@ def generate_readme_md(course_root, github_repo_url, branch, included_numbers):
                     readme_content += "**Class Notes (Markdown files):**\n"
                 for file in non_numbered_md_files:
                     file_path = os.path.join(section_folder, file)
-                    # Remove number prefixes and replace hyphens with spaces
+                    # Replace hyphens with spaces
                     tutorial_name = file.replace(".md", "").replace("-", " ").title()
                     readme_content += f"- [{tutorial_name}]({file_path})\n"
 
@@ -65,8 +65,8 @@ def generate_readme_md(course_root, github_repo_url, branch, included_numbers):
                 for file in r_files:
                     # Link to GitHub view of the file using the specified branch
                     github_file_url = f"{github_repo_url}/blob/{branch}/{section_folder}/{file}"
-                    script_name = file.replace(".R", "").replace("-", " ").title()  # Format the script name
-                    readme_content += f"- [{script_name}]({github_file_url})\n"
+                    script_name = file.replace("-", " ")  # Keep the `.R` extension, replace hyphens with spaces
+                    readme_content += f"- [`{script_name}`]({github_file_url})\n"
             
             readme_content += "\n"  # Add space after each section
 
@@ -82,5 +82,5 @@ if __name__ == "__main__":
     course_root = "."  # Use current directory as the course root
     github_repo_url = "https://github.com/dvanderelst/GradStats"
     branch = "Fall2024"  # Specify the current branch
-    included_numbers = [1, 2, 3, 5, 6]  # Example: Only include folders starting with 2, 3, or 5
+    included_numbers = [1, 2, 3, 4, 5, 6]  # Example: Only include folders starting with 2, 3, or 5
     generate_readme_md(course_root, github_repo_url, branch, included_numbers)

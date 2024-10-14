@@ -1,41 +1,28 @@
 Base Plotting
 ================
-Last Updated: 18, October, 2022 at 11:21
+Last Updated: 14, October, 2024 at 14:31
 
--   <a href="#notes" id="toc-notes">Notes</a>
--   <a href="#read-in-some-data" id="toc-read-in-some-data">Read in some
-    data</a>
--   <a href="#basic-plot-type-lines-and-scatter"
-    id="toc-basic-plot-type-lines-and-scatter">Basic plot type: lines and
-    scatter</a>
-    -   <a href="#scatter-plot" id="toc-scatter-plot">Scatter plot</a>
-    -   <a href="#line-plot" id="toc-line-plot">Line plot</a>
-    -   <a href="#setting-colors-and-markers"
-        id="toc-setting-colors-and-markers">Setting colors and markers</a>
-    -   <a href="#handy-dandy-adding-an-alpha-channel-to-a-color"
-        id="toc-handy-dandy-adding-an-alpha-channel-to-a-color">Handy Dandy:
-        adding an alpha channel to a color</a>
--   <a href="#basic-plot-type-histogram"
-    id="toc-basic-plot-type-histogram">Basic plot type: histogram</a>
--   <a href="#basic-plot-type-barchart"
-    id="toc-basic-plot-type-barchart">Basic plot type: barchart</a>
--   <a href="#basic-plot-type-boxplot"
-    id="toc-basic-plot-type-boxplot">Basic plot type: boxplot</a>
-    -   <a href="#setting-plot-parameters"
-        id="toc-setting-plot-parameters">Setting plot parameters</a>
-    -   <a href="#changing-text-and-font"
-        id="toc-changing-text-and-font">Changing text and font</a>
--   <a href="#adding-stuff-to-existing-plots"
-    id="toc-adding-stuff-to-existing-plots">Adding stuff to existing
-    plots</a>
-    -   <a href="#adding-points-or-lines" id="toc-adding-points-or-lines">Adding
-        points or lines</a>
-    -   <a href="#a-limitation-of-r" id="toc-a-limitation-of-r">A limitation of
-        R</a>
-    -   <a href="#more-bling" id="toc-more-bling">More bling</a>
--   <a href="#adding-legends" id="toc-adding-legends">Adding legends</a>
--   <a href="#exercises" id="toc-exercises">Exercises</a>
-    -   <a href="#more-exercises" id="toc-more-exercises">More exercises</a>
+- [Notes](#notes)
+- [Read in some data](#read-in-some-data)
+- [Basic plot type: lines and
+  scatter](#basic-plot-type-lines-and-scatter)
+  - [Scatter plot](#scatter-plot)
+  - [Line plot](#line-plot)
+  - [Setting colors and markers](#setting-colors-and-markers)
+  - [Handy Dandy: adding an alpha channel to a
+    color](#handy-dandy-adding-an-alpha-channel-to-a-color)
+- [Basic plot type: histogram](#basic-plot-type-histogram)
+- [Basic plot type: barchart](#basic-plot-type-barchart)
+- [Basic plot type: boxplot](#basic-plot-type-boxplot)
+  - [Setting plot parameters](#setting-plot-parameters)
+  - [Changing text and font](#changing-text-and-font)
+- [Adding stuff to existing plots](#adding-stuff-to-existing-plots)
+  - [Adding points or lines](#adding-points-or-lines)
+  - [A limitation of R](#a-limitation-of-r)
+  - [More bling](#more-bling)
+- [Adding legends](#adding-legends)
+- [Exercises](#exercises)
+  - [More exercises](#more-exercises)
 
 ## Notes
 
@@ -53,10 +40,10 @@ library(tidyverse)
 ```
 
     ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
-    ## ✔ ggplot2 3.3.6     ✔ purrr   0.3.4
-    ## ✔ tibble  3.1.8     ✔ dplyr   1.0.9
-    ## ✔ tidyr   1.2.0     ✔ stringr 1.4.0
-    ## ✔ readr   2.1.2     ✔ forcats 0.5.2
+    ## ✔ ggplot2 3.4.0      ✔ purrr   0.3.5 
+    ## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
+    ## ✔ tidyr   1.2.1      ✔ stringr 1.4.1 
+    ## ✔ readr   2.1.3      ✔ forcats 0.5.2 
     ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
@@ -91,7 +78,6 @@ head(body_data)
     ## #   Knee <dbl>, Calf <dbl>, Ankle <dbl>, Wrist <dbl>, Age <dbl>, Weight <dbl>,
     ## #   Height <dbl>, Gender <dbl>, and abbreviated variable names ¹​Bitrochanteric,
     ## #   ²​ChestDepth, ³​ChestDia, ⁴​ElbowDia, ⁵​WristDia, ⁶​AnkleDia
-    ## # ℹ Use `colnames()` to see all variable names
 
 ``` r
 try(dev.off()) # Make sure all graphic parameters are reset
@@ -108,7 +94,7 @@ try(dev.off()) # Make sure all graphic parameters are reset
 plot(body_data$KneeDia, body_data$Forearm)
 ```
 
-![](base_plotting_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+![](1-Base-Plotting_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
 ### Line plot
 
@@ -118,13 +104,13 @@ y <- runif(10) * x
 plot(x, y, type= 'l')
 ```
 
-![](base_plotting_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+![](1-Base-Plotting_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
 ``` r
 plot(x, y, type= 'b')
 ```
 
-![](base_plotting_files/figure-gfm/unnamed-chunk-3-2.png)<!-- -->
+![](1-Base-Plotting_files/figure-gfm/unnamed-chunk-3-2.png)<!-- -->
 
 ### Setting colors and markers
 
@@ -140,7 +126,7 @@ y <- runif(10) * x
 plot(x, y, type= 'b', pch=15, col ='red2')
 ```
 
-![](base_plotting_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+![](1-Base-Plotting_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 R also knows about hex colors.
 
@@ -150,7 +136,7 @@ y <- runif(10) * x
 plot(x, y, type= 'b', pch=15, col ='#47B04E')
 ```
 
-![](base_plotting_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+![](1-Base-Plotting_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 ### Handy Dandy: adding an alpha channel to a color
 
@@ -159,27 +145,27 @@ my_red <- adjustcolor( "red2", alpha.f = 0.25)
 plot(body_data$KneeDia, body_data$Forearm, pch=16, col=my_red)
 ```
 
-![](base_plotting_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](1-Base-Plotting_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 ## Basic plot type: histogram
 
 The `hist()` function has a number of interesting arguments:
 
--   main
--   xlab, ylab  
--   freq
+- main
+- xlab, ylab  
+- freq
 
 ``` r
 hist(body_data$ChestDepth, freq = FALSE, main ='A normalized histogram')
 ```
 
-![](base_plotting_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](1-Base-Plotting_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 ## Basic plot type: barchart
 
 Some interesting arguments:
 
--   names.arg
+- names.arg
 
 ``` r
 labels <- c('a', 'b', 'c', 'd', 'e', 'f')
@@ -187,7 +173,7 @@ values <- c(1, 2, 3, 1, 2, 3)
 barplot(values, names.arg = labels)
 ```
 
-![](base_plotting_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+![](1-Base-Plotting_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 ## Basic plot type: boxplot
 
@@ -196,7 +182,7 @@ body_data$AgeCat <- cut(body_data$Age, 10)
 boxplot(body_data$Height ~ body_data$AgeCat)
 ```
 
-![](base_plotting_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+![](1-Base-Plotting_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 ### Setting plot parameters
 
@@ -216,7 +202,7 @@ y <- runif(10) * x
 plot(x, y, type= 'l')
 ```
 
-![](base_plotting_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](1-Base-Plotting_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
 #### Plotting subplots
 
@@ -226,7 +212,7 @@ hist(body_data$ChestDepth, freq = FALSE, main ='A normalized histogram')
 hist(body_data$Biiliac, freq = FALSE, main ='A normalized histogram')
 ```
 
-![](base_plotting_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+![](1-Base-Plotting_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
 ``` r
 try(dev.off())  # Make sure all graphic parameters are reset
@@ -235,7 +221,7 @@ try(dev.off())  # Make sure all graphic parameters are reset
     ## null device 
     ##           1
 
--   mfrow and mfcol plot orders:
+- mfrow and mfcol plot orders:
 
 <https://r-charts.com/base-r/combining-plots/>
 
@@ -251,11 +237,11 @@ try(dev.off())  # Make sure all graphic parameters are reset
 
 font face: `font =`
 
--   values: 1 (plain), 2 (bold), 3 (italic), or 4 (bold italic)
+- values: 1 (plain), 2 (bold), 3 (italic), or 4 (bold italic)
 
 font family: `family =`
 
--   “serif”, “sans”, or “mono”
+- “serif”, “sans”, or “mono”
 
 #### Scaling text sizes
 
@@ -271,7 +257,7 @@ font family: `family =`
 plot(x, y, type= 'b', family='serif', main='Some title', cex=1.25)
 ```
 
-![](base_plotting_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+![](1-Base-Plotting_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 ## Adding stuff to existing plots
 
@@ -283,7 +269,7 @@ points(c(18, 20, 22), c(22, 23, 24), type='b', col='red2')
 points(c(18, 20, 22), c(23, 24, 25), col='blue2')
 ```
 
-![](base_plotting_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](1-Base-Plotting_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
 ### A limitation of R
 
@@ -301,7 +287,7 @@ plot(females$Height, females$Weight, pch=15, main='Some graph', col=my_blue)
 points(males$Height, males$Weight, pch=15, main='Some graph', col=my_red)
 ```
 
-![](base_plotting_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+![](1-Base-Plotting_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 This solves the problem. But it’s a bit dissapointing that R does not
 update the axes of the plots.
@@ -320,7 +306,7 @@ plot(females$Height, females$Weight, pch=15, main='Some graph', col=my_blue, xli
 points(males$Height, males$Weight, pch=15, main='Some graph', col=my_red)
 ```
 
-![](base_plotting_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+![](1-Base-Plotting_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
 
 ### More bling
 
@@ -346,15 +332,15 @@ text(x=160, y=100, labels='A label', col="green2", font=3, family='serif')
 arrows(x0=190, y0=100, x1=170,y1=60, length = 0.1, lwd=4, col=my_orange)
 ```
 
-![](base_plotting_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+![](1-Base-Plotting_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
 # Adding legends
 
 Adding legends can be done using the `legend()`. These are the main
 arguments to the function:
 
--   x and y : the x and y co-ordinates to be used to position the legend
--   legend : the text of the legend
+- x and y : the x and y co-ordinates to be used to position the legend
+- legend : the text of the legend
 
 *You can set the location using a keyword, i.e. `x=` “bottomright”,
 “bottom”, “bottomleft”, “left”, “topleft”, “top”, “topright”, “right” or
@@ -381,7 +367,7 @@ points(males$Height, males$Weight, pch=15, main='Some graph', col=my_red)
 legend('bottomright', c('Men', 'Women'), col = c(my_red, my_blue), pch=15)
 ```
 
-![](base_plotting_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+![](1-Base-Plotting_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
 
 # Exercises
 
@@ -399,16 +385,16 @@ body_data <- read_csv('data/body.csv')
     ## ℹ Use `spec()` to retrieve the full column specification for this data.
     ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
--   Create a histogram of people’s height, split out by gender. Overlay
-    the histogram for women and men (use an alpha setting to make both
-    of them visible). Make sure the histogram shows all data and is not
-    cut off.
+- Create a histogram of people’s height, split out by gender. Overlay
+  the histogram for women and men (use an alpha setting to make both of
+  them visible). Make sure the histogram shows all data and is not cut
+  off.
 
--   Plot a bar chart of people’s height. Use 10-year age bins on the
-    x-axis.
+- Plot a bar chart of people’s height. Use 10-year age bins on the
+  x-axis.
 
--   Create a cumulative histogram of people’s height (or any other
-    variable).
+- Create a cumulative histogram of people’s height (or any other
+  variable).
 
 ## More exercises
 
