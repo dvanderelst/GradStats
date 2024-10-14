@@ -3,7 +3,7 @@ import re
 
 def generate_readme_md(course_root, github_repo_url, branch, included_numbers):
     # Initialize the content for the readme file
-    readme_content = "# Course Tutorials\n\n"
+    readme_content = "# BIOL 8001C - Data Analysis\n\n"
     readme_content += "This page contains links to all class notes and R scripts organized by section.\n\n"
     
     # Regular expression to match numbers at the start of a file name followed by space or hyphen
