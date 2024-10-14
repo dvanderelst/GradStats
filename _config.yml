@@ -17,12 +17,6 @@ kramdown:
 # Just the Docs settings
 search_enabled: true  # Enable search function on the site
 
-# Optional: Custom navigation
-nav_order: 1
-collections:
-  course_sections:
-    output: true
-
 # Add custom navigation links
 aux_links:
   "GitHub Repo":
