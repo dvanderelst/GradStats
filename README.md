@@ -2,32 +2,18 @@
 
 This page contains links to all tutorials and R scripts organized by section.
 
-## Classprep
+## Basics Of R
+**Tutorials (Markdown files):**
+- [Basicprogramming](01 Basics Of R/BasicProgramming.md)
 
 **R Scripts:**
-- [Examplecorrelationtest](https://github.com/dvanderelst/GradStats/blob/main/00 ClassPrep/ExampleCorrelationTest.R)
-- [Example Nonlinearvariable](https://github.com/dvanderelst/GradStats/blob/main/00 ClassPrep/Example_NonLinearVariable.R)
-- [Monte Carlo F Value](https://github.com/dvanderelst/GradStats/blob/main/00 ClassPrep/Monte_Carlo_F_value.R)
-- [Sample Distribution Natsal Demo](https://github.com/dvanderelst/GradStats/blob/main/00 ClassPrep/Sample_Distribution_Natsal_Demo.R)
-- [Simple Population And Sample](https://github.com/dvanderelst/GradStats/blob/main/00 ClassPrep/Simple_Population_and_Sample.R)
-- [Simple Sampling Distribution](https://github.com/dvanderelst/GradStats/blob/main/00 ClassPrep/Simple_Sampling_Distribution.R)
-- [Assumptions Linearity](https://github.com/dvanderelst/GradStats/blob/main/00 ClassPrep/assumptions_linearity.R)
-- [Differences Of Means Exercise](https://github.com/dvanderelst/GradStats/blob/main/00 ClassPrep/differences_of_means_exercise.R)
-- [Glm 1 Cat Predictor](https://github.com/dvanderelst/GradStats/blob/main/00 ClassPrep/glm_1_cat_predictor.R)
-- [Poisson](https://github.com/dvanderelst/GradStats/blob/main/00 ClassPrep/poisson.R)
+- [Examplesofheadersandcomments](https://github.com/dvanderelst/GradStats/blob/main/01 Basics Of R/ExamplesOfHeadersAndComments.R)
 
-## Basicsofr
+## Data Wrangling
 **Tutorials (Markdown files):**
-- [Basicprogramming](01 BasicsOfR/BasicProgramming.md)
-
-**R Scripts:**
-- [Examplesofheadersandcomments](https://github.com/dvanderelst/GradStats/blob/main/01 BasicsOfR/ExamplesOfHeadersAndComments.R)
-
-## Datawrangling
-**Tutorials (Markdown files):**
-- [Cleaningdata](02 DataWrangling/CleaningData.md)
-- [Filteringdata](02 DataWrangling/FilteringData.md)
-- [Readingdata](02 DataWrangling/ReadingData.md)
+- [Cleaningdata](02 Data Wrangling/CleaningData.md)
+- [Filteringdata](02 Data Wrangling/FilteringData.md)
+- [Readingdata](02 Data Wrangling/ReadingData.md)
 
 ## Plotting
 **Tutorials (Markdown files):**
@@ -37,33 +23,24 @@ This page contains links to all tutorials and R scripts organized by section.
 **R Scripts:**
 - [Classcode](https://github.com/dvanderelst/GradStats/blob/main/03 Plotting/classcode.R)
 
-## Introlinearmodel
+## Intro Linear Model
 **Tutorials (Markdown files):**
-- [Basic Logic Of F Value](04 IntroLinearModel/Basic_logic_of_F_value.md)
-- [Correlation](04 IntroLinearModel/Correlation.md)
-- [Individualcoefficients](04 IntroLinearModel/IndividualCoefficients.md)
-- [Simpleexamples](04 IntroLinearModel/SimpleExamples.md)
-- [Simpleregression](04 IntroLinearModel/SimpleRegression.md)
+- [Basic Logic Of F Value](04 Intro Linear Model/Basic_logic_of_F_value.md)
+- [Correlation](04 Intro Linear Model/Correlation.md)
+- [Individualcoefficients](04 Intro Linear Model/IndividualCoefficients.md)
+- [Simpleexamples](04 Intro Linear Model/SimpleExamples.md)
+- [Simpleregression](04 Intro Linear Model/SimpleRegression.md)
 
-## Multipleregression
+## Multiple Regression
 **Tutorials (Markdown files):**
-- [Multiple Regression](05 MultipleRegression/Multiple_Regression.md)
-- [Omnibustest](05 MultipleRegression/OmnibusTest.md)
+- [Multiple Regression](05 Multiple Regression/Multiple_Regression.md)
+- [Omnibustest](05 Multiple Regression/OmnibusTest.md)
 
-## Statisticaltechniques
+## Statistical Techniques
 **Tutorials (Markdown files):**
-- [Ancova](06 StatisticalTechniques/ANCOVA.md)
-- [Anova](06 StatisticalTechniques/Anova.md)
-- [Assumptions](06 StatisticalTechniques/Assumptions.md)
-- [Mixedmodels](06 StatisticalTechniques/MixedModels.md)
-- [T-Test](06 StatisticalTechniques/T-test.md)
-
-## Sirmodel
-
-**R Scripts:**
-- [Sir](https://github.com/dvanderelst/GradStats/blob/main/91 SIRmodel/SIR.R)
-
-## Summary
-**Tutorials (Markdown files):**
-- [Summary](99 Summary/Summary.md)
+- [Ancova](06 Statistical Techniques/ANCOVA.md)
+- [Anova](06 Statistical Techniques/Anova.md)
+- [Assumptions](06 Statistical Techniques/Assumptions.md)
+- [Mixedmodels](06 Statistical Techniques/MixedModels.md)
+- [T-Test](06 Statistical Techniques/T-test.md)
 
