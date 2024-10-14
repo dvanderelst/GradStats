@@ -1,6 +1,5 @@
 # Jekyll Configuration for GitHub Pages
-theme: jekyll-theme-cayman
-
+theme: just-the-docs
 title: "My Course Site"
 description: "A site for R tutorials and data wrangling"
 
