@@ -82,5 +82,5 @@ if __name__ == "__main__":
     course_root = "."  # Use current directory as the course root
     github_repo_url = "https://github.com/dvanderelst/GradStats"
     branch = "Fall2024"  # Specify the current branch
-    included_numbers = [1, 2, 3, 4, 5, 6]  # Example: Only include folders starting with 2, 3, or 5
+    included_numbers = [1, 2, 3, 4, 5, 6, 100]  # Example: Only include folders starting with 2, 3, or 5
     generate_readme_md(course_root, github_repo_url, branch, included_numbers)

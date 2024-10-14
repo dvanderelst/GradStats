@@ -41,3 +41,8 @@ This page contains links to all class notes and R scripts organized by section.
 - [Mixedmodels](06 Statistical Techniques/MixedModels.md)
 - [T Test](06 Statistical Techniques/T-test.md)
 
+## Class Code
+
+**R Scripts:**
+- [`script01.R`](https://github.com/dvanderelst/GradStats/blob/Fall2024/100 Class Code/script01.R)
+
