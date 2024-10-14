@@ -1,0 +1,6 @@
+# Jekyll Configuration for GitHub Pages
+theme: jekyll-theme-cayman
+
+title: "My Course Site"
+description: "A site for R tutorials and data wrangling"
+
