@@ -45,7 +45,8 @@ def generate_readme_md(course_root, github_repo_url, branch, included_numbers):
                 readme_content += "**Class Notes (Markdown files):**\n"
                 for _, file in numbered_md_files:
                     file_path = os.path.join(section_folder, file)
-                    tutorial_name = file.replace(".md", "").replace("_", " ").title()  # Format the file name
+                    # Remove number prefixes and replace hyphens with spaces
+                    tutorial_name = re.sub(r'^\d+\s', '', file).replace(".md", "").replace("-", " ").title()
                     readme_content += f"- [{tutorial_name}]({file_path})\n"
             
             # Add non-numbered markdown files
@@ -54,7 +55,8 @@ def generate_readme_md(course_root, github_repo_url, branch, included_numbers):
                     readme_content += "**Class Notes (Markdown files):**\n"
                 for file in non_numbered_md_files:
                     file_path = os.path.join(section_folder, file)
-                    tutorial_name = file.replace(".md", "").replace("_", " ").title()  # Format the file name
+                    # Remove number prefixes and replace hyphens with spaces
+                    tutorial_name = file.replace(".md", "").replace("-", " ").title()
                     readme_content += f"- [{tutorial_name}]({file_path})\n"
 
             # Add R files to the section
@@ -63,7 +65,7 @@ def generate_readme_md(course_root, github_repo_url, branch, included_numbers):
                 for file in r_files:
                     # Link to GitHub view of the file using the specified branch
                     github_file_url = f"{github_repo_url}/blob/{branch}/{section_folder}/{file}"
-                    script_name = file.replace(".R", "").replace("_", " ").title()  # Format the script name
+                    script_name = file.replace(".R", "").replace("-", " ").title()  # Format the script name
                     readme_content += f"- [{script_name}]({github_file_url})\n"
             
             readme_content += "\n"  # Add space after each section
@@ -80,5 +82,5 @@ if __name__ == "__main__":
     course_root = "."  # Use current directory as the course root
     github_repo_url = "https://github.com/dvanderelst/GradStats"
     branch = "Fall2024"  # Specify the current branch
-    included_numbers = [1, 2, 3, 4, 5, 6]  # Example: Only include folders starting with 2, 3, or 5
+    included_numbers = [1, 2, 3, 5, 6]  # Example: Only include folders starting with 2, 3, or 5
     generate_readme_md(course_root, github_repo_url, branch, included_numbers)
