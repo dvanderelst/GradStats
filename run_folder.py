@@ -71,11 +71,11 @@ def generate_readme_md(course_root, github_repo_url, branch, included_numbers):
             readme_content += "\n"  # Add space after each section
 
     # Write the readme file to the course root folder
-    readme_file_path = os.path.join(course_root, "README.md")
+    readme_file_path = os.path.join(course_root, "index.md")
     with open(readme_file_path, "w") as f:
         f.write(readme_content)
 
-    print(f"README.md generated successfully at {readme_file_path}!")
+    print(f"index.md generated successfully at {readme_file_path}!")
 
 # Example usage:
 if __name__ == "__main__":

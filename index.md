@@ -1,35 +1,48 @@
----
-title: Home
-layout: home
----
+# BIOL 8001C - Data Analysis
 
-This is a *bare-minimum* template to create a Jekyll site that uses the [Just the Docs] theme. You can easily set the created site to be published on [GitHub Pages] – the [README] file explains how to do that, along with other details.
+This page contains links to all class notes and R scripts organized by section.
 
-If [Jekyll] is installed on your computer, you can also build and preview the created site *locally*. This lets you test changes before committing them, and avoids waiting for GitHub Pages.[^1] And you will be able to deploy your local build to a different platform than GitHub Pages.
+## Basics Of R
+**Class Notes (Markdown files):**
+- [Basic Programming](01 Basics Of R/Basic-Programming.md)
 
-More specifically, the created site:
+**R Scripts:**
+- [`ExamplesOfHeadersAndComments.R`](https://github.com/dvanderelst/GradStats/blob/Fall2024/01 Basics Of R/ExamplesOfHeadersAndComments.R)
 
-- uses a gem-based approach, i.e. uses a `Gemfile` and loads the `just-the-docs` gem
-- uses the [GitHub Pages / Actions workflow] to build and publish the site on GitHub Pages
+## Data Wrangling
+**Class Notes (Markdown files):**
+- [Reading Data](02 Data Wrangling/1-Reading-Data.md)
+- [Filtering Data](02 Data Wrangling/2-Filtering-Data.md)
+- [Cleaning Data](02 Data Wrangling/3-Cleaning-Data.md)
 
-Other than that, you're free to customize sites that you create with this template, however you like. You can easily change the versions of `just-the-docs` and Jekyll it uses, as well as adding further plugins.
+## Plotting
+**Class Notes (Markdown files):**
+- [Base Plotting](03 Plotting/1-Base-Plotting.md)
+- [Ggplot2](03 Plotting/2-ggplot2.md)
 
-[Browse our documentation][Just the Docs] to learn more about how to use this theme.
+## Intro Linear Model
+**Class Notes (Markdown files):**
+- [Basic_Logic_Of_F_Value](04 Intro Linear Model/Basic_logic_of_F_value.md)
+- [Correlation](04 Intro Linear Model/Correlation.md)
+- [Individualcoefficients](04 Intro Linear Model/IndividualCoefficients.md)
+- [Simpleexamples](04 Intro Linear Model/SimpleExamples.md)
+- [Simpleregression](04 Intro Linear Model/SimpleRegression.md)
 
-To get started with creating a site, simply:
+## Multiple Regression
+**Class Notes (Markdown files):**
+- [Multiple_Regression](05 Multiple Regression/Multiple_Regression.md)
+- [Omnibustest](05 Multiple Regression/OmnibusTest.md)
 
-1. click "[use this template]" to create a GitHub repository
-2. go to Settings > Pages > Build and deployment > Source, and select GitHub Actions
+## Statistical Techniques
+**Class Notes (Markdown files):**
+- [Ancova](06 Statistical Techniques/ANCOVA.md)
+- [Anova](06 Statistical Techniques/Anova.md)
+- [Assumptions](06 Statistical Techniques/Assumptions.md)
+- [Mixedmodels](06 Statistical Techniques/MixedModels.md)
+- [T Test](06 Statistical Techniques/T-test.md)
 
-If you want to maintain your docs in the `docs` directory of an existing project repo, see [Hosting your docs from an existing project repo](https://github.com/just-the-docs/just-the-docs-template/blob/main/README.md#hosting-your-docs-from-an-existing-project-repo) in the template README.
+## Class Code
 
-----
+**R Scripts:**
+- [`script01.R`](https://github.com/dvanderelst/GradStats/blob/Fall2024/100 Class Code/script01.R)
 
-[^1]: [It can take up to 10 minutes for changes to your site to publish after you push the changes to GitHub](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/creating-a-github-pages-site-with-jekyll#creating-your-site).
-
-[Just the Docs]: https://just-the-docs.github.io/just-the-docs/
-[GitHub Pages]: https://docs.github.com/en/pages
-[README]: https://github.com/just-the-docs/just-the-docs-template/blob/main/README.md
-[Jekyll]: https://jekyllrb.com
-[GitHub Pages / Actions workflow]: https://github.blog/changelog/2022-07-27-github-pages-custom-github-actions-workflows-beta/
-[use this template]: https://github.com/just-the-docs/just-the-docs-template/generate
