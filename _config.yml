@@ -1,30 +1,5 @@
 # Site settings
 title: "BIOL8001C - Data Analysis"
 description: "Course materials and tutorials for data analysis."
-
-# Remote theme for Just the Docs
-remote_theme: pmarsceill/just-the-docs
-
-# URL settings
-url: "https://dvanderelst.github.io/GradStats"
-baseurl: "/GradStats"  # The repository name in GitHub Pages
-
-# Build settings
-markdown: kramdown
-kramdown:
-  input: GFM
-
-# Just the Docs settings
-search_enabled: true  # Enable search function on the site
-
-# Add custom navigation links
-aux_links:
-  "GitHub Repo":
-    - "https://github.com/dvanderelst/GradStats"
-
-# Footer settings (Optional: Social links in the footer)
-footer:
-  links:
-    - title: "GitHub"
-      url: "https://github.com/dvanderelst/GradStats"
+theme: minima
 
