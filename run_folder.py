@@ -1,9 +1,9 @@
 import os
 
-def generate_readme_md(course_root, github_repo_url, included_numbers):
+def generate_readme_md(course_root, github_repo_url, branch, included_numbers):
     # Initialize the content for the readme file
     readme_content = "# Course Tutorials\n\n"
-    readme_content += "This page contains links to all tutorials and R scripts organized by section.\n\n"
+    readme_content += "This page contains links to all class notes and R scripts organized by section.\n\n"
     
     # Walk through the course folder
     for section_folder in sorted(os.listdir(course_root)):
@@ -29,7 +29,7 @@ def generate_readme_md(course_root, github_repo_url, included_numbers):
 
             # Add markdown files to the section
             if md_files:
-                readme_content += "**Tutorials (Markdown files):**\n"
+                readme_content += "**Class Notes (Markdown files):**\n"
                 for file in md_files:
                     file_path = os.path.join(section_folder, file)
                     tutorial_name = file.replace(".md", "").replace("_", " ").title()  # Format the file name
@@ -39,8 +39,8 @@ def generate_readme_md(course_root, github_repo_url, included_numbers):
             if r_files:
                 readme_content += "\n**R Scripts:**\n"
                 for file in r_files:
-                    # Link to GitHub view of the file
-                    github_file_url = f"{github_repo_url}/blob/main/{section_folder}/{file}"
+                    # Link to GitHub view of the file using the specified branch
+                    github_file_url = f"{github_repo_url}/blob/{branch}/{section_folder}/{file}"
                     script_name = file.replace(".R", "").replace("_", " ").title()  # Format the script name
                     readme_content += f"- [{script_name}]({github_file_url})\n"
             
@@ -57,5 +57,6 @@ def generate_readme_md(course_root, github_repo_url, included_numbers):
 if __name__ == "__main__":
     course_root = "."  # Use current directory as the course root
     github_repo_url = "https://github.com/dvanderelst/GradStats"
-    included_numbers = [1, 2, 3, 4, 5, 6]
-    generate_readme_md(course_root, github_repo_url, included_numbers)
+    branch = "Fall2024"  # Specify the current branch
+    included_numbers = [1, 2, 3, 4, 5, 6]  # Example: Only include folders starting with 2, 3, or 5
+    generate_readme_md(course_root, github_repo_url, branch, included_numbers)
