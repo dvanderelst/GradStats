@@ -4,7 +4,7 @@ This page contains links to all class notes and R scripts organized by section.
 
 ## Basics Of R
 **Class Notes (Markdown files):**
-- [Basicprogramming](01 Basics Of R/BasicProgramming.md)
+- [Basic Programming](01 Basics Of R/Basic-Programming.md)
 
 **R Scripts:**
 - [`ExamplesOfHeadersAndComments.R`](https://github.com/dvanderelst/GradStats/blob/Fall2024/01 Basics Of R/ExamplesOfHeadersAndComments.R)
