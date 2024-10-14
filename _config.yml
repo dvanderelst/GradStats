@@ -1,5 +1,5 @@
 # Site settings
 title: "BIOL8001C - Data Analysis"
 description: "Course materials and tutorials for data analysis."
-theme: minima
+remote_theme: pages-themes/cayman@v0.2.0
 
