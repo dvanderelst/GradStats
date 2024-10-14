@@ -330,7 +330,7 @@ data <- transmute(data, area = pi * (Diameter/2)^2)
 data
 ```
 
-### Logical/Conditional Variables
+### Logical/Conditional Variables using `case_when`
 
 Tip: You can use `mutate` to created categories in your data.
 
@@ -345,6 +345,8 @@ data <- mutate(data, mpg_difference = mpg_hgw - mpg_city,
 head(data)
 ```
 
+### Logical/Conditional Variables using `if_else`
+
 ```{r}
 data <- mutate(data, small_engine = if_else(engine < 2, 1, 0))
 names(data)
@@ -353,6 +355,32 @@ names(data)
 ```{r}
 data <- mutate(data, `small tank` = if_else(tank < 15, 1, 0))
 names(data)
+```
+
+### Logical/Conditional Variables using `cut`
+
+The `cut` function is useful for creating categories based on continuous variables.
+You can find more information about the `cut()` function [here](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/cut).
+
+```{r}
+data <- mutate(data, category = cut(min_price,
+                              breaks = c(0, 10, 20, 30, 40),
+                              labels = c("Low", "Medium", "High", "Very High")))
+glimpse(data)
+```
+
+### Recode values
+
+`recode()` is a method to change the observations within a variable. It can be used together with `mutate()`.
+
+```{r}
+data <- mutate(data,
+               category = recode(cylinders,
+                                 '3' = "Low Power",
+                                 '4' = "Low Power",
+                                 '6' = "Moderate Power",
+                                 '8' = "High Power"))
+glimpse(data)
 ```
 
 ## Exercises

@@ -1,6 +1,6 @@
 Reading Data
 ================
-Last Updated: 10, October, 2024 at 09:03
+Last Updated: 14, October, 2024 at 09:59
 
 - [Before we begin…](#before-we-begin)
 - [Using the tidyverse vs built-in data reading
@@ -32,7 +32,13 @@ Last Updated: 10, October, 2024 at 09:03
   `mutate`](#creating-new-variables-using-mutate)
   - [Mathematical Operations on Existing
     Columns](#mathematical-operations-on-existing-columns)
-  - [Logical/Conditional Variables](#logicalconditional-variables)
+  - [Logical/Conditional Variables using
+    `case_when`](#logicalconditional-variables-using-case_when)
+  - [Logical/Conditional Variables using
+    `if_else`](#logicalconditional-variables-using-if_else)
+  - [Logical/Conditional Variables using
+    `cut`](#logicalconditional-variables-using-cut)
+  - [Recode values](#recode-values)
 - [Exercises](#exercises)
   - [Exercise 1](#exercise-1)
   - [Exercise 2](#exercise-2)
@@ -48,14 +54,16 @@ Last Updated: 10, October, 2024 at 09:03
 library(tidyverse)
 ```
 
-    ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
-    ## ✔ ggplot2 3.4.0      ✔ purrr   0.3.5 
-    ## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
-    ## ✔ tidyr   1.2.1      ✔ stringr 1.4.1 
-    ## ✔ readr   2.1.3      ✔ forcats 0.5.2 
+    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+    ## ✔ dplyr     1.1.4     ✔ readr     2.1.5
+    ## ✔ forcats   1.0.0     ✔ stringr   1.5.1
+    ## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+    ## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+    ## ✔ purrr     1.0.2     
     ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
+    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
 
 ## Before we begin…
 
@@ -438,40 +446,36 @@ head(data)
 ```
 
     ## # A tibble: 6 × 13
-    ##    ...1  `S#` Teacher …¹ Unive…² Depar…³ Provi…⁴ Desig…⁵ Termi…⁶ Gradu…⁷ Country
-    ##   <dbl> <dbl> <chr>      <chr>   <chr>   <chr>   <chr>   <chr>   <chr>   <chr>  
-    ## 1     2     3 Dr. Abdul… Univer… Comput… Baloch… Assist… PhD     Asian … Thaila…
-    ## 2     4     5 Dr. Wahee… Univer… Comput… Baloch… Assist… PhD     Asian … Thaila…
-    ## 3     5     6 Dr. Junai… Univer… Comput… Baloch… Assist… PhD     Asian … Thaila…
-    ## 4     6     7 Dr. Mahee… Univer… Comput… Baloch… Assist… PhD     Asian … Thaila…
-    ## 5    24    25 Samina Az… Sardar… Comput… Baloch… Lectur… BS      Baloch… Pakist…
-    ## 6    25    26 Nausheed … Sardar… Comput… Baloch… Lectur… MCS     Univer… Pakist…
-    ## # … with 3 more variables: Year <dbl>,
+    ##    ...1  `S#` `Teacher Name`      `University Currently Teaching`     Department
+    ##   <dbl> <dbl> <chr>               <chr>                               <chr>     
+    ## 1     2     3 Dr. Abdul Basit     University of Balochistan           Computer …
+    ## 2     4     5 Dr. Waheed Noor     University of Balochistan           Computer …
+    ## 3     5     6 Dr. Junaid Baber    University of Balochistan           Computer …
+    ## 4     6     7 Dr. Maheen Bakhtyar University of Balochistan           Computer …
+    ## 5    24    25 Samina Azim         Sardar Bahadur Khan Women's Univer… Computer …
+    ## 6    25    26 Nausheed Saeed      Sardar Bahadur Khan Women's Univer… Computer …
+    ## # ℹ 8 more variables: `Province University Located` <chr>, Designation <chr>,
+    ## #   `Terminal Degree` <chr>, `Graduated from` <chr>, Country <chr>, Year <dbl>,
     ## #   `Area of Specialization/Research Interests` <chr>,
-    ## #   `Other Information` <chr>, and abbreviated variable names ¹​`Teacher Name`,
-    ## #   ²​`University Currently Teaching`, ³​Department,
-    ## #   ⁴​`Province University Located`, ⁵​Designation, ⁶​`Terminal Degree`,
-    ## #   ⁷​`Graduated from`
+    ## #   `Other Information` <chr>
 
 ``` r
 tail(data)
 ```
 
     ## # A tibble: 6 × 13
-    ##    ...1  `S#` Teacher …¹ Unive…² Depar…³ Provi…⁴ Desig…⁵ Termi…⁶ Gradu…⁷ Country
-    ##   <dbl> <dbl> <chr>      <chr>   <chr>   <chr>   <chr>   <chr>   <chr>   <chr>  
-    ## 1  1971  1972 Dr. Khali… Ghulam… Comput… KPK     Profes… PhD     Concor… Canada 
-    ## 2  1974  1975 Dr. Ahmar… Ghulam… Comput… KPK     Associ… PhD     JNU     South …
-    ## 3  1975  1976 Dr. Fawad… Ghulam… Comput… KPK     Associ… PhD     Grenob… France 
-    ## 4  1977  1978 Dr. Rasha… Ghulam… Comput… KPK     Assist… PhD     Florid… USA    
-    ## 5  1979  1980 Dr. Shaha… Ghulam… Comput… KPK     Assist… PhD     Ghulam… Pakist…
-    ## 6  1980  1981 Dr. Sajid… Ghulam… Comput… KPK     Assist… PhD     Seoul … South …
-    ## # … with 3 more variables: Year <dbl>,
+    ##    ...1  `S#` `Teacher Name`         `University Currently Teaching` Department 
+    ##   <dbl> <dbl> <chr>                  <chr>                           <chr>      
+    ## 1  1971  1972 Dr. Khalid J Siddiqui  Ghulam Ishaq Khan Institute     Computer S…
+    ## 2  1974  1975 Dr. Ahmar Rashid       Ghulam Ishaq Khan Institute     Computer S…
+    ## 3  1975  1976 Dr. Fawad Hussain      Ghulam Ishaq Khan Institute     Computer S…
+    ## 4  1977  1978 Dr. Rashad M Jillani   Ghulam Ishaq Khan Institute     Computer S…
+    ## 5  1979  1980 Dr. Shahabuddin Ansari Ghulam Ishaq Khan Institute     Computer S…
+    ## 6  1980  1981 Dr. Sajid Anwar        Ghulam Ishaq Khan Institute     Computer S…
+    ## # ℹ 8 more variables: `Province University Located` <chr>, Designation <chr>,
+    ## #   `Terminal Degree` <chr>, `Graduated from` <chr>, Country <chr>, Year <dbl>,
     ## #   `Area of Specialization/Research Interests` <chr>,
-    ## #   `Other Information` <chr>, and abbreviated variable names ¹​`Teacher Name`,
-    ## #   ²​`University Currently Teaching`, ³​Department,
-    ## #   ⁴​`Province University Located`, ⁵​Designation, ⁶​`Terminal Degree`,
-    ## #   ⁷​`Graduated from`
+    ## #   `Other Information` <chr>
 
 ### Summary
 
@@ -711,7 +715,7 @@ data['very_simple']
     ##  8           1
     ##  9           1
     ## 10           1
-    ## # … with 1,132 more rows
+    ## # ℹ 1,132 more rows
 
 However, we can do more interesting things.
 
@@ -733,7 +737,7 @@ data['has_phd']
     ##  8 FALSE  
     ##  9 FALSE  
     ## 10 FALSE  
-    ## # … with 1,132 more rows
+    ## # ℹ 1,132 more rows
 
 We can calculate new variables.
 
@@ -782,7 +786,7 @@ data
     ##  8     8 EagleBoys DeepPan          Hawaiian          28.8  651.
     ##  9     9 EagleBoys ThinCrust        BBQMeatlovers     30.0  709.
     ## 10    10 EagleBoys DeepPan          BBQMeatlovers     29.4  678.
-    ## # … with 240 more rows
+    ## # ℹ 240 more rows
 
 For fun: `transmute` only keeps the new variable.
 
@@ -804,9 +808,9 @@ data
     ##  8  651.
     ##  9  709.
     ## 10  678.
-    ## # … with 240 more rows
+    ## # ℹ 240 more rows
 
-### Logical/Conditional Variables
+### Logical/Conditional Variables using `case_when`
 
 Tip: You can use `mutate` to created categories in your data.
 
@@ -834,20 +838,21 @@ head(data)
 ```
 
     ## # A tibble: 6 × 28
-    ##   make  model type  min_p…¹ mid_p…² max_p…³ mpg_c…⁴ mpg_hgw airbag drive cylin…⁵
-    ##   <chr> <chr> <chr>   <dbl>   <dbl>   <dbl>   <dbl>   <dbl>  <dbl> <dbl> <chr>  
-    ## 1 Acura Inte… Small    12.9    15.9    18.8      25      31      0     1 4      
-    ## 2 Acura Lege… Mids…    29.2    33.9    38.7      18      25      2     1 6      
-    ## 3 Audi  90    Comp…    25.9    29.1    32.3      20      26      1     1 6      
-    ## 4 Audi  100   Mids…    30.8    37.7    44.6      19      26      2     1 6      
-    ## 5 BMW   535i  Mids…    23.7    30      36.2      22      30      1     0 4      
-    ## 6 Buick Cent… Mids…    14.2    15.7    17.3      22      31      1     1 4      
-    ## # … with 17 more variables: engine <dbl>, horsepower <dbl>, rpm <dbl>,
-    ## #   rpmile <dbl>, manual <dbl>, tank <dbl>, passengers <dbl>, length <dbl>,
-    ## #   wheelbase <dbl>, width <dbl>, uturn <dbl>, rearseat <chr>, luggage <chr>,
-    ## #   weight <dbl>, domestic <dbl>, mpg_difference <dbl>,
-    ## #   fuel_efficiency_category <chr>, and abbreviated variable names ¹​min_price,
-    ## #   ²​mid_price, ³​max_price, ⁴​mpg_city, ⁵​cylinders
+    ##   make  model  type  min_price mid_price max_price mpg_city mpg_hgw airbag drive
+    ##   <chr> <chr>  <chr>     <dbl>     <dbl>     <dbl>    <dbl>   <dbl>  <dbl> <dbl>
+    ## 1 Acura Integ… Small      12.9      15.9      18.8       25      31      0     1
+    ## 2 Acura Legend Mids…      29.2      33.9      38.7       18      25      2     1
+    ## 3 Audi  90     Comp…      25.9      29.1      32.3       20      26      1     1
+    ## 4 Audi  100    Mids…      30.8      37.7      44.6       19      26      2     1
+    ## 5 BMW   535i   Mids…      23.7      30        36.2       22      30      1     0
+    ## 6 Buick Centu… Mids…      14.2      15.7      17.3       22      31      1     1
+    ## # ℹ 18 more variables: cylinders <chr>, engine <dbl>, horsepower <dbl>,
+    ## #   rpm <dbl>, rpmile <dbl>, manual <dbl>, tank <dbl>, passengers <dbl>,
+    ## #   length <dbl>, wheelbase <dbl>, width <dbl>, uturn <dbl>, rearseat <chr>,
+    ## #   luggage <chr>, weight <dbl>, domestic <dbl>, mpg_difference <dbl>,
+    ## #   fuel_efficiency_category <chr>
+
+### Logical/Conditional Variables using `if_else`
 
 ``` r
 data <- mutate(data, small_engine = if_else(engine < 2, 1, 0))
@@ -890,6 +895,102 @@ names(data)
     ## [25] "weight"                   "domestic"                
     ## [27] "mpg_difference"           "fuel_efficiency_category"
     ## [29] "small_engine"             "small tank"
+
+### Logical/Conditional Variables using `cut`
+
+The `cut` function is useful for creating categories based on continuous
+variables. You can find more information about the `cut()` function
+[here](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/cut).
+
+``` r
+data <- mutate(data, category = cut(min_price,
+                              breaks = c(0, 10, 20, 30, 40),
+                              labels = c("Low", "Medium", "High", "Very High")))
+glimpse(data)
+```
+
+    ## Rows: 93
+    ## Columns: 31
+    ## $ make                     <chr> "Acura", "Acura", "Audi", "Audi", "BMW", "Bui…
+    ## $ model                    <chr> "Integra", "Legend", "90", "100", "535i", "Ce…
+    ## $ type                     <chr> "Small", "Midsize", "Compact", "Midsize", "Mi…
+    ## $ min_price                <dbl> 12.9, 29.2, 25.9, 30.8, 23.7, 14.2, 19.9, 22.…
+    ## $ mid_price                <dbl> 15.9, 33.9, 29.1, 37.7, 30.0, 15.7, 20.8, 23.…
+    ## $ max_price                <dbl> 18.8, 38.7, 32.3, 44.6, 36.2, 17.3, 21.7, 24.…
+    ## $ mpg_city                 <dbl> 25, 18, 20, 19, 22, 22, 19, 16, 19, 16, 16, 2…
+    ## $ mpg_hgw                  <dbl> 31, 25, 26, 26, 30, 31, 28, 25, 27, 25, 25, 3…
+    ## $ airbag                   <dbl> 0, 2, 1, 2, 1, 1, 1, 1, 1, 1, 2, 0, 1, 2, 0, …
+    ## $ drive                    <dbl> 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, …
+    ## $ cylinders                <chr> "4", "6", "6", "6", "4", "4", "6", "6", "6", …
+    ## $ engine                   <dbl> 1.8, 3.2, 2.8, 2.8, 3.5, 2.2, 3.8, 5.7, 3.8, …
+    ## $ horsepower               <dbl> 140, 200, 172, 172, 208, 110, 170, 180, 170, …
+    ## $ rpm                      <dbl> 6300, 5500, 5500, 5500, 5700, 5200, 4800, 400…
+    ## $ rpmile                   <dbl> 2890, 2335, 2280, 2535, 2545, 2565, 1570, 132…
+    ## $ manual                   <dbl> 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, …
+    ## $ tank                     <dbl> 13.2, 18.0, 16.9, 21.1, 21.1, 16.4, 18.0, 23.…
+    ## $ passengers               <dbl> 5, 5, 5, 6, 4, 6, 6, 6, 5, 6, 5, 5, 5, 4, 6, …
+    ## $ length                   <dbl> 177, 195, 180, 193, 186, 189, 200, 216, 198, …
+    ## $ wheelbase                <dbl> 102, 115, 102, 106, 109, 105, 111, 116, 108, …
+    ## $ width                    <dbl> 68, 71, 67, 70, 69, 69, 74, 78, 73, 73, 74, 6…
+    ## $ uturn                    <dbl> 37, 38, 37, 37, 39, 41, 42, 45, 41, 43, 44, 3…
+    ## $ rearseat                 <chr> "26.5", "30.0", "28.0", "31.0", "27.0", "28.0…
+    ## $ luggage                  <chr> "11", "15", "14", "17", "13", "16", "17", "21…
+    ## $ weight                   <dbl> 2705, 3560, 3375, 3405, 3640, 2880, 3470, 410…
+    ## $ domestic                 <dbl> 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+    ## $ mpg_difference           <dbl> 6, 7, 6, 7, 8, 9, 9, 9, 8, 9, 9, 11, 9, 9, 8,…
+    ## $ fuel_efficiency_category <chr> "Moderate", "Moderate", "Moderate", "Moderate…
+    ## $ small_engine             <dbl> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+    ## $ `small tank`             <dbl> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+    ## $ category                 <fct> Medium, High, High, Very High, High, Medium, …
+
+### Recode values
+
+`recode()` is a method to change the observations within a variable. It
+can be used together with `mutate()`.
+
+``` r
+data <- mutate(data,
+               category = recode(cylinders,
+                                 '3' = "Low Power",
+                                 '4' = "Low Power",
+                                 '6' = "Moderate Power",
+                                 '8' = "High Power"))
+glimpse(data)
+```
+
+    ## Rows: 93
+    ## Columns: 31
+    ## $ make                     <chr> "Acura", "Acura", "Audi", "Audi", "BMW", "Bui…
+    ## $ model                    <chr> "Integra", "Legend", "90", "100", "535i", "Ce…
+    ## $ type                     <chr> "Small", "Midsize", "Compact", "Midsize", "Mi…
+    ## $ min_price                <dbl> 12.9, 29.2, 25.9, 30.8, 23.7, 14.2, 19.9, 22.…
+    ## $ mid_price                <dbl> 15.9, 33.9, 29.1, 37.7, 30.0, 15.7, 20.8, 23.…
+    ## $ max_price                <dbl> 18.8, 38.7, 32.3, 44.6, 36.2, 17.3, 21.7, 24.…
+    ## $ mpg_city                 <dbl> 25, 18, 20, 19, 22, 22, 19, 16, 19, 16, 16, 2…
+    ## $ mpg_hgw                  <dbl> 31, 25, 26, 26, 30, 31, 28, 25, 27, 25, 25, 3…
+    ## $ airbag                   <dbl> 0, 2, 1, 2, 1, 1, 1, 1, 1, 1, 2, 0, 1, 2, 0, …
+    ## $ drive                    <dbl> 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, …
+    ## $ cylinders                <chr> "4", "6", "6", "6", "4", "4", "6", "6", "6", …
+    ## $ engine                   <dbl> 1.8, 3.2, 2.8, 2.8, 3.5, 2.2, 3.8, 5.7, 3.8, …
+    ## $ horsepower               <dbl> 140, 200, 172, 172, 208, 110, 170, 180, 170, …
+    ## $ rpm                      <dbl> 6300, 5500, 5500, 5500, 5700, 5200, 4800, 400…
+    ## $ rpmile                   <dbl> 2890, 2335, 2280, 2535, 2545, 2565, 1570, 132…
+    ## $ manual                   <dbl> 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, …
+    ## $ tank                     <dbl> 13.2, 18.0, 16.9, 21.1, 21.1, 16.4, 18.0, 23.…
+    ## $ passengers               <dbl> 5, 5, 5, 6, 4, 6, 6, 6, 5, 6, 5, 5, 5, 4, 6, …
+    ## $ length                   <dbl> 177, 195, 180, 193, 186, 189, 200, 216, 198, …
+    ## $ wheelbase                <dbl> 102, 115, 102, 106, 109, 105, 111, 116, 108, …
+    ## $ width                    <dbl> 68, 71, 67, 70, 69, 69, 74, 78, 73, 73, 74, 6…
+    ## $ uturn                    <dbl> 37, 38, 37, 37, 39, 41, 42, 45, 41, 43, 44, 3…
+    ## $ rearseat                 <chr> "26.5", "30.0", "28.0", "31.0", "27.0", "28.0…
+    ## $ luggage                  <chr> "11", "15", "14", "17", "13", "16", "17", "21…
+    ## $ weight                   <dbl> 2705, 3560, 3375, 3405, 3640, 2880, 3470, 410…
+    ## $ domestic                 <dbl> 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+    ## $ mpg_difference           <dbl> 6, 7, 6, 7, 8, 9, 9, 9, 8, 9, 9, 11, 9, 9, 8,…
+    ## $ fuel_efficiency_category <chr> "Moderate", "Moderate", "Moderate", "Moderate…
+    ## $ small_engine             <dbl> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+    ## $ `small tank`             <dbl> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+    ## $ category                 <chr> "Low Power", "Moderate Power", "Moderate Powe…
 
 ## Exercises
 
@@ -983,19 +1084,18 @@ head(data)
 ```
 
     ## # A tibble: 6 × 26
-    ##   make  model type  min_p…¹ mid_p…² max_p…³ mpg_c…⁴ mpg_hgw airbag drive cylin…⁵
-    ##   <chr> <chr> <chr>   <dbl>   <dbl>   <dbl>   <dbl>   <dbl>  <dbl> <dbl> <chr>  
-    ## 1 Acura Inte… Small    12.9    15.9    18.8      25      31      0     1 4      
-    ## 2 Acura Lege… Mids…    29.2    33.9    38.7      18      25      2     1 6      
-    ## 3 Audi  90    Comp…    25.9    29.1    32.3      20      26      1     1 6      
-    ## 4 Audi  100   Mids…    30.8    37.7    44.6      19      26      2     1 6      
-    ## 5 BMW   535i  Mids…    23.7    30      36.2      22      30      1     0 4      
-    ## 6 Buick Cent… Mids…    14.2    15.7    17.3      22      31      1     1 4      
-    ## # … with 15 more variables: engine <dbl>, horsepower <dbl>, rpm <dbl>,
-    ## #   rpmile <dbl>, manual <dbl>, tank <dbl>, passengers <dbl>, length <dbl>,
-    ## #   wheelbase <dbl>, width <dbl>, uturn <dbl>, rearseat <chr>, luggage <chr>,
-    ## #   weight <dbl>, domestic <dbl>, and abbreviated variable names ¹​min_price,
-    ## #   ²​mid_price, ³​max_price, ⁴​mpg_city, ⁵​cylinders
+    ##   make  model  type  min_price mid_price max_price mpg_city mpg_hgw airbag drive
+    ##   <chr> <chr>  <chr>     <dbl>     <dbl>     <dbl>    <dbl>   <dbl>  <dbl> <dbl>
+    ## 1 Acura Integ… Small      12.9      15.9      18.8       25      31      0     1
+    ## 2 Acura Legend Mids…      29.2      33.9      38.7       18      25      2     1
+    ## 3 Audi  90     Comp…      25.9      29.1      32.3       20      26      1     1
+    ## 4 Audi  100    Mids…      30.8      37.7      44.6       19      26      2     1
+    ## 5 BMW   535i   Mids…      23.7      30        36.2       22      30      1     0
+    ## 6 Buick Centu… Mids…      14.2      15.7      17.3       22      31      1     1
+    ## # ℹ 16 more variables: cylinders <chr>, engine <dbl>, horsepower <dbl>,
+    ## #   rpm <dbl>, rpmile <dbl>, manual <dbl>, tank <dbl>, passengers <dbl>,
+    ## #   length <dbl>, wheelbase <dbl>, width <dbl>, uturn <dbl>, rearseat <chr>,
+    ## #   luggage <chr>, weight <dbl>, domestic <dbl>
 
 ``` r
 colnames(data)
@@ -1014,19 +1114,18 @@ head(data)
 ```
 
     ## # A tibble: 6 × 27
-    ##   make  model type  min_p…¹ mid_p…² max_p…³ mpg_c…⁴ mpg_hgw airbag drive cylin…⁵
-    ##   <chr> <chr> <chr>   <dbl>   <dbl>   <dbl>   <dbl>   <dbl>  <dbl> <dbl> <chr>  
-    ## 1 Acura Inte… Small    12.9    15.9    18.8      25      31      0     1 4      
-    ## 2 Acura Lege… Mids…    29.2    33.9    38.7      18      25      2     1 6      
-    ## 3 Audi  90    Comp…    25.9    29.1    32.3      20      26      1     1 6      
-    ## 4 Audi  100   Mids…    30.8    37.7    44.6      19      26      2     1 6      
-    ## 5 BMW   535i  Mids…    23.7    30      36.2      22      30      1     0 4      
-    ## 6 Buick Cent… Mids…    14.2    15.7    17.3      22      31      1     1 4      
-    ## # … with 16 more variables: engine <dbl>, horsepower <dbl>, rpm <dbl>,
-    ## #   rpmile <dbl>, manual <dbl>, tank <dbl>, passengers <dbl>, length <dbl>,
-    ## #   wheelbase <dbl>, width <dbl>, uturn <dbl>, rearseat <chr>, luggage <chr>,
-    ## #   weight <dbl>, domestic <dbl>, mpg_difference <dbl>, and abbreviated
-    ## #   variable names ¹​min_price, ²​mid_price, ³​max_price, ⁴​mpg_city, ⁵​cylinders
+    ##   make  model  type  min_price mid_price max_price mpg_city mpg_hgw airbag drive
+    ##   <chr> <chr>  <chr>     <dbl>     <dbl>     <dbl>    <dbl>   <dbl>  <dbl> <dbl>
+    ## 1 Acura Integ… Small      12.9      15.9      18.8       25      31      0     1
+    ## 2 Acura Legend Mids…      29.2      33.9      38.7       18      25      2     1
+    ## 3 Audi  90     Comp…      25.9      29.1      32.3       20      26      1     1
+    ## 4 Audi  100    Mids…      30.8      37.7      44.6       19      26      2     1
+    ## 5 BMW   535i   Mids…      23.7      30        36.2       22      30      1     0
+    ## 6 Buick Centu… Mids…      14.2      15.7      17.3       22      31      1     1
+    ## # ℹ 17 more variables: cylinders <chr>, engine <dbl>, horsepower <dbl>,
+    ## #   rpm <dbl>, rpmile <dbl>, manual <dbl>, tank <dbl>, passengers <dbl>,
+    ## #   length <dbl>, wheelbase <dbl>, width <dbl>, uturn <dbl>, rearseat <chr>,
+    ## #   luggage <chr>, weight <dbl>, domestic <dbl>, mpg_difference <dbl>
 
 ``` r
 glimpse(data)
