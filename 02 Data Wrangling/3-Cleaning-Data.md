@@ -1,6 +1,6 @@
 Cleaning Data
 ================
-Last Updated: 10, October, 2023 at 08:45
+Last Updated: 14, October, 2024 at 14:23
 
 - [Before we start…](#before-we-start)
 - [Loading the tidyverse](#loading-the-tidyverse)
@@ -63,7 +63,7 @@ Download the following data sets:
 
 ## Loading the tidyverse
 
-As always, let’s load the tidyverse…
+Let’s load the tidyverse…
 
 ``` r
 library(tidyverse)
@@ -127,7 +127,7 @@ birth year and not the age. For now, let’s just remove these entries.
 hist(depression_data$age)
 ```
 
-![](CleaningData_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+![](3-Cleaning-Data_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 ``` r
 dim(depression_data)
@@ -146,7 +146,7 @@ dim(filtered_depression_data)
 hist(filtered_depression_data$age, breaks=100)
 ```
 
-![](CleaningData_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+![](3-Cleaning-Data_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 Here is another visualization.
 
@@ -156,7 +156,7 @@ boxplot(depression_data$age)
 boxplot(filtered_depression_data$age)
 ```
 
-![](CleaningData_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](3-Cleaning-Data_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 Here is another problem with the data…
 
@@ -164,7 +164,7 @@ Here is another problem with the data…
 hist(filtered_depression_data$familysize, breaks=100)
 ```
 
-![](CleaningData_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](3-Cleaning-Data_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 ``` r
 summary(filtered_depression_data$familysize)
@@ -1092,7 +1092,7 @@ data_2012 <- filter(long_again, Year == 2012)
 ggplot(data_2012) + aes(x=date, y = Count, group=Source, color=Source) + geom_line()
 ```
 
-![](CleaningData_files/figure-gfm/unnamed-chunk-54-1.png)<!-- -->
+![](3-Cleaning-Data_files/figure-gfm/unnamed-chunk-54-1.png)<!-- -->
 
 ``` r
 ggplot(long_again) + aes(x=Month, y = Count, group=Source, color=Source) + geom_line() + facet_grid(~Year)
@@ -1100,7 +1100,7 @@ ggplot(long_again) + aes(x=Month, y = Count, group=Source, color=Source) + geom_
 
     ## Warning: Removed 2 rows containing missing values (`geom_line()`).
 
-![](CleaningData_files/figure-gfm/unnamed-chunk-55-1.png)<!-- -->
+![](3-Cleaning-Data_files/figure-gfm/unnamed-chunk-55-1.png)<!-- -->
 
 ## Example: Coal data
 

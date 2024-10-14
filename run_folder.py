@@ -1,10 +1,14 @@
 import os
+import re
 
 def generate_readme_md(course_root, github_repo_url, branch, included_numbers):
     # Initialize the content for the readme file
     readme_content = "# Course Tutorials\n\n"
     readme_content += "This page contains links to all class notes and R scripts organized by section.\n\n"
     
+    # Regular expression to match numbers at the start of a file name
+    num_prefix_pattern = re.compile(r'^(\d+)\s')
+
     # Walk through the course folder
     for section_folder in sorted(os.listdir(course_root)):
         section_path = os.path.join(course_root, section_folder)
@@ -16,25 +20,43 @@ def generate_readme_md(course_root, github_repo_url, branch, included_numbers):
             section_name = section_folder.split(" ", 1)[1].replace("_", " ").title()  # Format the section name in title case
             readme_content += f"## {section_name}\n"
             
-            # Separate markdown and R files
-            md_files = []
+            # Separate numbered and non-numbered markdown files, and R files
+            numbered_md_files = []
+            non_numbered_md_files = []
             r_files = []
             
             # Find markdown and R files in each section
             for file in sorted(os.listdir(section_path)):
                 if file.endswith(".md"):
-                    md_files.append(file)
+                    # Check if the file starts with a number
+                    match = num_prefix_pattern.match(file)
+                    if match:
+                        numbered_md_files.append((int(match.group(1)), file))  # Store number and file name
+                    else:
+                        non_numbered_md_files.append(file)
                 elif file.endswith(".R"):
                     r_files.append(file)
 
-            # Add markdown files to the section
-            if md_files:
+            # Sort numbered markdown files by their prefix number
+            numbered_md_files.sort(key=lambda x: x[0])
+
+            # Add numbered markdown files to the section
+            if numbered_md_files:
                 readme_content += "**Class Notes (Markdown files):**\n"
-                for file in md_files:
+                for _, file in numbered_md_files:
                     file_path = os.path.join(section_folder, file)
                     tutorial_name = file.replace(".md", "").replace("_", " ").title()  # Format the file name
                     readme_content += f"- [{tutorial_name}]({file_path})\n"
             
+            # Add non-numbered markdown files
+            if non_numbered_md_files:
+                if not numbered_md_files:  # Add a header if no numbered files
+                    readme_content += "**Class Notes (Markdown files):**\n"
+                for file in non_numbered_md_files:
+                    file_path = os.path.join(section_folder, file)
+                    tutorial_name = file.replace(".md", "").replace("_", " ").title()  # Format the file name
+                    readme_content += f"- [{tutorial_name}]({file_path})\n"
+
             # Add R files to the section
             if r_files:
                 readme_content += "\n**R Scripts:**\n"

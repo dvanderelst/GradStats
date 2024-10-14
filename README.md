@@ -11,9 +11,9 @@ This page contains links to all class notes and R scripts organized by section.
 
 ## Data Wrangling
 **Class Notes (Markdown files):**
-- [Cleaningdata](02 Data Wrangling/CleaningData.md)
-- [Filteringdata](02 Data Wrangling/FilteringData.md)
-- [Readingdata](02 Data Wrangling/ReadingData.md)
+- [1-Reading-Data](02 Data Wrangling/1-Reading-Data.md)
+- [2-Filtering-Data](02 Data Wrangling/2-Filtering-Data.md)
+- [3-Cleaning-Data](02 Data Wrangling/3-Cleaning-Data.md)
 
 ## Plotting
 **Class Notes (Markdown files):**

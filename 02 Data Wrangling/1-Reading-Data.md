@@ -1,6 +1,6 @@
 Reading Data
 ================
-Last Updated: 14, October, 2024 at 09:59
+Last Updated: 14, October, 2024 at 14:22
 
 - [Before we begin…](#before-we-begin)
 - [Using the tidyverse vs built-in data reading
@@ -54,16 +54,14 @@ Last Updated: 14, October, 2024 at 09:59
 library(tidyverse)
 ```
 
-    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-    ## ✔ dplyr     1.1.4     ✔ readr     2.1.5
-    ## ✔ forcats   1.0.0     ✔ stringr   1.5.1
-    ## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
-    ## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
-    ## ✔ purrr     1.0.2     
+    ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
+    ## ✔ ggplot2 3.4.0      ✔ purrr   0.3.5 
+    ## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
+    ## ✔ tidyr   1.2.1      ✔ stringr 1.4.1 
+    ## ✔ readr   2.1.3      ✔ forcats 0.5.2 
     ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
-    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
 
 ## Before we begin…
 
@@ -446,36 +444,40 @@ head(data)
 ```
 
     ## # A tibble: 6 × 13
-    ##    ...1  `S#` `Teacher Name`      `University Currently Teaching`     Department
-    ##   <dbl> <dbl> <chr>               <chr>                               <chr>     
-    ## 1     2     3 Dr. Abdul Basit     University of Balochistan           Computer …
-    ## 2     4     5 Dr. Waheed Noor     University of Balochistan           Computer …
-    ## 3     5     6 Dr. Junaid Baber    University of Balochistan           Computer …
-    ## 4     6     7 Dr. Maheen Bakhtyar University of Balochistan           Computer …
-    ## 5    24    25 Samina Azim         Sardar Bahadur Khan Women's Univer… Computer …
-    ## 6    25    26 Nausheed Saeed      Sardar Bahadur Khan Women's Univer… Computer …
-    ## # ℹ 8 more variables: `Province University Located` <chr>, Designation <chr>,
-    ## #   `Terminal Degree` <chr>, `Graduated from` <chr>, Country <chr>, Year <dbl>,
+    ##    ...1  `S#` Teacher …¹ Unive…² Depar…³ Provi…⁴ Desig…⁵ Termi…⁶ Gradu…⁷ Country
+    ##   <dbl> <dbl> <chr>      <chr>   <chr>   <chr>   <chr>   <chr>   <chr>   <chr>  
+    ## 1     2     3 Dr. Abdul… Univer… Comput… Baloch… Assist… PhD     Asian … Thaila…
+    ## 2     4     5 Dr. Wahee… Univer… Comput… Baloch… Assist… PhD     Asian … Thaila…
+    ## 3     5     6 Dr. Junai… Univer… Comput… Baloch… Assist… PhD     Asian … Thaila…
+    ## 4     6     7 Dr. Mahee… Univer… Comput… Baloch… Assist… PhD     Asian … Thaila…
+    ## 5    24    25 Samina Az… Sardar… Comput… Baloch… Lectur… BS      Baloch… Pakist…
+    ## 6    25    26 Nausheed … Sardar… Comput… Baloch… Lectur… MCS     Univer… Pakist…
+    ## # … with 3 more variables: Year <dbl>,
     ## #   `Area of Specialization/Research Interests` <chr>,
-    ## #   `Other Information` <chr>
+    ## #   `Other Information` <chr>, and abbreviated variable names ¹​`Teacher Name`,
+    ## #   ²​`University Currently Teaching`, ³​Department,
+    ## #   ⁴​`Province University Located`, ⁵​Designation, ⁶​`Terminal Degree`,
+    ## #   ⁷​`Graduated from`
 
 ``` r
 tail(data)
 ```
 
     ## # A tibble: 6 × 13
-    ##    ...1  `S#` `Teacher Name`         `University Currently Teaching` Department 
-    ##   <dbl> <dbl> <chr>                  <chr>                           <chr>      
-    ## 1  1971  1972 Dr. Khalid J Siddiqui  Ghulam Ishaq Khan Institute     Computer S…
-    ## 2  1974  1975 Dr. Ahmar Rashid       Ghulam Ishaq Khan Institute     Computer S…
-    ## 3  1975  1976 Dr. Fawad Hussain      Ghulam Ishaq Khan Institute     Computer S…
-    ## 4  1977  1978 Dr. Rashad M Jillani   Ghulam Ishaq Khan Institute     Computer S…
-    ## 5  1979  1980 Dr. Shahabuddin Ansari Ghulam Ishaq Khan Institute     Computer S…
-    ## 6  1980  1981 Dr. Sajid Anwar        Ghulam Ishaq Khan Institute     Computer S…
-    ## # ℹ 8 more variables: `Province University Located` <chr>, Designation <chr>,
-    ## #   `Terminal Degree` <chr>, `Graduated from` <chr>, Country <chr>, Year <dbl>,
+    ##    ...1  `S#` Teacher …¹ Unive…² Depar…³ Provi…⁴ Desig…⁵ Termi…⁶ Gradu…⁷ Country
+    ##   <dbl> <dbl> <chr>      <chr>   <chr>   <chr>   <chr>   <chr>   <chr>   <chr>  
+    ## 1  1971  1972 Dr. Khali… Ghulam… Comput… KPK     Profes… PhD     Concor… Canada 
+    ## 2  1974  1975 Dr. Ahmar… Ghulam… Comput… KPK     Associ… PhD     JNU     South …
+    ## 3  1975  1976 Dr. Fawad… Ghulam… Comput… KPK     Associ… PhD     Grenob… France 
+    ## 4  1977  1978 Dr. Rasha… Ghulam… Comput… KPK     Assist… PhD     Florid… USA    
+    ## 5  1979  1980 Dr. Shaha… Ghulam… Comput… KPK     Assist… PhD     Ghulam… Pakist…
+    ## 6  1980  1981 Dr. Sajid… Ghulam… Comput… KPK     Assist… PhD     Seoul … South …
+    ## # … with 3 more variables: Year <dbl>,
     ## #   `Area of Specialization/Research Interests` <chr>,
-    ## #   `Other Information` <chr>
+    ## #   `Other Information` <chr>, and abbreviated variable names ¹​`Teacher Name`,
+    ## #   ²​`University Currently Teaching`, ³​Department,
+    ## #   ⁴​`Province University Located`, ⁵​Designation, ⁶​`Terminal Degree`,
+    ## #   ⁷​`Graduated from`
 
 ### Summary
 
@@ -715,7 +717,7 @@ data['very_simple']
     ##  8           1
     ##  9           1
     ## 10           1
-    ## # ℹ 1,132 more rows
+    ## # … with 1,132 more rows
 
 However, we can do more interesting things.
 
@@ -737,7 +739,7 @@ data['has_phd']
     ##  8 FALSE  
     ##  9 FALSE  
     ## 10 FALSE  
-    ## # ℹ 1,132 more rows
+    ## # … with 1,132 more rows
 
 We can calculate new variables.
 
@@ -786,7 +788,7 @@ data
     ##  8     8 EagleBoys DeepPan          Hawaiian          28.8  651.
     ##  9     9 EagleBoys ThinCrust        BBQMeatlovers     30.0  709.
     ## 10    10 EagleBoys DeepPan          BBQMeatlovers     29.4  678.
-    ## # ℹ 240 more rows
+    ## # … with 240 more rows
 
 For fun: `transmute` only keeps the new variable.
 
@@ -808,7 +810,7 @@ data
     ##  8  651.
     ##  9  709.
     ## 10  678.
-    ## # ℹ 240 more rows
+    ## # … with 240 more rows
 
 ### Logical/Conditional Variables using `case_when`
 
@@ -838,19 +840,20 @@ head(data)
 ```
 
     ## # A tibble: 6 × 28
-    ##   make  model  type  min_price mid_price max_price mpg_city mpg_hgw airbag drive
-    ##   <chr> <chr>  <chr>     <dbl>     <dbl>     <dbl>    <dbl>   <dbl>  <dbl> <dbl>
-    ## 1 Acura Integ… Small      12.9      15.9      18.8       25      31      0     1
-    ## 2 Acura Legend Mids…      29.2      33.9      38.7       18      25      2     1
-    ## 3 Audi  90     Comp…      25.9      29.1      32.3       20      26      1     1
-    ## 4 Audi  100    Mids…      30.8      37.7      44.6       19      26      2     1
-    ## 5 BMW   535i   Mids…      23.7      30        36.2       22      30      1     0
-    ## 6 Buick Centu… Mids…      14.2      15.7      17.3       22      31      1     1
-    ## # ℹ 18 more variables: cylinders <chr>, engine <dbl>, horsepower <dbl>,
-    ## #   rpm <dbl>, rpmile <dbl>, manual <dbl>, tank <dbl>, passengers <dbl>,
-    ## #   length <dbl>, wheelbase <dbl>, width <dbl>, uturn <dbl>, rearseat <chr>,
-    ## #   luggage <chr>, weight <dbl>, domestic <dbl>, mpg_difference <dbl>,
-    ## #   fuel_efficiency_category <chr>
+    ##   make  model type  min_p…¹ mid_p…² max_p…³ mpg_c…⁴ mpg_hgw airbag drive cylin…⁵
+    ##   <chr> <chr> <chr>   <dbl>   <dbl>   <dbl>   <dbl>   <dbl>  <dbl> <dbl> <chr>  
+    ## 1 Acura Inte… Small    12.9    15.9    18.8      25      31      0     1 4      
+    ## 2 Acura Lege… Mids…    29.2    33.9    38.7      18      25      2     1 6      
+    ## 3 Audi  90    Comp…    25.9    29.1    32.3      20      26      1     1 6      
+    ## 4 Audi  100   Mids…    30.8    37.7    44.6      19      26      2     1 6      
+    ## 5 BMW   535i  Mids…    23.7    30      36.2      22      30      1     0 4      
+    ## 6 Buick Cent… Mids…    14.2    15.7    17.3      22      31      1     1 4      
+    ## # … with 17 more variables: engine <dbl>, horsepower <dbl>, rpm <dbl>,
+    ## #   rpmile <dbl>, manual <dbl>, tank <dbl>, passengers <dbl>, length <dbl>,
+    ## #   wheelbase <dbl>, width <dbl>, uturn <dbl>, rearseat <chr>, luggage <chr>,
+    ## #   weight <dbl>, domestic <dbl>, mpg_difference <dbl>,
+    ## #   fuel_efficiency_category <chr>, and abbreviated variable names ¹​min_price,
+    ## #   ²​mid_price, ³​max_price, ⁴​mpg_city, ⁵​cylinders
 
 ### Logical/Conditional Variables using `if_else`
 
@@ -1084,18 +1087,19 @@ head(data)
 ```
 
     ## # A tibble: 6 × 26
-    ##   make  model  type  min_price mid_price max_price mpg_city mpg_hgw airbag drive
-    ##   <chr> <chr>  <chr>     <dbl>     <dbl>     <dbl>    <dbl>   <dbl>  <dbl> <dbl>
-    ## 1 Acura Integ… Small      12.9      15.9      18.8       25      31      0     1
-    ## 2 Acura Legend Mids…      29.2      33.9      38.7       18      25      2     1
-    ## 3 Audi  90     Comp…      25.9      29.1      32.3       20      26      1     1
-    ## 4 Audi  100    Mids…      30.8      37.7      44.6       19      26      2     1
-    ## 5 BMW   535i   Mids…      23.7      30        36.2       22      30      1     0
-    ## 6 Buick Centu… Mids…      14.2      15.7      17.3       22      31      1     1
-    ## # ℹ 16 more variables: cylinders <chr>, engine <dbl>, horsepower <dbl>,
-    ## #   rpm <dbl>, rpmile <dbl>, manual <dbl>, tank <dbl>, passengers <dbl>,
-    ## #   length <dbl>, wheelbase <dbl>, width <dbl>, uturn <dbl>, rearseat <chr>,
-    ## #   luggage <chr>, weight <dbl>, domestic <dbl>
+    ##   make  model type  min_p…¹ mid_p…² max_p…³ mpg_c…⁴ mpg_hgw airbag drive cylin…⁵
+    ##   <chr> <chr> <chr>   <dbl>   <dbl>   <dbl>   <dbl>   <dbl>  <dbl> <dbl> <chr>  
+    ## 1 Acura Inte… Small    12.9    15.9    18.8      25      31      0     1 4      
+    ## 2 Acura Lege… Mids…    29.2    33.9    38.7      18      25      2     1 6      
+    ## 3 Audi  90    Comp…    25.9    29.1    32.3      20      26      1     1 6      
+    ## 4 Audi  100   Mids…    30.8    37.7    44.6      19      26      2     1 6      
+    ## 5 BMW   535i  Mids…    23.7    30      36.2      22      30      1     0 4      
+    ## 6 Buick Cent… Mids…    14.2    15.7    17.3      22      31      1     1 4      
+    ## # … with 15 more variables: engine <dbl>, horsepower <dbl>, rpm <dbl>,
+    ## #   rpmile <dbl>, manual <dbl>, tank <dbl>, passengers <dbl>, length <dbl>,
+    ## #   wheelbase <dbl>, width <dbl>, uturn <dbl>, rearseat <chr>, luggage <chr>,
+    ## #   weight <dbl>, domestic <dbl>, and abbreviated variable names ¹​min_price,
+    ## #   ²​mid_price, ³​max_price, ⁴​mpg_city, ⁵​cylinders
 
 ``` r
 colnames(data)
@@ -1114,18 +1118,19 @@ head(data)
 ```
 
     ## # A tibble: 6 × 27
-    ##   make  model  type  min_price mid_price max_price mpg_city mpg_hgw airbag drive
-    ##   <chr> <chr>  <chr>     <dbl>     <dbl>     <dbl>    <dbl>   <dbl>  <dbl> <dbl>
-    ## 1 Acura Integ… Small      12.9      15.9      18.8       25      31      0     1
-    ## 2 Acura Legend Mids…      29.2      33.9      38.7       18      25      2     1
-    ## 3 Audi  90     Comp…      25.9      29.1      32.3       20      26      1     1
-    ## 4 Audi  100    Mids…      30.8      37.7      44.6       19      26      2     1
-    ## 5 BMW   535i   Mids…      23.7      30        36.2       22      30      1     0
-    ## 6 Buick Centu… Mids…      14.2      15.7      17.3       22      31      1     1
-    ## # ℹ 17 more variables: cylinders <chr>, engine <dbl>, horsepower <dbl>,
-    ## #   rpm <dbl>, rpmile <dbl>, manual <dbl>, tank <dbl>, passengers <dbl>,
-    ## #   length <dbl>, wheelbase <dbl>, width <dbl>, uturn <dbl>, rearseat <chr>,
-    ## #   luggage <chr>, weight <dbl>, domestic <dbl>, mpg_difference <dbl>
+    ##   make  model type  min_p…¹ mid_p…² max_p…³ mpg_c…⁴ mpg_hgw airbag drive cylin…⁵
+    ##   <chr> <chr> <chr>   <dbl>   <dbl>   <dbl>   <dbl>   <dbl>  <dbl> <dbl> <chr>  
+    ## 1 Acura Inte… Small    12.9    15.9    18.8      25      31      0     1 4      
+    ## 2 Acura Lege… Mids…    29.2    33.9    38.7      18      25      2     1 6      
+    ## 3 Audi  90    Comp…    25.9    29.1    32.3      20      26      1     1 6      
+    ## 4 Audi  100   Mids…    30.8    37.7    44.6      19      26      2     1 6      
+    ## 5 BMW   535i  Mids…    23.7    30      36.2      22      30      1     0 4      
+    ## 6 Buick Cent… Mids…    14.2    15.7    17.3      22      31      1     1 4      
+    ## # … with 16 more variables: engine <dbl>, horsepower <dbl>, rpm <dbl>,
+    ## #   rpmile <dbl>, manual <dbl>, tank <dbl>, passengers <dbl>, length <dbl>,
+    ## #   wheelbase <dbl>, width <dbl>, uturn <dbl>, rearseat <chr>, luggage <chr>,
+    ## #   weight <dbl>, domestic <dbl>, mpg_difference <dbl>, and abbreviated
+    ## #   variable names ¹​min_price, ²​mid_price, ³​max_price, ⁴​mpg_city, ⁵​cylinders
 
 ``` r
 glimpse(data)

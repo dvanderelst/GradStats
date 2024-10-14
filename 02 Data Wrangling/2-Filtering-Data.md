@@ -1,17 +1,13 @@
 Filtering Data
 ================
-Last Updated: 28, September, 2023 at 08:48
+Last Updated: 14, October, 2024 at 14:22
 
-- <a href="#before-we-begin" id="toc-before-we-begin">Before we begin…</a>
-- <a href="#dplyr-selecting-rows-and-columns"
-  id="toc-dplyr-selecting-rows-and-columns">dplyr: Selecting rows and
-  columns</a>
-  - <a href="#selecting-variables" id="toc-selecting-variables">Selecting
-    variables</a>
-  - <a href="#filtering-data-using-criteria"
-    id="toc-filtering-data-using-criteria">Filtering data using criteria</a>
-  - <a href="#ordering-rows" id="toc-ordering-rows">Ordering rows</a>
-  - <a href="#exercises" id="toc-exercises">Exercises</a>
+- [Before we begin…](#before-we-begin)
+- [dplyr: Selecting rows and columns](#dplyr-selecting-rows-and-columns)
+  - [Selecting variables](#selecting-variables)
+  - [Filtering data using criteria](#filtering-data-using-criteria)
+  - [Ordering rows](#ordering-rows)
+  - [Exercises](#exercises)
 
 ## Before we begin…
 
@@ -162,14 +158,14 @@ You can string queries together using `&`, `|`, and others. See
 hist(data$sender.longitude, breaks=25)
 ```
 
-![](FilteringData_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+![](2-Filtering-Data_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 ``` r
 subset <- filter(data, sender.longitude < -50 | sender.longitude > 100)
 hist(subset$sender.longitude,breaks=25)
 ```
 
-![](FilteringData_files/figure-gfm/unnamed-chunk-8-2.png)<!-- -->
+![](2-Filtering-Data_files/figure-gfm/unnamed-chunk-8-2.png)<!-- -->
 
 Let’s use the NOT operator to filter out one of the locations.
 
