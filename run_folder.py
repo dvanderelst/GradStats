@@ -1,6 +1,6 @@
 import os
 
-def generate_readme_md(course_root):
+def generate_readme_md(course_root, github_repo_url):
     # Initialize the content for the readme file
     readme_content = "# Course Tutorials\n\n"
     readme_content += "This page contains links to all tutorials and R scripts organized by section.\n\n"
@@ -14,13 +14,33 @@ def generate_readme_md(course_root):
             section_name = section_folder.split(" ", 1)[1].replace("_", " ").title()  # Format the section name
             readme_content += f"## {section_name}\n"
             
+            # Separate markdown and R files
+            md_files = []
+            r_files = []
+            
             # Find markdown and R files in each section
             for file in sorted(os.listdir(section_path)):
-                if file.endswith(".md") or file.endswith(".R"):  # Include both .md and .R files
+                if file.endswith(".md"):
+                    md_files.append(file)
+                elif file.endswith(".R"):
+                    r_files.append(file)
+
+            # Add markdown files to the section
+            if md_files:
+                readme_content += "**Tutorials (Markdown files):**\n"
+                for file in md_files:
                     file_path = os.path.join(section_folder, file)
-                    tutorial_name = file.replace(".md", "").replace(".R", "").replace("_", " ").title()  # Format the file name
-                    # Create link to the file
+                    tutorial_name = file.replace(".md", "").replace("_", " ").title()  # Format the file name
                     readme_content += f"- [{tutorial_name}]({file_path})\n"
+            
+            # Add R files to the section
+            if r_files:
+                readme_content += "\n**R Scripts:**\n"
+                for file in r_files:
+                    # Link to GitHub view of the file
+                    github_file_url = f"{github_repo_url}/blob/main/{section_folder}/{file}"
+                    script_name = file.replace(".R", "").replace("_", " ").title()  # Format the script name
+                    readme_content += f"- [{script_name}]({github_file_url})\n"
             
             readme_content += "\n"  # Add space after each section
 
@@ -34,4 +54,5 @@ def generate_readme_md(course_root):
 # Example usage:
 if __name__ == "__main__":
     course_root = "."  # Use current directory as the course root
-    generate_readme_md(course_root)
+    github_repo_url = "https://github.com/dvanderelst/GradStats"  # Replace with your GitHub repo URL
+    generate_readme_md(course_root, github_repo_url)
