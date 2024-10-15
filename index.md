@@ -44,5 +44,6 @@ This page contains links to all class notes and R scripts organized by section.
 ## Class Code
 
 **R Scripts:**
+- [`Selecting_Filtering.R`](https://github.com/dvanderelst/GradStats/blob/Fall2024/100 Class Code/Selecting_Filtering.R)
 - [`script01.R`](https://github.com/dvanderelst/GradStats/blob/Fall2024/100 Class Code/script01.R)
 
