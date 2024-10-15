@@ -152,7 +152,6 @@ selected_locations <-c('USA, Brownfield (TX)', 'USA, Rochester (NY)', 'USA, Well
 subset <- filter(data, sender.location %in% selected_locations)
 unique(subset$sender.location)
 ```
-
 ### Special cases
 
 #### Filtering missing values
