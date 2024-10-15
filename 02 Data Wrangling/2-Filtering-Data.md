@@ -1,6 +1,6 @@
 Filtering Data
 ================
-Last Updated: 15, October, 2024 at 09:09
+Last Updated: 15, October, 2024 at 09:17
 
 - [Before we begin…](#before-we-begin)
 - [dplyr: Selecting rows and columns](#dplyr-selecting-rows-and-columns)
@@ -53,6 +53,13 @@ colnames(data) <- make.names(colnames(data))
 ```
 
 ### Selecting columns
+
+Selecting columns is usally less usefull than filtering rows (which I
+will cover below). However, it can be used to create a subset of the
+data that is easier to work with. I tend to use this to split off
+specific parts of the data that need cleaning or transformation before
+merging them again. For example, I might clean demographic data for a
+survey separately from the response data.
 
 #### Single variable
 
