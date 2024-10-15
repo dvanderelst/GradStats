@@ -36,7 +36,7 @@ data <- read_excel("data/transit-data.xlsx", sheet = 'transport data', skip=1)
 colnames(data) <- make.names(colnames(data))
 ```
 
-### Selecting variables
+### Selecting columns
 
 #### Single variable
 
@@ -69,9 +69,50 @@ colnames(subset)
 
 #### Other functions to select variable names
 
-<https://dplyr.tidyverse.org/reference/select.html>
+`starts_with()` selects columns that start with a specific prefix.
 
-### Filtering data using criteria
+```{r}
+titanic_data <- read_csv("data/Titanic.csv")
+subset <- select(titanic_data, starts_with("S"))
+colnames(subset)
+```
+
+`ends_with()` selects columns that end with a specific suffix.
+
+```{r}
+titanic_data <- read_csv("data/Titanic.csv")
+subset <- select(titanic_data, ends_with("e"))
+colnames(subset)
+```
+
+`contains()` selects columns that contain a specific string.
+
+```{r}
+titanic_data <- read_csv("data/Titanic.csv")
+subset <- select(titanic_data, contains("e"))
+colnames(subset)
+```
+
+`matches()` selects columns that match a regular expression.
+
+(This is often useful when the data contain columns with similar names that follow a pattern.)
+
+```{r}
+titanic_data <- read_csv("data/Titanic.csv")
+subset <- select(titanic_data, matches("^[NA]"))
+colnames(subset)
+```
+
+Explanation of the regular expression:
+
++ `^`: This is the anchor that signifies the start of the string. It ensures that the match happens at the beginning of the column name, not somewhere in the middle or end.
++ `[NA]`: This defines a character class. It matches either the letter `N` or `A`. The square brackets `[]` are used to specify multiple characters, meaning the regular expression will match either of the characters listed inside the brackets.
+
+So, `^[NA]` will match any string (or column name, in this case) that starts with either N or A.
+
+There are even more way of using the select function together with other functions, including `num_range()`, `one_of()`, `everything()`, and `last_col()`. See the R documentation for more details: <https://dplyr.tidyverse.org/reference/select.html>
+
+### Filtering rows
 
 ```{r}
 subset <- filter(data, sender.latitude < 50)
@@ -112,6 +153,34 @@ subset <- filter(data, sender.location %in% selected_locations)
 unique(subset$sender.location)
 ```
 
+### Special cases
+
+#### Filtering missing values
+
+```{r}
+library(skimr)
+
+# Let's load in a dataset with missing values
+pakistan_data <- read_csv("data/pakistan_intellectual_capital.csv")
+colnames(pakistan_data) <- make.names(colnames(pakistan_data))
+skim(pakistan_data)
+
+pakistan_data <- filter(pakistan_data, !is.na(Year))
+skim(pakistan_data)
+```
+
+#### Remove duplicates based on columns
+
+```{r}
+pakistan_data <- read_csv("data/pakistan_intellectual_capital.csv")
+colnames(pakistan_data) <- make.names(colnames(pakistan_data))
+skim(pakistan_data)
+# Let's check whether the data contains duplicates
+# We will assume that people are unique if they have a different terminal degree and graduated from different institutions, and have different names.
+pakistan_data <- distinct(pakistan_data, Teacher.Name, Terminal.Degree, Graduated.from)
+skim(pakistan_data)
+```
+
 ### Ordering rows
 
 You can use `arrange` to order the rows.
@@ -139,9 +208,9 @@ subset1 <-arrange(subset1, desc(rounded), sender.location)
 head(subset1, n = 15)
 ```
 
-### Exercises
+## Exercises
 
-#### Exercise: Titanic Data
+### Exercise: Titanic Data
 
 Read in the `Titanic.csv` data and perform the following operations:
 
@@ -149,7 +218,7 @@ Read in the `Titanic.csv` data and perform the following operations:
 -   How many first class passengers were female?
 -   How many female passengers survived?
 
-#### Exercise: Car data
+### Exercise: Car data
 
 Read in the `cars.txt` data and perform the following operations:
 
@@ -161,7 +230,7 @@ The data file contains variables describing a number of cars.
 -   Which cars use over 50% more fuel on the city than they do in the highway?
 -   Which cars have an action radius of over 400 miles on the highway?
 
-#### Exercise: Film data
+### Exercise: Film data
 
 Use the following data file: `films.dat` (in the data folder). This file lists the title, year of release, length in minutes, number of cast members listed, rating, and number of lines of description are recorded for a simple random sample of 100 movies.
 
