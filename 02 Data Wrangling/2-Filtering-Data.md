@@ -1,13 +1,17 @@
 Filtering Data
 ================
-Last Updated: 14, October, 2024 at 14:22
+Last Updated: 15, October, 2024 at 09:09
 
 - [Before we begin…](#before-we-begin)
 - [dplyr: Selecting rows and columns](#dplyr-selecting-rows-and-columns)
-  - [Selecting variables](#selecting-variables)
-  - [Filtering data using criteria](#filtering-data-using-criteria)
+  - [Selecting columns](#selecting-columns)
+  - [Filtering rows](#filtering-rows)
+  - [Special cases](#special-cases)
   - [Ordering rows](#ordering-rows)
-  - [Exercises](#exercises)
+- [Exercises](#exercises)
+  - [Exercise: Titanic Data](#exercise-titanic-data)
+  - [Exercise: Car data](#exercise-car-data)
+  - [Exercise: Film data](#exercise-film-data)
 
 ## Before we begin…
 
@@ -48,7 +52,7 @@ data <- read_excel("data/transit-data.xlsx", sheet = 'transport data', skip=1)
 colnames(data) <- make.names(colnames(data))
 ```
 
-### Selecting variables
+### Selecting columns
 
 #### Single variable
 
@@ -111,9 +115,116 @@ colnames(subset)
 
 #### Other functions to select variable names
 
+`starts_with()` selects columns that start with a specific prefix.
+
+``` r
+titanic_data <- read_csv("data/Titanic.csv")
+```
+
+    ## New names:
+    ## Rows: 1313 Columns: 7
+    ## ── Column specification
+    ## ──────────────────────────────────────────────────────── Delimiter: "," chr
+    ## (3): Name, PClass, Sex dbl (4): ...1, Age, Survived, SexCode
+    ## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+    ## Specify the column types or set `show_col_types = FALSE` to quiet this message.
+    ## • `` -> `...1`
+
+``` r
+subset <- select(titanic_data, starts_with("S"))
+colnames(subset)
+```
+
+    ## [1] "Sex"      "Survived" "SexCode"
+
+`ends_with()` selects columns that end with a specific suffix.
+
+``` r
+titanic_data <- read_csv("data/Titanic.csv")
+```
+
+    ## New names:
+    ## Rows: 1313 Columns: 7
+    ## ── Column specification
+    ## ──────────────────────────────────────────────────────── Delimiter: "," chr
+    ## (3): Name, PClass, Sex dbl (4): ...1, Age, Survived, SexCode
+    ## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+    ## Specify the column types or set `show_col_types = FALSE` to quiet this message.
+    ## • `` -> `...1`
+
+``` r
+subset <- select(titanic_data, ends_with("e"))
+colnames(subset)
+```
+
+    ## [1] "Name"    "Age"     "SexCode"
+
+`contains()` selects columns that contain a specific string.
+
+``` r
+titanic_data <- read_csv("data/Titanic.csv")
+```
+
+    ## New names:
+    ## Rows: 1313 Columns: 7
+    ## ── Column specification
+    ## ──────────────────────────────────────────────────────── Delimiter: "," chr
+    ## (3): Name, PClass, Sex dbl (4): ...1, Age, Survived, SexCode
+    ## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+    ## Specify the column types or set `show_col_types = FALSE` to quiet this message.
+    ## • `` -> `...1`
+
+``` r
+subset <- select(titanic_data, contains("e"))
+colnames(subset)
+```
+
+    ## [1] "Name"     "Age"      "Sex"      "Survived" "SexCode"
+
+`matches()` selects columns that match a regular expression.
+
+(This is often useful when the data contain columns with similar names
+that follow a pattern.)
+
+``` r
+titanic_data <- read_csv("data/Titanic.csv")
+```
+
+    ## New names:
+    ## Rows: 1313 Columns: 7
+    ## ── Column specification
+    ## ──────────────────────────────────────────────────────── Delimiter: "," chr
+    ## (3): Name, PClass, Sex dbl (4): ...1, Age, Survived, SexCode
+    ## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+    ## Specify the column types or set `show_col_types = FALSE` to quiet this message.
+    ## • `` -> `...1`
+
+``` r
+subset <- select(titanic_data, matches("^[NA]"))
+colnames(subset)
+```
+
+    ## [1] "Name" "Age"
+
+Explanation of the regular expression:
+
+- `^`: This is the anchor that signifies the start of the string. It
+  ensures that the match happens at the beginning of the column name,
+  not somewhere in the middle or end.
+- `[NA]`: This defines a character class. It matches either the letter
+  `N` or `A`. The square brackets `[]` are used to specify multiple
+  characters, meaning the regular expression will match either of the
+  characters listed inside the brackets.
+
+So, `^[NA]` will match any string (or column name, in this case) that
+starts with either N or A.
+
+There are even more way of using the select function together with other
+functions, including `num_range()`, `one_of()`, `everything()`, and
+`last_col()`. See the R documentation for more details:
 <https://dplyr.tidyverse.org/reference/select.html>
 
-### Filtering data using criteria
+### Filtering rows
 
 ``` r
 subset <- filter(data, sender.latitude < 50)
@@ -158,14 +269,14 @@ You can string queries together using `&`, `|`, and others. See
 hist(data$sender.longitude, breaks=25)
 ```
 
-![](2-Filtering-Data_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+![](2-Filtering-Data_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
 ``` r
 subset <- filter(data, sender.longitude < -50 | sender.longitude > 100)
 hist(subset$sender.longitude,breaks=25)
 ```
 
-![](2-Filtering-Data_files/figure-gfm/unnamed-chunk-8-2.png)<!-- -->
+![](2-Filtering-Data_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->
 
 Let’s use the NOT operator to filter out one of the locations.
 
@@ -455,6 +566,197 @@ unique(subset$sender.location)
 
     ## [1] "USA, Wellington (KS)" "USA, Rochester (NY)"  "USA, Brownfield (TX)"
 
+### Special cases
+
+#### Filtering missing values
+
+``` r
+library(skimr)
+
+# Let's load in a dataset with missing values
+pakistan_data <- read_csv("data/pakistan_intellectual_capital.csv")
+```
+
+    ## New names:
+    ## Rows: 1142 Columns: 13
+    ## ── Column specification
+    ## ──────────────────────────────────────────────────────── Delimiter: "," chr
+    ## (10): Teacher Name, University Currently Teaching, Department, Province ... dbl
+    ## (3): ...1, S#, Year
+    ## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+    ## Specify the column types or set `show_col_types = FALSE` to quiet this message.
+    ## • `` -> `...1`
+
+``` r
+colnames(pakistan_data) <- make.names(colnames(pakistan_data))
+skim(pakistan_data)
+```
+
+|                                                  |               |
+|:-------------------------------------------------|:--------------|
+| Name                                             | pakistan_data |
+| Number of rows                                   | 1142          |
+| Number of columns                                | 13            |
+| \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_   |               |
+| Column type frequency:                           |               |
+| character                                        | 10            |
+| numeric                                          | 3             |
+| \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ |               |
+| Group variables                                  | None          |
+
+Data summary
+
+**Variable type: character**
+
+| skim_variable                             | n_missing | complete_rate | min | max | empty | n_unique | whitespace |
+|:------------------------------------------|----------:|--------------:|----:|----:|------:|---------:|-----------:|
+| Teacher.Name                              |         0 |          1.00 |   5 |  40 |     0 |     1133 |          0 |
+| University.Currently.Teaching             |         0 |          1.00 |   7 |  71 |     0 |       63 |          0 |
+| Department                                |         0 |          1.00 |   7 |  43 |     0 |       17 |          0 |
+| Province.University.Located               |         0 |          1.00 |   3 |  11 |     0 |        5 |          0 |
+| Designation                               |        19 |          0.98 |   4 |  39 |     0 |       46 |          0 |
+| Terminal.Degree                           |         4 |          1.00 |   2 |  30 |     0 |       41 |          0 |
+| Graduated.from                            |         0 |          1.00 |   3 |  88 |     0 |      347 |          0 |
+| Country                                   |         0 |          1.00 |   2 |  18 |     0 |       35 |          0 |
+| Area.of.Specialization.Research.Interests |       519 |          0.55 |   3 | 477 |     0 |      570 |          0 |
+| Other.Information                         |      1018 |          0.11 |   8 | 132 |     0 |       51 |          0 |
+
+**Variable type: numeric**
+
+| skim_variable | n_missing | complete_rate |    mean |     sd |   p0 |     p25 |    p50 |     p75 | p100 | hist  |
+|:--------------|----------:|--------------:|--------:|-------:|-----:|--------:|-------:|--------:|-----:|:------|
+| …1            |         0 |          1.00 | 1054.35 | 520.20 |    2 |  689.25 | 1087.5 | 1476.75 | 1980 | ▅▅▆▇▅ |
+| S.            |         0 |          1.00 | 1055.35 | 520.20 |    3 |  690.25 | 1088.5 | 1477.75 | 1981 | ▅▅▆▇▅ |
+| Year          |       653 |          0.43 | 2010.46 |   5.58 | 1983 | 2008.00 | 2012.0 | 2014.00 | 2018 | ▁▁▁▆▇ |
+
+``` r
+pakistan_data <- filter(pakistan_data, !is.na(Year))
+skim(pakistan_data)
+```
+
+|                                                  |               |
+|:-------------------------------------------------|:--------------|
+| Name                                             | pakistan_data |
+| Number of rows                                   | 489           |
+| Number of columns                                | 13            |
+| \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_   |               |
+| Column type frequency:                           |               |
+| character                                        | 10            |
+| numeric                                          | 3             |
+| \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ |               |
+| Group variables                                  | None          |
+
+Data summary
+
+**Variable type: character**
+
+| skim_variable                             | n_missing | complete_rate | min | max | empty | n_unique | whitespace |
+|:------------------------------------------|----------:|--------------:|----:|----:|------:|---------:|-----------:|
+| Teacher.Name                              |         0 |          1.00 |   8 |  30 |     0 |      488 |          0 |
+| University.Currently.Teaching             |         0 |          1.00 |  12 |  55 |     0 |       35 |          0 |
+| Department                                |         0 |          1.00 |   9 |  43 |     0 |       10 |          0 |
+| Province.University.Located               |         0 |          1.00 |   3 |  11 |     0 |        5 |          0 |
+| Designation                               |         3 |          0.99 |   8 |  39 |     0 |       25 |          0 |
+| Terminal.Degree                           |         0 |          1.00 |   2 |   9 |     0 |       22 |          0 |
+| Graduated.from                            |         0 |          1.00 |   7 |  88 |     0 |      220 |          0 |
+| Country                                   |         0 |          1.00 |   2 |  18 |     0 |       25 |          0 |
+| Area.of.Specialization.Research.Interests |       170 |          0.65 |   7 | 477 |     0 |      294 |          0 |
+| Other.Information                         |       445 |          0.09 |   8 | 132 |     0 |       23 |          0 |
+
+**Variable type: numeric**
+
+| skim_variable | n_missing | complete_rate |    mean |     sd |   p0 |  p25 |  p50 |  p75 | p100 | hist  |
+|:--------------|----------:|--------------:|--------:|-------:|-----:|-----:|-----:|-----:|-----:|:------|
+| …1            |         0 |             1 |  908.79 | 549.68 |   24 |  417 |  892 | 1275 | 1977 | ▇▇▇▅▆ |
+| S.            |         0 |             1 |  909.79 | 549.68 |   25 |  418 |  893 | 1276 | 1978 | ▇▇▇▅▆ |
+| Year          |         0 |             1 | 2010.46 |   5.58 | 1983 | 2008 | 2012 | 2014 | 2018 | ▁▁▁▆▇ |
+
+#### Remove duplicates based on columns
+
+``` r
+pakistan_data <- read_csv("data/pakistan_intellectual_capital.csv")
+```
+
+    ## New names:
+    ## Rows: 1142 Columns: 13
+    ## ── Column specification
+    ## ──────────────────────────────────────────────────────── Delimiter: "," chr
+    ## (10): Teacher Name, University Currently Teaching, Department, Province ... dbl
+    ## (3): ...1, S#, Year
+    ## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+    ## Specify the column types or set `show_col_types = FALSE` to quiet this message.
+    ## • `` -> `...1`
+
+``` r
+colnames(pakistan_data) <- make.names(colnames(pakistan_data))
+skim(pakistan_data)
+```
+
+|                                                  |               |
+|:-------------------------------------------------|:--------------|
+| Name                                             | pakistan_data |
+| Number of rows                                   | 1142          |
+| Number of columns                                | 13            |
+| \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_   |               |
+| Column type frequency:                           |               |
+| character                                        | 10            |
+| numeric                                          | 3             |
+| \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ |               |
+| Group variables                                  | None          |
+
+Data summary
+
+**Variable type: character**
+
+| skim_variable                             | n_missing | complete_rate | min | max | empty | n_unique | whitespace |
+|:------------------------------------------|----------:|--------------:|----:|----:|------:|---------:|-----------:|
+| Teacher.Name                              |         0 |          1.00 |   5 |  40 |     0 |     1133 |          0 |
+| University.Currently.Teaching             |         0 |          1.00 |   7 |  71 |     0 |       63 |          0 |
+| Department                                |         0 |          1.00 |   7 |  43 |     0 |       17 |          0 |
+| Province.University.Located               |         0 |          1.00 |   3 |  11 |     0 |        5 |          0 |
+| Designation                               |        19 |          0.98 |   4 |  39 |     0 |       46 |          0 |
+| Terminal.Degree                           |         4 |          1.00 |   2 |  30 |     0 |       41 |          0 |
+| Graduated.from                            |         0 |          1.00 |   3 |  88 |     0 |      347 |          0 |
+| Country                                   |         0 |          1.00 |   2 |  18 |     0 |       35 |          0 |
+| Area.of.Specialization.Research.Interests |       519 |          0.55 |   3 | 477 |     0 |      570 |          0 |
+| Other.Information                         |      1018 |          0.11 |   8 | 132 |     0 |       51 |          0 |
+
+**Variable type: numeric**
+
+| skim_variable | n_missing | complete_rate |    mean |     sd |   p0 |     p25 |    p50 |     p75 | p100 | hist  |
+|:--------------|----------:|--------------:|--------:|-------:|-----:|--------:|-------:|--------:|-----:|:------|
+| …1            |         0 |          1.00 | 1054.35 | 520.20 |    2 |  689.25 | 1087.5 | 1476.75 | 1980 | ▅▅▆▇▅ |
+| S.            |         0 |          1.00 | 1055.35 | 520.20 |    3 |  690.25 | 1088.5 | 1477.75 | 1981 | ▅▅▆▇▅ |
+| Year          |       653 |          0.43 | 2010.46 |   5.58 | 1983 | 2008.00 | 2012.0 | 2014.00 | 2018 | ▁▁▁▆▇ |
+
+``` r
+# Let's check whether the data contains duplicates
+# We will assume that people are unique if they have a different terminal degree and graduated from different institutions, and have different names.
+pakistan_data <- distinct(pakistan_data, Teacher.Name, Terminal.Degree, Graduated.from)
+skim(pakistan_data)
+```
+
+|                                                  |               |
+|:-------------------------------------------------|:--------------|
+| Name                                             | pakistan_data |
+| Number of rows                                   | 1140          |
+| Number of columns                                | 3             |
+| \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_   |               |
+| Column type frequency:                           |               |
+| character                                        | 3             |
+| \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ |               |
+| Group variables                                  | None          |
+
+Data summary
+
+**Variable type: character**
+
+| skim_variable   | n_missing | complete_rate | min | max | empty | n_unique | whitespace |
+|:----------------|----------:|--------------:|----:|----:|------:|---------:|-----------:|
+| Teacher.Name    |         0 |             1 |   5 |  40 |     0 |     1133 |          0 |
+| Terminal.Degree |         4 |             1 |   2 |  30 |     0 |       41 |          0 |
+| Graduated.from  |         0 |             1 |   3 |  88 |     0 |      347 |          0 |
+
 ### Ordering rows
 
 You can use `arrange` to order the rows.
@@ -539,9 +841,9 @@ head(subset1, n = 15)
     ## 14 CAN, Dodsland (ON)                       51.8      52
     ## 15 GBR, London (Schiff Sorrento)            51.5      52
 
-### Exercises
+## Exercises
 
-#### Exercise: Titanic Data
+### Exercise: Titanic Data
 
 Read in the `Titanic.csv` data and perform the following operations:
 
@@ -549,7 +851,7 @@ Read in the `Titanic.csv` data and perform the following operations:
 - How many first class passengers were female?
 - How many female passengers survived?
 
-#### Exercise: Car data
+### Exercise: Car data
 
 Read in the `cars.txt` data and perform the following operations:
 
@@ -562,7 +864,7 @@ The data file contains variables describing a number of cars.
   highway?
 - Which cars have an action radius of over 400 miles on the highway?
 
-#### Exercise: Film data
+### Exercise: Film data
 
 Use the following data file: `films.dat` (in the data folder). This file
 lists the title, year of release, length in minutes, number of cast
