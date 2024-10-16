@@ -1,13 +1,13 @@
 Cleaning Data
 ================
-Last Updated: 14, October, 2024 at 14:23
+Last Updated: 16, October, 2024 at 10:11
 
 - [Before we start…](#before-we-start)
 - [Loading the tidyverse](#loading-the-tidyverse)
-- [Some simple operations](#some-simple-operations)
-  - [Opening large text files](#opening-large-text-files)
-  - [Detecting outliers](#detecting-outliers)
-  - [Missing data](#missing-data)
+- [Some Simple Operations](#some-simple-operations)
+  - [Opening Large Text Files](#opening-large-text-files)
+  - [Detecting Errors in Data](#detecting-errors-in-data)
+  - [Missing Data](#missing-data)
   - [Separating a column](#separating-a-column)
   - [Combining columns](#combining-columns)
   - [Strings using `stringr`](#strings-using-stringr)
@@ -60,6 +60,7 @@ Download the following data sets:
 - `vot.csv`
 - `airline-safety.csv`
 - `Titanic.csv`
+- `adult.csv`
 
 ## Loading the tidyverse
 
@@ -69,18 +70,24 @@ Let’s load the tidyverse…
 library(tidyverse)
 ```
 
-    ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
-    ## ✔ ggplot2 3.4.0      ✔ purrr   0.3.5 
-    ## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
-    ## ✔ tidyr   1.2.1      ✔ stringr 1.4.1 
-    ## ✔ readr   2.1.3      ✔ forcats 0.5.2 
+    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+    ## ✔ dplyr     1.1.4     ✔ readr     2.1.5
+    ## ✔ forcats   1.0.0     ✔ stringr   1.5.1
+    ## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+    ## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+    ## ✔ purrr     1.0.2     
     ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
+    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
 
-## Some simple operations
+``` r
+library(skimr)
+```
 
-### Opening large text files
+## Some Simple Operations
+
+### Opening Large Text Files
 
 One of the most simple things you can do is inspect your data using a
 text editor. When text files are large, it’s a good idea to get an
@@ -89,10 +96,10 @@ Editor](https://www.sublimetext.com/). This editor can handle much
 larger files than you can open (as text) in Rstudio. Keep the file open
 while you’re cleaning it!
 
-### Detecting outliers
+### Detecting Errors in Data
 
-Outliers (as errors) can be most easily identified using graphs (See
-later). However, some textual output might be useful as well.
+Errors can be most easily identified using graphs (See later). However,
+some textual output might be useful as well.
 
 Let’s read in some data (see `codebook.txt` for info about the
 variables).
@@ -113,11 +120,27 @@ depression_data <- read_tsv('data/raw_depression.csv')
 People have clearly made errors when entering their ages:
 
 ``` r
-summary(depression_data$age)
+skim(depression_data$age)
 ```
 
-    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##   13.00   18.00   21.00   23.61   25.00 1998.00
+|                                                  |                      |
+|:-------------------------------------------------|:---------------------|
+| Name                                             | depression_data\$age |
+| Number of rows                                   | 39775                |
+| Number of columns                                | 1                    |
+| \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_   |                      |
+| Column type frequency:                           |                      |
+| numeric                                          | 1                    |
+| \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ |                      |
+| Group variables                                  | None                 |
+
+Data summary
+
+**Variable type: numeric**
+
+| skim_variable | n_missing | complete_rate |  mean |    sd |  p0 | p25 | p50 | p75 | p100 | hist  |
+|:--------------|----------:|--------------:|------:|------:|----:|----:|----:|----:|-----:|:------|
+| data          |         0 |             1 | 23.61 | 21.58 |  13 |  18 |  21 |  25 | 1998 | ▇▁▁▁▁ |
 
 The histogram looks weird because of the very few, very high ages. We
 *could* try to fix these by assuming, for example, that `1998` is the
@@ -130,14 +153,14 @@ hist(depression_data$age)
 ![](3-Cleaning-Data_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 ``` r
-dim(depression_data)
+dim(depression_data) # Get the dimensions of the data before filtering
 ```
 
     ## [1] 39775   172
 
 ``` r
 filtered_depression_data <- filter(depression_data, age < 120)
-dim(filtered_depression_data)
+dim(filtered_depression_data) # Get the dimensions of the data after filtering
 ```
 
     ## [1] 39770   172
@@ -158,7 +181,9 @@ boxplot(filtered_depression_data$age)
 
 ![](3-Cleaning-Data_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
-Here is another problem with the data…
+Here is another problem with the data. We could try to fix this by
+assuming that people have made mistakes when entering their family size.
+Just as before, we could remove these entries.
 
 ``` r
 hist(filtered_depression_data$familysize, breaks=100)
@@ -172,6 +197,20 @@ summary(filtered_depression_data$familysize)
 
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
     ##    0.00    2.00    3.00    3.51    4.00  133.00
+
+``` r
+filtered_depression_data <- filter(filtered_depression_data, familysize < 20)
+hist(filtered_depression_data$familysize)
+```
+
+![](3-Cleaning-Data_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+
+``` r
+summary(filtered_depression_data$familysize)
+```
+
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    ##   0.000   2.000   3.000   3.498   4.000  19.000
 
 Categorical data can also be messy. People entered their majors as free
 text. And this is the result:
@@ -193,58 +232,61 @@ head(result, 50)
 ```
 
     ##                          depression_data$major  n      percent valid_percent
-    ##                                              _  1 2.514142e-05  3.513827e-05
-    ##                                              - 34 8.548083e-04  1.194701e-03
-    ##                                             --  1 2.514142e-05  3.513827e-05
-    ##                                            ---  1 2.514142e-05  3.513827e-05
-    ##                                          -nil-  1 2.514142e-05  3.513827e-05
-    ##                                            ???  1 2.514142e-05  3.513827e-05
-    ##                                              .  1 2.514142e-05  3.513827e-05
-    ##                                              /  2 5.028284e-05  7.027654e-05
     ##  &#1055;&#1089;&#1080;&#1093;&#1086;&#1083;&#1  1 2.514142e-05  3.513827e-05
     ##    &#1593;&#1604;&#1605; &#1606;&#1601;&#1587;  1 2.514142e-05  3.513827e-05
     ##       &#22810;&#23186;&#39636;&#35373;&#35336;  1 2.514142e-05  3.513827e-05
     ##                               &#28888;&#22521;  1 2.514142e-05  3.513827e-05
     ##                                  &#304;lahiyat  1 2.514142e-05  3.513827e-05
+    ##                                              - 34 8.548083e-04  1.194701e-03
+    ##                                             --  1 2.514142e-05  3.513827e-05
+    ##                                            ---  1 2.514142e-05  3.513827e-05
+    ##                                          -nil-  1 2.514142e-05  3.513827e-05
+    ##                                              .  1 2.514142e-05  3.513827e-05
+    ##                                              /  2 5.028284e-05  7.027654e-05
     ##                                              0  2 5.028284e-05  7.027654e-05
     ##                         1. Social work, 2. Law  1 2.514142e-05  3.513827e-05
     ##                                      12th arts  1 2.514142e-05  3.513827e-05
     ##                                             18  1 2.514142e-05  3.513827e-05
     ##                                             19  1 2.514142e-05  3.513827e-05
     ##  2 majors: Computer science and industrial eng  1 2.514142e-05  3.513827e-05
-    ##                                   2D animation  1 2.514142e-05  3.513827e-05
     ##                                         2D Art  1 2.514142e-05  3.513827e-05
+    ##                                   2D animation  1 2.514142e-05  3.513827e-05
     ##                                   3D Animation  1 2.514142e-05  3.513827e-05
     ##                     3d animation, architecture  1 2.514142e-05  3.513827e-05
     ##                                             75  1 2.514142e-05  3.513827e-05
-    ##                                        a level  1 2.514142e-05  3.513827e-05
+    ##                                            ???  1 2.514142e-05  3.513827e-05
     ##                                      A Teacher  1 2.514142e-05  3.513827e-05
     ##                                             AA  1 2.514142e-05  3.513827e-05
     ##                                           AADT  1 2.514142e-05  3.513827e-05
-    ##                                       academic  1 2.514142e-05  3.513827e-05
-    ##                                            Acc  1 2.514142e-05  3.513827e-05
-    ##                                      Acc maybe  1 2.514142e-05  3.513827e-05
-    ##                                           acca  1 2.514142e-05  3.513827e-05
-    ##                                           Acca  2 5.028284e-05  7.027654e-05
     ##                                           ACCA  2 5.028284e-05  7.027654e-05
     ##     ACCA Professional Accounting Qualification  1 2.514142e-05  3.513827e-05
-    ##                                    Accaountant  1 2.514142e-05  3.513827e-05
-    ##                                     accauntant  1 2.514142e-05  3.513827e-05
-    ##                                     Accontancy  1 2.514142e-05  3.513827e-05
-    ##                                      accontant  1 2.514142e-05  3.513827e-05
-    ##                               Acconting degree  1 2.514142e-05  3.513827e-05
-    ##                                        Accoung  1 2.514142e-05  3.513827e-05
-    ##                                     Accounring  1 2.514142e-05  3.513827e-05
-    ##                                        account 22 5.531113e-04  7.730419e-04
-    ##                                        Account 78 1.961031e-03  2.740785e-03
     ##                                        ACCOUNT  1 2.514142e-05  3.513827e-05
-    ##                            account and finance  1 2.514142e-05  3.513827e-05
-    ##                            Account and finance  2 5.028284e-05  7.027654e-05
-    ##                                    Account ing  1 2.514142e-05  3.513827e-05
-    ##                                     Accountacy  1 2.514142e-05  3.513827e-05
-    ##                                      accountan  2 5.028284e-05  7.027654e-05
+    ##                                    ACCOUNTANCY  3 7.542426e-05  1.054148e-04
+    ##                                     ACCOUNTANT  2 5.028284e-05  7.027654e-05
+    ##                                     ACCOUNTING  9 2.262728e-04  3.162444e-04
+    ##                                       ACCOUNTS  1 2.514142e-05  3.513827e-05
+    ##                             ACTUARIAL SCIENCES  1 2.514142e-05  3.513827e-05
+    ##                                          ADMIN  1 2.514142e-05  3.513827e-05
+    ##                                 ADMINISTRATION  3 7.542426e-05  1.054148e-04
+    ##                                 ADMINISTRATIVE  1 2.514142e-05  3.513827e-05
+    ##                                   AGRICULTURAL  1 2.514142e-05  3.513827e-05
+    ##                                    AGRICULTURE  2 5.028284e-05  7.027654e-05
+    ##                        ALAM marine engineering  1 2.514142e-05  3.513827e-05
+    ##  AMERICAN SIGN LANGUAGE INTERPRETING, COMMUNIT  1 2.514142e-05  3.513827e-05
+    ##                                 ANIMAL SCIENCE  1 2.514142e-05  3.513827e-05
+    ##                                   ARCHITECTURE  4 1.005657e-04  1.405531e-04
+    ##                                            ART  2 5.028284e-05  7.027654e-05
+    ##                                   ART & DESIGN  1 2.514142e-05  3.513827e-05
+    ##                                           ARTS  1 2.514142e-05  3.513827e-05
+    ##                                ARTS MANAGEMENT  1 2.514142e-05  3.513827e-05
+    ##                                            Acc  1 2.514142e-05  3.513827e-05
+    ##                                      Acc maybe  1 2.514142e-05  3.513827e-05
+    ##                                           Acca  2 5.028284e-05  7.027654e-05
 
-### Missing data
+Cleaning this would be more laborious and will require text processing.
+We will cover some of this later.
+
+### Missing Data
 
 R encodes missing values as `NA`. Missing values are contagious:
 performing calculations on data that contains missing values often leads
@@ -265,16 +307,80 @@ max(some_data)
 
     ## [1] NA
 
+In the section on Filtering Data, we have covered how to filter out
+missing values.
+
 Tips from the field:
 
 - When reading in a file, it’s a good idea to know how missing values
-  are encoded so you can tell R which values to interpret as missing.
+  are encoded so you can tell R which values to interpret as missing. We
+  have covered this under “Reading Data”.
 - Sometime people will use absurd values to indicate missing data. For
   example, they might enter -1 or 99999 when an age value is missing.
   These are then read by R as numbers and your calculations end up being
   nonsense. One way to catch this it by looking for outliers!
 
+Here is an example of the last case.
+
+``` r
+income_data <- read_csv('data/adult.csv')
+```
+
+    ## Rows: 48842 Columns: 15
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## chr (9): workclass, education, marital-status, occupation, relationship, rac...
+    ## dbl (6): age, fnlwgt, educational-num, capital-gain, capital-loss, hours-per...
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+``` r
+colnames(income_data) <- make.names(colnames(income_data))
+```
+
+It seems the value `9999` is used to indicate missing data for the
+variable `capital gain`.
+
+``` r
+# Create a table for the various values for the variable 'capital-gain'
+tbl<-tabyl(income_data$capital.gain)
+# Show the last ten rows of tbl
+tail(tbl)
+```
+
+    ##  income_data$capital.gain   n      percent
+    ##                     25124   6 1.228451e-04
+    ##                     25236  14 2.866385e-04
+    ##                     27828  58 1.187503e-03
+    ##                     34095   6 1.228451e-04
+    ##                     41310   3 6.142255e-05
+    ##                     99999 244 4.995700e-03
+
+Likewise, the value `?` seems to be used to indicate missing data for
+the variable `occupation`.
+
+``` r
+# Create a table for the various values for the variable 'occupation'
+tbl <- tabyl(income_data$occupation)
+head(tbl)
+```
+
+    ##  income_data$occupation    n      percent
+    ##                       ? 2809 0.0575119774
+    ##            Adm-clerical 5611 0.1148806355
+    ##            Armed-Forces   15 0.0003071127
+    ##            Craft-repair 6112 0.1251382007
+    ##         Exec-managerial 6086 0.1246058720
+    ##         Farming-fishing 1490 0.0305065313
+
 ### Separating a column
+
+It happens more often that you would exspect that variables are combined
+in one column. For example, the column
+`Hospital.Referral.Region.Description` in the `inpatient` data set
+combines the state and city of the hospital. We can separate this column
+into two columns.
 
 ``` r
 patient_data <-read_tsv('data/inpatient.tsv')
@@ -295,19 +401,18 @@ head(patient_data, 5)
 ```
 
     ## # A tibble: 5 × 12
-    ##   DRG.Definition Provi…¹ Provi…² Provi…³ Provi…⁴ Provi…⁵ Provi…⁶ Hospi…⁷ Total…⁸
-    ##   <chr>            <dbl> <chr>   <chr>   <chr>   <chr>   <chr>   <chr>     <dbl>
-    ## 1 039 - EXTRACR…   10001 SOUTHE… 1108 R… DOTHAN  AL      36301   AL - D…      91
-    ## 2 039 - EXTRACR…   10005 MARSHA… 2505 U… BOAZ    AL      35957   AL - B…      14
-    ## 3 039 - EXTRACR…   10006 ELIZA … 205 MA… FLOREN… AL      35631   AL - B…      24
-    ## 4 039 - EXTRACR…   10011 ST VIN… 50 MED… BIRMIN… AL      35235   AL - B…      25
-    ## 5 039 - EXTRACR…   10016 SHELBY… 1000 F… ALABAS… AL      35007   AL - B…      18
-    ## # … with 3 more variables: Average.Covered.Charges <chr>,
-    ## #   Average.Total.Payments <chr>, Average.Medicare.Payments <chr>, and
-    ## #   abbreviated variable names ¹​Provider.Id, ²​Provider.Name,
-    ## #   ³​Provider.Street.Address, ⁴​Provider.City, ⁵​Provider.State,
-    ## #   ⁶​Provider.Zip.Code, ⁷​Hospital.Referral.Region.Description,
-    ## #   ⁸​Total.Discharges
+    ##   DRG.Definition  Provider.Id Provider.Name Provider.Street.Addr…¹ Provider.City
+    ##   <chr>                 <dbl> <chr>         <chr>                  <chr>        
+    ## 1 039 - EXTRACRA…       10001 SOUTHEAST AL… 1108 ROSS CLARK CIRCLE DOTHAN       
+    ## 2 039 - EXTRACRA…       10005 MARSHALL MED… 2505 U S HIGHWAY 431 … BOAZ         
+    ## 3 039 - EXTRACRA…       10006 ELIZA COFFEE… 205 MARENGO STREET     FLORENCE     
+    ## 4 039 - EXTRACRA…       10011 ST VINCENT'S… 50 MEDICAL PARK EAST … BIRMINGHAM   
+    ## 5 039 - EXTRACRA…       10016 SHELBY BAPTI… 1000 FIRST STREET NOR… ALABASTER    
+    ## # ℹ abbreviated name: ¹​Provider.Street.Address
+    ## # ℹ 7 more variables: Provider.State <chr>, Provider.Zip.Code <chr>,
+    ## #   Hospital.Referral.Region.Description <chr>, Total.Discharges <dbl>,
+    ## #   Average.Covered.Charges <chr>, Average.Total.Payments <chr>,
+    ## #   Average.Medicare.Payments <chr>
 
 ``` r
 result <- tabyl(patient_data$Hospital.Referral.Region.Description)
@@ -327,9 +432,9 @@ Let’s separate this column into two columns.
 test <- separate(patient_data, Hospital.Referral.Region.Description, into=c('state', 'city'), sep='-')
 ```
 
-    ## Warning: Expected 2 pieces. Additional pieces discarded in 791 rows [710, 711,
-    ## 718, 830, 853, 1918, 1921, 1927, 1930, 1940, 2055, 2086, 3398, 3401, 3411, 3415,
-    ## 3594, 3630, 5424, 5425, ...].
+    ## Warning: Expected 2 pieces. Additional pieces discarded in 791 rows [710, 711, 718, 830,
+    ## 853, 1918, 1921, 1927, 1930, 1940, 2055, 2086, 3398, 3401, 3411, 3415, 3594,
+    ## 3630, 5424, 5425, ...].
 
 This resulted in some warnings in certain rows. Let’s look at some of
 those rows.
@@ -352,7 +457,8 @@ patient_data$Hospital.Referral.Region.Description[1930]
 
     ## [1] "NC - Winston-Salem"
 
-Let’s look at an example of the results.
+The problem seems to be that these rows contain values with more than
+one `-`. Let’s look at an example of the results.
 
 ``` r
 test$state[710]
@@ -366,11 +472,14 @@ test$city[710]
 
     ## [1] " Winston"
 
+It turns out that R has remove the second part of the city name. We can
+fix this setting the `remove` argument to `FALSE`.
+
 ``` r
 test <- separate(patient_data, Hospital.Referral.Region.Description, into=c('state', 'city'), sep=' - ', remove = FALSE)
 ```
 
-No warnings anymore! Let’s look at an example of the results again
+No warnings anymore! Let’s look at an example of the results again.
 
 ``` r
 test$state[710]
@@ -385,11 +494,22 @@ test$city[710]
     ## [1] "Winston-Salem"
 
 Note, you can use regular expression for the `sep` argument: [see
-here.](https://cran.r-project.org/web/packages/stringr/vignettes/regular-expressions.html)
+here.](https://cran.r-project.org/web/packages/stringr/vignettes/regular-expressions.html).
+This allows you to separate columns based on more complex patterns.
 
 ### Combining columns
 
 The opposite operation!
+
+The remove argument in the `unite()` function specifies whether the
+original columns should be removed after creating the new combined
+column. So, the `remove` argument does something different than in the
+`separate()` function.
+
+- `remove = TRUE` (default): The original columns are removed from the
+  data frame after combining them.
+- `remove = FALSE`: The original columns are retained alongside the new
+  combined column.
 
 ``` r
 test <- unite(test, 'combined', c(Provider.Id, Provider.Name), sep='_+_', remove = FALSE)
@@ -408,7 +528,10 @@ easy). I will run through some examples but do have a look at the
 [cheatsheet](https://evoldyn.gitlab.io/evomics-2018/ref-sheets/R_strings.pdf)
 as well.
 
-Remember, this data?
+Remember this data? We will try to clean the `major` column to a certain
+extent. We will convert the majors to lower case and try to find biology
+majors. Fully cleaning this data would require a lot more work. But
+perhaps it can now also be done using AI tools.
 
 ``` r
 depression_data <- read_tsv('data/raw_depression.csv')
@@ -452,27 +575,278 @@ head(depression_data$major, 10)
     ##  [7] "mechatronics engeenerieng" "music"                    
     ##  [9] "psychology"                "computer programming"
 
-Let’s try to find biology majors
+Let’s try to find biology majors. The code below creates a variable that
+is `TRUE` if the major contains the string `bio`. Next, we filter the
+data to only include biology students using this new variable.
 
 ``` r
 depression_data$bio <- str_detect(depression_data$major, 'bio')
 bio_students <- filter(depression_data, bio)
+tabyl(bio_students$major)
 ```
 
-That matched also biomedical and biochemistry students. Let’s detect
-those using a regex (See <https://regex101.com/> for a regex
-construction tool).
+    ##                             bio_students$major   n      percent
+    ##                     agricultural biotechnology   1 0.0009615385
+    ##                              animal biologists   1 0.0009615385
+    ##                                 animal biology   2 0.0019230769
+    ##                          anthropology, biology   1 0.0009615385
+    ##                           applied biochemistry   1 0.0009615385
+    ##              applied sciences in biotechnology   1 0.0009615385
+    ##                                aquatic biology   1 0.0009615385
+    ##                                            bio   3 0.0028846154
+    ##                                bio engineering   3 0.0028846154
+    ##                                      bio medic   1 0.0009615385
+    ##                                   bio medicine   1 0.0009615385
+    ##                                    bio pre-med   2 0.0019230769
+    ##                                      bio psych   1 0.0009615385
+    ##                                    bio science   1 0.0009615385
+    ##                                  bio-composite   1 0.0009615385
+    ##                       bio-composite technology   1 0.0009615385
+    ##                                       bio-tech   1 0.0009615385
+    ##                                        biochem   1 0.0009615385
+    ##                                   biochemestry   1 0.0009615385
+    ##                                    biochemical   1 0.0009615385
+    ##                        biochemical engineering   4 0.0038461538
+    ##          biochemical-biotechnology engineering   1 0.0009615385
+    ##                                   biochemistry  64 0.0615384615
+    ##                  biochemistry and cell biology   1 0.0009615385
+    ##              biochemistry and computer science   1 0.0009615385
+    ##                 biochemistry, physical therapy   1 0.0009615385
+    ##                     biochemistry/biotechnology   1 0.0009615385
+    ##                                    biochemisty   1 0.0009615385
+    ##                        biochemisty and spanish   1 0.0009615385
+    ##                        biocomposite technology   1 0.0009615385
+    ##                                   biodiversity   2 0.0019230769
+    ##                    biodiversity & conservation   1 0.0009615385
+    ##                  biodiversity and conservation   2 0.0019230769
+    ##                                 bioengineering   3 0.0028846154
+    ##                              biohealth science   1 0.0009615385
+    ##                                       bioilogy   1 0.0009615385
+    ##                         bioindustry technology   1 0.0009615385
+    ##                                 bioinformatics   5 0.0048076923
+    ##                                          biolo   1 0.0009615385
+    ##                                        biolofy   1 0.0009615385
+    ##                      biological animal science   1 0.0009615385
+    ##                        biological anthropology   2 0.0019230769
+    ##                             biological science   4 0.0038461538
+    ##                            biological sciences  13 0.0125000000
+    ##                                      biologist   1 0.0009615385
+    ##                                     biologists   1 0.0009615385
+    ##                                        biology 459 0.4413461538
+    ##                       biology & administrative   1 0.0009615385
+    ##                        biology and archaeology   1 0.0009615385
+    ##                          biology and chemistry   2 0.0019230769
+    ##               biology and french, double-major   1 0.0009615385
+    ##                            biology and history   1 0.0009615385
+    ##              biology and philosophy dual major   1 0.0009615385
+    ##                         biology and psychology   2 0.0019230769
+    ##                              biology education   2 0.0019230769
+    ##                           biology in education   1 0.0009615385
+    ##                                 biology marine   1 0.0009615385
+    ##                                biology science   2 0.0019230769
+    ##                   biology w/ med lab specifics   1 0.0009615385
+    ##                 biology, conflict, development   1 0.0009615385
+    ##                                 biology, music   1 0.0009615385
+    ##                             biology, sociology   1 0.0009615385
+    ##                               biology, spanish   1 0.0009615385
+    ##                        biology/ health science   1 0.0009615385
+    ##                                biology/ premed   1 0.0009615385
+    ##                    biology/business management   1 0.0009615385
+    ##                               biology: pre-med   1 0.0009615385
+    ##                                      biologyst   1 0.0009615385
+    ##                                       biologyy   1 0.0009615385
+    ##                                         biomed   2 0.0019230769
+    ##                                 biomed science   1 0.0009615385
+    ##                                     biomedical  21 0.0201923077
+    ##              biomedical electrical engineering   1 0.0009615385
+    ##              biomedical electronic engineering   2 0.0019230769
+    ##             biomedical electronics engineering   1 0.0009615385
+    ##                         biomedical engineering  31 0.0298076923
+    ##                                  biomedical sc   1 0.0009615385
+    ##                             biomedical science  53 0.0509615385
+    ##                            biomedical sciences  12 0.0115384615
+    ##                             biomedical sciencr   1 0.0009615385
+    ##                          biomedical technology   1 0.0009615385
+    ##                                    biomedicine  10 0.0096153846
+    ##                                   biomolecular   1 0.0009615385
+    ##                           biomolecular science   6 0.0057692308
+    ##                            biomolecule science   1 0.0009615385
+    ##                                     biophysics   2 0.0019230769
+    ##                         bioprocess engineering   4 0.0038461538
+    ##                          bioprocess technology   1 0.0009615385
+    ##                                  bioprocessing   1 0.0009615385
+    ##                                       biopsych   1 0.0009615385
+    ##                                  biopsychology   1 0.0009615385
+    ##                                     bioscience   2 0.0019230769
+    ##                                    biosciences   2 0.0019230769
+    ##                         biosystems engineering   1 0.0009615385
+    ##                                        biotech   2 0.0019230769
+    ##                            biotech engineering   3 0.0028846154
+    ##                                biotechnologies   1 0.0009615385
+    ##                                  biotechnology 111 0.1067307692
+    ##                      biotechnology engineering   4 0.0038461538
+    ##                         biotechnology resource   1 0.0009615385
+    ##                                     bs biology   1 0.0009615385
+    ##                     cell and molecular biology   1 0.0009615385
+    ##            chemical and bioprocess engineering   1 0.0009615385
+    ##                            ciências biológicas   1 0.0009615385
+    ##                 computer science, biochemistry   1 0.0009615385
+    ##  conservation and management of biodiversity (   1 0.0009615385
+    ##                           conservation biology   4 0.0038461538
+    ##                           ecology biodiversity   1 0.0009615385
+    ##                               english, biology   1 0.0009615385
+    ##                          environmental biology   1 0.0009615385
+    ##                           evolutionary biology   1 0.0009615385
+    ##                              fisheries biology   1 0.0009615385
+    ##                             food biotechnology   6 0.0057692308
+    ##                     forensic science & biology   1 0.0009615385
+    ##                        health science/ biology   1 0.0009615385
+    ##                                history/biology   1 0.0009615385
+    ##                                  human biology   1 0.0009615385
+    ##                             induatrial biology   1 0.0009615385
+    ##                             industrial biology   1 0.0009615385
+    ##  life science engineering (agriculture, biolog   1 0.0009615385
+    ##                                 marine biology  12 0.0115384615
+    ##                             medical bioscience   2 0.0019230769
+    ##                        medical biotechnologies   1 0.0009615385
+    ##                                micro-biologist   1 0.0009615385
+    ##                                   microbiology  49 0.0471153846
+    ##  microbiology (environmental psychology for ge   1 0.0009615385
+    ##                     molecular and cell biology   1 0.0009615385
+    ##                 molecular and cellular biology   1 0.0009615385
+    ##                              molecular biology  11 0.0105769231
+    ##                              molecular biotech   1 0.0009615385
+    ##                                       neurobio   1 0.0009615385
+    ##                                   neurobiology   1 0.0009615385
+    ##                    neurobiology --> psychology   1 0.0009615385
+    ##                          neuroscience, biology   1 0.0009615385
+    ##                                nursing/biology   1 0.0009615385
+    ##                                  paeleobiology   1 0.0009615385
+    ##                         pharmacy, microbiology   1 0.0009615385
+    ##   plant biotechnology (science and technology)   1 0.0009615385
+    ##                    psychology or micro biology   1 0.0009615385
+    ##                   psychology, english, biology   1 0.0009615385
+    ##                             psychology/biology   1 0.0009615385
+    ##                         resource biotechnology   1 0.0009615385
+    ##                                science biology   6 0.0057692308
+    ##                          science biotechnology   1 0.0009615385
+    ##                             science in biology   1 0.0009615385
+    ##                           science microbiology   2 0.0019230769
+    ##                               wildlife biology   1 0.0009615385
+
+That matched also biomedical, biochemistry students, and others which we
+might not want to include. Let’s detect those using a regex (See
+<https://regex101.com/> for a regex construction tool).
+
+The code below creates a variable that is `TRUE` if the major contains
+does *not* contain `chem`, `med`, `phys`, or `tech`.
 
 ``` r
 depression_data$not_other <- !str_detect(depression_data$major, 'chem|med|phys|tech')
 ```
 
-Let’s combine our columns
+Let’s combine our two new columns. We multiply the two columns into a
+new variable `selection` to get a new column that is `TRUE` if the major
+contains `bio` and does not contain `chem`, `med`, `phys`, or `tech`.
 
 ``` r
 depression_data <- mutate(depression_data, selection = not_other * bio)
 bio_students <- filter(depression_data, selection==1)
+tabyl(bio_students$major)
 ```
+
+    ##                             bio_students$major   n     percent
+    ##                              animal biologists   1 0.001494768
+    ##                                 animal biology   2 0.002989537
+    ##                          anthropology, biology   1 0.001494768
+    ##                                aquatic biology   1 0.001494768
+    ##                                            bio   3 0.004484305
+    ##                                bio engineering   3 0.004484305
+    ##                                      bio psych   1 0.001494768
+    ##                                    bio science   1 0.001494768
+    ##                                  bio-composite   1 0.001494768
+    ##                                   biodiversity   2 0.002989537
+    ##                    biodiversity & conservation   1 0.001494768
+    ##                  biodiversity and conservation   2 0.002989537
+    ##                                 bioengineering   3 0.004484305
+    ##                              biohealth science   1 0.001494768
+    ##                                       bioilogy   1 0.001494768
+    ##                                 bioinformatics   5 0.007473842
+    ##                                          biolo   1 0.001494768
+    ##                                        biolofy   1 0.001494768
+    ##                      biological animal science   1 0.001494768
+    ##                        biological anthropology   2 0.002989537
+    ##                             biological science   4 0.005979073
+    ##                            biological sciences  13 0.019431988
+    ##                                      biologist   1 0.001494768
+    ##                                     biologists   1 0.001494768
+    ##                                        biology 459 0.686098655
+    ##                       biology & administrative   1 0.001494768
+    ##                        biology and archaeology   1 0.001494768
+    ##               biology and french, double-major   1 0.001494768
+    ##                            biology and history   1 0.001494768
+    ##              biology and philosophy dual major   1 0.001494768
+    ##                         biology and psychology   2 0.002989537
+    ##                              biology education   2 0.002989537
+    ##                           biology in education   1 0.001494768
+    ##                                 biology marine   1 0.001494768
+    ##                                biology science   2 0.002989537
+    ##                 biology, conflict, development   1 0.001494768
+    ##                                 biology, music   1 0.001494768
+    ##                             biology, sociology   1 0.001494768
+    ##                               biology, spanish   1 0.001494768
+    ##                        biology/ health science   1 0.001494768
+    ##                    biology/business management   1 0.001494768
+    ##                                      biologyst   1 0.001494768
+    ##                                       biologyy   1 0.001494768
+    ##                                   biomolecular   1 0.001494768
+    ##                           biomolecular science   6 0.008968610
+    ##                            biomolecule science   1 0.001494768
+    ##                         bioprocess engineering   4 0.005979073
+    ##                                  bioprocessing   1 0.001494768
+    ##                                       biopsych   1 0.001494768
+    ##                                  biopsychology   1 0.001494768
+    ##                                     bioscience   2 0.002989537
+    ##                                    biosciences   2 0.002989537
+    ##                         biosystems engineering   1 0.001494768
+    ##                                     bs biology   1 0.001494768
+    ##                     cell and molecular biology   1 0.001494768
+    ##                            ciências biológicas   1 0.001494768
+    ##  conservation and management of biodiversity (   1 0.001494768
+    ##                           conservation biology   4 0.005979073
+    ##                           ecology biodiversity   1 0.001494768
+    ##                               english, biology   1 0.001494768
+    ##                          environmental biology   1 0.001494768
+    ##                           evolutionary biology   1 0.001494768
+    ##                              fisheries biology   1 0.001494768
+    ##                     forensic science & biology   1 0.001494768
+    ##                        health science/ biology   1 0.001494768
+    ##                                history/biology   1 0.001494768
+    ##                                  human biology   1 0.001494768
+    ##                             induatrial biology   1 0.001494768
+    ##                             industrial biology   1 0.001494768
+    ##  life science engineering (agriculture, biolog   1 0.001494768
+    ##                                 marine biology  12 0.017937220
+    ##                                micro-biologist   1 0.001494768
+    ##                                   microbiology  49 0.073243647
+    ##  microbiology (environmental psychology for ge   1 0.001494768
+    ##                     molecular and cell biology   1 0.001494768
+    ##                 molecular and cellular biology   1 0.001494768
+    ##                              molecular biology  11 0.016442451
+    ##                                       neurobio   1 0.001494768
+    ##                                   neurobiology   1 0.001494768
+    ##                    neurobiology --> psychology   1 0.001494768
+    ##                          neuroscience, biology   1 0.001494768
+    ##                                nursing/biology   1 0.001494768
+    ##                                  paeleobiology   1 0.001494768
+    ##                         pharmacy, microbiology   1 0.001494768
+    ##                    psychology or micro biology   1 0.001494768
+    ##                   psychology, english, biology   1 0.001494768
+    ##                             psychology/biology   1 0.001494768
+    ##                                science biology   6 0.008968610
+    ##                             science in biology   1 0.001494768
+    ##                           science microbiology   2 0.002989537
+    ##                               wildlife biology   1 0.001494768
 
 ## Reorganizing data
 
@@ -542,7 +916,7 @@ summaries
     ##  8 Compact Mercedes-Benz         175
     ##  9 Compact Nissan                181
     ## 10 Compact Oldsmobile            188
-    ## # … with 71 more rows
+    ## # ℹ 71 more rows
 
 You can ask for more than one summary statistic.
 
@@ -571,7 +945,7 @@ summaries
     ##  8 Compact Mercedes-Benz         175        175      NA
     ##  9 Compact Nissan                181        181      NA
     ## 10 Compact Oldsmobile            188        188      NA
-    ## # … with 71 more rows
+    ## # ℹ 71 more rows
 
 ### Further processing
 
@@ -732,16 +1106,15 @@ head(relig_income, 5)
 ```
 
     ## # A tibble: 5 × 11
-    ##   religion       `<$10k` $10-2…¹ $20-3…² $30-4…³ $40-5…⁴ $50-7…⁵ $75-1…⁶ $100-…⁷
-    ##   <chr>            <dbl>   <dbl>   <dbl>   <dbl>   <dbl>   <dbl>   <dbl>   <dbl>
-    ## 1 Agnostic            27      34      60      81      76     137     122     109
-    ## 2 Atheist             12      27      37      52      35      70      73      59
-    ## 3 Buddhist            27      21      30      34      33      58      62      39
-    ## 4 Catholic           418     617     732     670     638    1116     949     792
-    ## 5 Don’t know/re…      15      14      15      11      10      35      21      17
-    ## # … with 2 more variables: `>150k` <dbl>, `Don't know/refused` <dbl>, and
-    ## #   abbreviated variable names ¹​`$10-20k`, ²​`$20-30k`, ³​`$30-40k`, ⁴​`$40-50k`,
-    ## #   ⁵​`$50-75k`, ⁶​`$75-100k`, ⁷​`$100-150k`
+    ##   religion  `<$10k` `$10-20k` `$20-30k` `$30-40k` `$40-50k` `$50-75k` `$75-100k`
+    ##   <chr>       <dbl>     <dbl>     <dbl>     <dbl>     <dbl>     <dbl>      <dbl>
+    ## 1 Agnostic       27        34        60        81        76       137        122
+    ## 2 Atheist        12        27        37        52        35        70         73
+    ## 3 Buddhist       27        21        30        34        33        58         62
+    ## 4 Catholic      418       617       732       670       638      1116        949
+    ## 5 Don’t kn…      15        14        15        11        10        35         21
+    ## # ℹ 3 more variables: `$100-150k` <dbl>, `>150k` <dbl>,
+    ## #   `Don't know/refused` <dbl>
 
 This data is in a wider format. But we can easily melt it to a long
 format.
@@ -889,7 +1262,7 @@ summaries
     ##  8 Africa     1987         53.3
     ##  9 Africa     1992         53.6
     ## 10 Africa     1997         53.6
-    ## # … with 50 more rows
+    ## # ℹ 50 more rows
 
 ``` r
 merged <- full_join(gap_data, summaries, by=c('continent', 'year'))
@@ -1066,18 +1439,6 @@ long_again <- select(long_again, -Fiscal_Year)
 
 ``` r
 library(lubridate)
-```
-
-    ## Loading required package: timechange
-
-    ## 
-    ## Attaching package: 'lubridate'
-
-    ## The following objects are masked from 'package:base':
-    ## 
-    ##     date, intersect, setdiff, union
-
-``` r
 long_again$date <- paste('01', long_again$Month, long_again$Year)
 long_again$date<-dmy(long_again$date)
 ```
@@ -1092,15 +1453,16 @@ data_2012 <- filter(long_again, Year == 2012)
 ggplot(data_2012) + aes(x=date, y = Count, group=Source, color=Source) + geom_line()
 ```
 
-![](3-Cleaning-Data_files/figure-gfm/unnamed-chunk-54-1.png)<!-- -->
+![](3-Cleaning-Data_files/figure-gfm/unnamed-chunk-58-1.png)<!-- -->
 
 ``` r
 ggplot(long_again) + aes(x=Month, y = Count, group=Source, color=Source) + geom_line() + facet_grid(~Year)
 ```
 
-    ## Warning: Removed 2 rows containing missing values (`geom_line()`).
+    ## Warning: Removed 2 rows containing missing values or values outside the scale range
+    ## (`geom_line()`).
 
-![](3-Cleaning-Data_files/figure-gfm/unnamed-chunk-55-1.png)<!-- -->
+![](3-Cleaning-Data_files/figure-gfm/unnamed-chunk-59-1.png)<!-- -->
 
 ## Example: Coal data
 
@@ -1134,11 +1496,11 @@ head(coal_data)
     ## 4 Greenland  5   e-5 5   e-5 3   e-5 3   e-5 3   e-5  0      0      0      0    
     ## 5 Mexico     1.02e-1 1.06e-1 1.20e-1 1.29e-1 1.31e-1  0.146  0.156  0.170  0.160
     ## 6 Saint Pie… 0       0       0       0       0        0      0      0      0    
-    ## # … with 21 more variables: `1989` <dbl>, `1990` <dbl>, `1991` <dbl>,
-    ## #   `1992` <dbl>, `1993` <dbl>, `1994` <dbl>, `1995` <dbl>, `1996` <dbl>,
-    ## #   `1997` <dbl>, `1998` <dbl>, `1999` <dbl>, `2000` <dbl>, `2001` <dbl>,
-    ## #   `2002` <dbl>, `2003` <dbl>, `2004` <dbl>, `2005` <dbl>, `2006` <dbl>,
-    ## #   `2007` <dbl>, `2008` <dbl>, `2009` <dbl>
+    ## # ℹ 21 more variables: `1989` <dbl>, `1990` <dbl>, `1991` <dbl>, `1992` <dbl>,
+    ## #   `1993` <dbl>, `1994` <dbl>, `1995` <dbl>, `1996` <dbl>, `1997` <dbl>,
+    ## #   `1998` <dbl>, `1999` <dbl>, `2000` <dbl>, `2001` <dbl>, `2002` <dbl>,
+    ## #   `2003` <dbl>, `2004` <dbl>, `2005` <dbl>, `2006` <dbl>, `2007` <dbl>,
+    ## #   `2008` <dbl>, `2009` <dbl>
 
 **Take some time to think how you would convert this data to a tidy data
 set.**

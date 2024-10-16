@@ -21,6 +21,7 @@ Download the following data sets:
 -   `vot.csv`
 -   `airline-safety.csv`
 -   `Titanic.csv`
+-   `adult.csv`
 
 ## Loading the tidyverse
 
@@ -28,17 +29,18 @@ Let's load the tidyverse...
 
 ```{r}
 library(tidyverse)
+library(skimr)
 ```
 
-## Some simple operations
+## Some Simple Operations
 
-### Opening large text files
+### Opening Large Text Files
 
 One of the most simple things you can do is inspect your data using a text editor. When text files are large, it's a good idea to get an editor that can handle large files. I suggest [Sublime Text Editor](https://www.sublimetext.com/). This editor can handle much larger files than you can open (as text) in Rstudio. Keep the file open while you're cleaning it!
 
-### Detecting outliers
+### Detecting Errors in Data
 
-Outliers (as errors) can be most easily identified using graphs (See later). However, some textual output might be useful as well.
+Errors can be most easily identified using graphs (See later). However, some textual output might be useful as well.
 
 Let's read in some data (see `codebook.txt` for info about the variables).
 
@@ -49,7 +51,7 @@ depression_data <- read_tsv('data/raw_depression.csv')
 People have clearly made errors when entering their ages:
 
 ```{r}
-summary(depression_data$age)
+skim(depression_data$age)
 ```
 
 The histogram looks weird because of the very few, very high ages. We *could* try to fix these by assuming, for example, that `1998` is the birth year and not the age. For now, let's just remove these entries.
@@ -59,9 +61,9 @@ hist(depression_data$age)
 ```
 
 ```{r}
-dim(depression_data)
+dim(depression_data) # Get the dimensions of the data before filtering
 filtered_depression_data <- filter(depression_data, age < 120)
-dim(filtered_depression_data)
+dim(filtered_depression_data) # Get the dimensions of the data after filtering
 hist(filtered_depression_data$age, breaks=100)
 ```
 
@@ -73,12 +75,19 @@ boxplot(depression_data$age)
 boxplot(filtered_depression_data$age)
 ```
 
-Here is another problem with the data...
+Here is another problem with the data. We could try to fix this by assuming that people have made mistakes when entering their family size. Just as before, we could remove these entries.
 
 ```{r}
 hist(filtered_depression_data$familysize, breaks=100)
 summary(filtered_depression_data$familysize)
 ```
+
+```{r}
+filtered_depression_data <- filter(filtered_depression_data, familysize < 20)
+hist(filtered_depression_data$familysize)
+summary(filtered_depression_data$familysize)
+```
+
 
 Categorical data can also be messy. People entered their majors as free text. And this is the result:
 
@@ -87,8 +96,9 @@ library(janitor)
 result <- tabyl(depression_data$major)
 head(result, 50)
 ```
+Cleaning this would be more laborious and will require text processing. We will cover some of this later.
 
-### Missing data
+### Missing Data
 
 R encodes missing values as `NA`. Missing values are contagious: performing calculations on data that contains missing values often leads to an `NA` result. Some functions are robust against missing values (they simply ignore them). However, when a result comes back as `NA` it's often because the data contained missing values in the first place.
 
@@ -98,12 +108,41 @@ mean(some_data)
 max(some_data)
 ```
 
+In the section on Filtering Data, we have covered how to filter out missing values.
+
 Tips from the field:
 
--   When reading in a file, it's a good idea to know how missing values are encoded so you can tell R which values to interpret as missing.
+-   When reading in a file, it's a good idea to know how missing values are encoded so you can tell R which values to interpret as missing. We have covered this under "Reading Data".
 -   Sometime people will use absurd values to indicate missing data. For example, they might enter -1 or 99999 when an age value is missing. These are then read by R as numbers and your calculations end up being nonsense. One way to catch this it by looking for outliers!
 
+Here is an example of the last case.
+
+```{r}
+income_data <- read_csv('data/adult.csv')
+colnames(income_data) <- make.names(colnames(income_data))
+```
+
+It seems the value `9999` is used to indicate missing data for the variable `capital gain`.
+
+```{r}
+# Create a table for the various values for the variable 'capital-gain'
+tbl<-tabyl(income_data$capital.gain)
+# Show the last ten rows of tbl
+tail(tbl)
+```
+
+Likewise, the value `?` seems to be used to indicate missing data for the variable `occupation`.
+
+```{r}
+# Create a table for the various values for the variable 'occupation'
+tbl <- tabyl(income_data$occupation)
+head(tbl)
+```
+
+
 ### Separating a column
+
+It happens more often that you would exspect that variables are combined in one column. For example, the column `Hospital.Referral.Region.Description` in the `inpatient` data set combines the state and city of the hospital. We can separate this column into two columns.
 
 ```{r}
 patient_data <-read_tsv('data/inpatient.tsv')
@@ -130,40 +169,48 @@ patient_data$Hospital.Referral.Region.Description[711]
 patient_data$Hospital.Referral.Region.Description[1930]
 ```
 
-Let's look at an example of the results.
+The problem seems to be that these rows contain values with more than one `-`. Let's look at an example of the results.
+
 
 ```{r}
 test$state[710]
 test$city[710]
 ```
+
+It turns out that R has remove the second part of the city name. We can fix this setting the `remove` argument to `FALSE`.
 
 ```{r}
 test <- separate(patient_data, Hospital.Referral.Region.Description, into=c('state', 'city'), sep=' - ', remove = FALSE)
 ```
 
-No warnings anymore! Let's look at an example of the results again
+No warnings anymore! Let's look at an example of the results again.
 
 ```{r}
 test$state[710]
 test$city[710]
 ```
 
-Note, you can use regular expression for the `sep` argument: [see here.](https://cran.r-project.org/web/packages/stringr/vignettes/regular-expressions.html)
+Note, you can use regular expression for the `sep` argument: [see here.](https://cran.r-project.org/web/packages/stringr/vignettes/regular-expressions.html). This allows you to separate columns based on more complex patterns.
 
 ### Combining columns
 
 The opposite operation!
+
+The remove argument in the `unite()` function specifies whether the original columns should be removed after creating the new combined column. So, the `remove` argument does something different than in the `separate()` function.
+
++ `remove = TRUE` (default): The original columns are removed from the data frame after combining them.
++ `remove = FALSE`: The original columns are retained alongside the new combined column.
 
 ```{r}
 test <- unite(test, 'combined', c(Provider.Id, Provider.Name), sep='_+_', remove = FALSE)
 head(test$combined, 3)
 ```
 
-### Strings using `stringr`
+## Strings using `stringr`
 
 It does happen that you need to clean textual data. The `stringr` package has a bunch of functions to make your life easier (but not easy). I will run through some examples but do have a look at the [cheatsheet](https://evoldyn.gitlab.io/evomics-2018/ref-sheets/R_strings.pdf) as well.
 
-Remember, this data?
+Remember this data? We will try to clean the `major` column to a certain extent. We will convert the majors to lower case and try to find biology majors. Fully cleaning this data would require a lot more work. But perhaps it can now also be done using AI tools.
 
 ```{r}
 depression_data <- read_tsv('data/raw_depression.csv')
@@ -183,25 +230,31 @@ depression_data$major <- str_to_lower(depression_data$major)
 head(depression_data$major, 10)
 ```
 
-Let's try to find biology majors
+Let's try to find biology majors. The code below creates a variable that is `TRUE` if the major contains the string `bio`. Next, we filter the data to only include biology students using this new variable.
 
 ```{r}
 depression_data$bio <- str_detect(depression_data$major, 'bio')
 bio_students <- filter(depression_data, bio)
+tabyl(bio_students$major)
 ```
 
-That matched also biomedical and biochemistry students. Let's detect those using a regex (See <https://regex101.com/> for a regex construction tool).
+That matched also biomedical, biochemistry students, and others which we might not want to include. Let's detect those using a regex (See <https://regex101.com/> for a regex construction tool).
+
+The code below creates a variable that is `TRUE` if the major contains does *not* contain `chem`, `med`, `phys`, or `tech`.
 
 ```{r}
 depression_data$not_other <- !str_detect(depression_data$major, 'chem|med|phys|tech')
 ```
 
-Let's combine our columns
+Let's combine our two new columns. We multiply the two columns into a new variable `selection` to get a new column that is `TRUE` if the major contains `bio` and does not contain `chem`, `med`, `phys`, or `tech`. 
 
 ```{r}
 depression_data <- mutate(depression_data, selection = not_other * bio)
 bio_students <- filter(depression_data, selection==1)
+tabyl(bio_students$major)
 ```
+
+
 
 ## Reorganizing data
 
