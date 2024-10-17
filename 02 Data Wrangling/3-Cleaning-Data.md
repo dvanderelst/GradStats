@@ -1,6 +1,6 @@
 Cleaning Data
 ================
-Last Updated: 16, October, 2024 at 10:11
+Last Updated: 16, October, 2024 at 20:28
 
 - [Before we start…](#before-we-start)
 - [Loading the tidyverse](#loading-the-tidyverse)
@@ -10,7 +10,14 @@ Last Updated: 16, October, 2024 at 10:11
   - [Missing Data](#missing-data)
   - [Separating a column](#separating-a-column)
   - [Combining columns](#combining-columns)
-  - [Strings using `stringr`](#strings-using-stringr)
+- [Strings using `stringr`](#strings-using-stringr)
+- [Time using `lubridate`](#time-using-lubridate)
+  - [Creating a date from parts](#creating-a-date-from-parts)
+  - [Specifying the time zone](#specifying-the-time-zone)
+  - [Extracting parts of a date or
+    time](#extracting-parts-of-a-date-or-time)
+  - [Calculating Differences Between
+    Dates/Times](#calculating-differences-between-datestimes)
 - [Reorganizing data](#reorganizing-data)
   - [Loading some data](#loading-some-data)
   - [Grouping and summarizing data](#grouping-and-summarizing-data)
@@ -520,7 +527,7 @@ head(test$combined, 3)
     ## [2] "10005_+_MARSHALL MEDICAL CENTER SOUTH"   
     ## [3] "10006_+_ELIZA COFFEE MEMORIAL HOSPITAL"
 
-### Strings using `stringr`
+## Strings using `stringr`
 
 It does happen that you need to clean textual data. The `stringr`
 package has a bunch of functions to make your life easier (but not
@@ -848,7 +855,363 @@ tabyl(bio_students$major)
     ##                           science microbiology   2 0.002989537
     ##                               wildlife biology   1 0.001494768
 
+## Time using `lubridate`
+
+The ability to work with time is useful for many data sets. But this is
+not trivial. For example, dates and times are specified in different
+formats in different countries. And time zones can be a real headache.
+
+The `lubridate` package is a great package for working with dates. It
+makes it easy to extract parts of a date, calculate differences between
+dates, and much more. We will cover some basic operations here.
+
+``` r
+library(nycflights13)
+library(lubridate)
+
+# Load the flights dataset
+data("flights")
+# Inspect the structure
+glimpse(flights)
+```
+
+    ## Rows: 336,776
+    ## Columns: 19
+    ## $ year           <int> 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2…
+    ## $ month          <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+    ## $ day            <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+    ## $ dep_time       <int> 517, 533, 542, 544, 554, 554, 555, 557, 557, 558, 558, …
+    ## $ sched_dep_time <int> 515, 529, 540, 545, 600, 558, 600, 600, 600, 600, 600, …
+    ## $ dep_delay      <dbl> 2, 4, 2, -1, -6, -4, -5, -3, -3, -2, -2, -2, -2, -2, -1…
+    ## $ arr_time       <int> 830, 850, 923, 1004, 812, 740, 913, 709, 838, 753, 849,…
+    ## $ sched_arr_time <int> 819, 830, 850, 1022, 837, 728, 854, 723, 846, 745, 851,…
+    ## $ arr_delay      <dbl> 11, 20, 33, -18, -25, 12, 19, -14, -8, 8, -2, -3, 7, -1…
+    ## $ carrier        <chr> "UA", "UA", "AA", "B6", "DL", "UA", "B6", "EV", "B6", "…
+    ## $ flight         <int> 1545, 1714, 1141, 725, 461, 1696, 507, 5708, 79, 301, 4…
+    ## $ tailnum        <chr> "N14228", "N24211", "N619AA", "N804JB", "N668DN", "N394…
+    ## $ origin         <chr> "EWR", "LGA", "JFK", "JFK", "LGA", "EWR", "EWR", "LGA",…
+    ## $ dest           <chr> "IAH", "IAH", "MIA", "BQN", "ATL", "ORD", "FLL", "IAD",…
+    ## $ air_time       <dbl> 227, 227, 160, 183, 116, 150, 158, 53, 140, 138, 149, 1…
+    ## $ distance       <dbl> 1400, 1416, 1089, 1576, 762, 719, 1065, 229, 944, 733, …
+    ## $ hour           <dbl> 5, 5, 5, 5, 6, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 6, 6, 6…
+    ## $ minute         <dbl> 15, 29, 40, 45, 0, 58, 0, 0, 0, 0, 0, 0, 0, 0, 0, 59, 0…
+    ## $ time_hour      <dttm> 2013-01-01 05:00:00, 2013-01-01 05:00:00, 2013-01-01 0…
+
+``` r
+# View the first few rows
+head(flights)
+```
+
+    ## # A tibble: 6 × 19
+    ##    year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
+    ##   <int> <int> <int>    <int>          <int>     <dbl>    <int>          <int>
+    ## 1  2013     1     1      517            515         2      830            819
+    ## 2  2013     1     1      533            529         4      850            830
+    ## 3  2013     1     1      542            540         2      923            850
+    ## 4  2013     1     1      544            545        -1     1004           1022
+    ## 5  2013     1     1      554            600        -6      812            837
+    ## 6  2013     1     1      554            558        -4      740            728
+    ## # ℹ 11 more variables: arr_delay <dbl>, carrier <chr>, flight <int>,
+    ## #   tailnum <chr>, origin <chr>, dest <chr>, air_time <dbl>, distance <dbl>,
+    ## #   hour <dbl>, minute <dbl>, time_hour <dttm>
+
+This is the contents of the data:
+
+| **Column**       | **Description**                                                                 |
+|------------------|---------------------------------------------------------------------------------|
+| `year`           | Year of the flight (all flights are from 2013).                                 |
+| `month`          | Month of the flight (1 = January, 2 = February, etc.).                          |
+| `day`            | Day of the month when the flight departed.                                      |
+| `dep_time`       | Actual departure time in **local time** (HHMM format, e.g., 517 = 5:17 AM).     |
+| `sched_dep_time` | Scheduled departure time in **local time** (HHMM format).                       |
+| `dep_delay`      | Departure delay in **minutes** (positive = delayed, negative = early).          |
+| `arr_time`       | Actual arrival time in **local time** (HHMM format).                            |
+| `sched_arr_time` | Scheduled arrival time in **local time** (HHMM format).                         |
+| `arr_delay`      | Arrival delay in **minutes** (positive = delayed, negative = early).            |
+| `carrier`        | Two-letter airline carrier code (e.g., “AA” for American Airlines).             |
+| `flight`         | Flight number.                                                                  |
+| `tailnum`        | Tail number (aircraft registration number).                                     |
+| `origin`         | Origin airport code (JFK = John F. Kennedy, LGA = LaGuardia, EWR = Newark).     |
+| `dest`           | Destination airport code (e.g., “LAX” for Los Angeles).                         |
+| `air_time`       | Flight time in **minutes**.                                                     |
+| `distance`       | Distance flown in **miles**.                                                    |
+| `hour`           | Scheduled departure hour (extracted from `sched_dep_time`).                     |
+| `minute`         | Scheduled departure minute (extracted from `sched_dep_time`).                   |
+| `time_hour`      | Scheduled departure time as a **POSIXct datetime object** (in local time zone). |
+
+### Creating a date from parts
+
+The `make_date()` function creates a date from parts. It takes the year,
+month, and day as arguments. There is also a function `make_datetime()`
+that includes the time. This function assumes that the time is in
+24-hour format and returns the time as UTC.
+
+**No place on Earth uses UTC as its local time zone. However, several
+places operate on a time zone equivalent to UTC, meaning the local time
+matches UTC.**
+
+We will use this function together with the `mutate()` function to
+create a new column `date` in the `flights` dataset.
+
+``` r
+flights <- mutate(flights, my_date1 = make_date(year, month, day))
+flights <- mutate(flights, my_date2 = make_date(year, month))
+flights <- mutate(flights, my_date3 = make_datetime(year, month, day))
+```
+
+If we don’t specify a day, the first day of the month is assumed. When
+using the `make_time()` function and we don’t specify a time, midnight
+is assumed.
+
+``` r
+flights$my_date1[10000]
+```
+
+    ## [1] "2013-01-12"
+
+``` r
+flights$my_date2[10000]
+```
+
+    ## [1] "2013-01-01"
+
+``` r
+flights$my_date3[10000]
+```
+
+    ## [1] "2013-01-12 UTC"
+
+For fun, let’s also add the time of the flight to the date (hours and
+minutes). To get the hour, we will divide the `dep_time` by 100 and
+round down. To get the minutes, we will take the remainder of the
+division by 100.
+
+``` r
+flights <- mutate(flights, hour = floor(dep_time / 100))
+flights <- mutate(flights, minute = dep_time %% 100)
+flights <- mutate(flights, my_date4 = make_datetime(year, month, day, hour, minute))
+flights$my_date4[10000]
+```
+
+    ## [1] "2013-01-12 10:24:00 UTC"
+
+### Specifying the time zone
+
+The `airport` dataset contains information about the airports. The `tz`
+column contains the time zone of the airport. We can use this
+information to specify the time zone of the `my_date4` column.
+
+``` r
+data(airports)
+# This is a line we will see later. Ignore it for now.
+# It adds data from the airports dataset to the flights dataset.
+flights_with_tz <- left_join(flights, airports, by = c("origin" = "faa"))
+# The flights dataset now contains the time zone of the origin airport (tzone variable).
+
+flights_with_tz <- mutate(flights_with_tz, my_date4 = make_datetime(year, month, day, hour, minute, tz = tzone))
+flights_with_tz$my_date4[10000]
+```
+
+    ## [1] "2013-01-12 10:24:00 EST"
+
+### Extracting parts of a date or time
+
+Our `date` column is a `POSIXct` object. This implies that R knows that
+this column contains dates and times, and it understands the format. The
+following code shows that the column is indeed a `POSIXct` object.
+
+``` r
+class(flights_with_tz$my_date4)
+```
+
+    ## [1] "POSIXct" "POSIXt"
+
+Therefore, We can directly extract parts of this object using the
+`year()`, `month()`, `day()`, `hour()`, `minute()`, and `second()`
+functions.
+
+``` r
+flights_with_tz <- mutate(flights_with_tz, extracted_year = year(my_date4))
+```
+
+However, if you read in a data file, times and dates are not always
+recognized as such. In that case, you can use the `ymd()`, `mdy()`,
+`dmy()`, `ymd_hms()`, `mdy_hms()`, and `dmy_hms()` functions to convert
+the data to a `POSIXct` object.
+
+We will demonstrate this using the time_hour column in the `flights`
+dataset. This column contains the scheduled departure time as a
+`POSIXct` object. However, we will convert it to a character vector
+(text) and then back to a `POSIXct` object.
+
+``` r
+flights <- mutate(flights, time_text = as.character(time_hour))
+# To make it clear that we are converting the existing posixct object to a character vector, we will also replace : with * and - with +, and spaces with _.
+flights <- mutate(flights, time_text = str_replace_all(time_text, ':', '*'))
+flights <- mutate(flights, time_text = str_replace_all(time_text, '-', '+'))
+flights <- mutate(flights, time_text = str_replace_all(time_text, ' ', '_'))
+```
+
+Now we will convert the `time_text` column to a `POSIXct` object using
+the `ymd_hms()` function. We use this function as the format is
+`year+month+day_ hour*minute*second`. The `ymd_hms()` function is smart
+enough to recognize this format, even though we have replaced the `:`
+with `*` and the `-` with `+`.
+
+``` r
+flights <- mutate(flights, new_date_time = ymd_hms(time_text))
+flights$new_date_time[10000]
+```
+
+    ## [1] "2013-01-12 10:00:00 UTC"
+
+Note that we lost the time zone information when we converted the
+`time_hour` column to a character vector. Therefore, the `new_date_time`
+column does not contain time zone information. `ymd_hms()` can recognize
+and correctly interpret a time zone if it’s provided in the string
+itself, but the string must follow a specific ISO 8601 format or include
+a valid time zone abbreviation/offset.
+
+Here, we first add the strings from the
+
+``` r
+flights_with_tz <- mutate(flights_with_tz, time_text = as.character(time_hour))
+flights_with_tz <- mutate(flights_with_tz, time_text = str_replace_all(time_text, ':', '*'))
+flights_with_tz <- mutate(flights_with_tz, time_text = str_replace_all(time_text, '-', '+'))
+flights_with_tz <- mutate(flights_with_tz, time_text = str_replace_all(time_text, ' ', '_'))
+
+# Now append the time zone to the string
+# We will use the tz variable that specifies an offset from UTC in hours and minutes.
+# First we need to make sure that -5 is written as -05, etc. This is required for the ISO 8601 format.
+
+converted <- sprintf("%+03d", flights_with_tz$tz)
+flights_with_tz <- mutate(flights_with_tz, time_text = paste0(time_text, "*", converted))
+flights_with_tz$time_text[1000]
+```
+
+    ## [1] "2013+01+02_08*00*00*-05"
+
+Now we can demonstrate that `ymd_hms()` can recognize the time zone if
+it’s provided in the string. Note that the time is converted to the UTC
+time zone.
+
+``` r
+flights_with_tz$time_text[1000]
+```
+
+    ## [1] "2013+01+02_08*00*00*-05"
+
+``` r
+flights_with_tz <- mutate(flights_with_tz, new_date_time = ymd_hms(time_text))
+flights_with_tz$new_date_time[1000]
+```
+
+    ## [1] "2013-01-02 13:00:00 UTC"
+
+### Calculating Differences Between Dates/Times
+
+Once R recognizes a time and date as such, calculating differences
+between dates and times is easy. The `difftime()` function calculates
+the difference between two dates or times. The result is a `difftime`
+object that contains the difference in seconds. You can convert this to
+other units using the `units` argument.
+
+Let’s start with a silly example. Say, we want to know how long after
+January 1, 2012 (noon), the each flight in the `flights` dataset was
+scheduled.
+
+``` r
+# Let's create the date January 1, 2013
+start_date <- ymd_hms("2012-01-01 12:00:00")
+flights <- mutate(flights, time_diff = difftime(my_date4, start_date, units = "hours"))
+head(flights$time_diff)
+```
+
+    ## Time differences in hours
+    ## [1] 8777.283 8777.550 8777.700 8777.733 8777.900 8777.900
+
+Let’s create a POSIXct time for the scheduled and the actual take off
+time.
+
+``` r
+# First create the planned_hour and planned_minute columns
+flights <- mutate(flights, planned_hour = floor(sched_dep_time / 100))
+flights <- mutate(flights, planned_minute = sched_dep_time %% 100)
+# Now create the planned_time column
+flights <- mutate(flights, planned_time = make_datetime(year, month, day, planned_hour, planned_minute))
+
+# Now create the actual_hour and actual_minute columns
+flights <- mutate(flights, actual_hour = floor(dep_time / 100))
+flights <- mutate(flights, actual_minute = dep_time %% 100)
+# Now create the actual_time column
+flights <- mutate(flights, actual_time = make_datetime(year, month, day, actual_hour, actual_minute))
+```
+
+Finally we can calculate the difference between the planned and actual
+take off time. Here, we’ll calculate that difference in minutes.
+
+``` r
+flights <- mutate(flights, time_diff = difftime(actual_time, planned_time, units = "mins"))
+head(flights$time_diff)
+```
+
+    ## Time differences in mins
+    ## [1]  2  4  2 -1 -6 -4
+
+Let’s look at the histogram of the time differences.
+
+``` r
+# Convert the time_diff column to numeric
+time_diff <- as.numeric(flights$time_diff)
+# Create a histogram
+# Note that there are missing data. This is because there is missing data in the original data.
+summary(time_diff)
+```
+
+    ##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max.      NA's 
+    ## -1438.000    -5.000    -2.000     7.348    10.000   911.000      8255
+
+``` r
+hist(time_diff, breaks=100)
+```
+
+![](3-Cleaning-Data_files/figure-gfm/unnamed-chunk-42-1.png)<!-- -->
+\### Filtering Data Based on Date/Time Ranges
+
+The last thing we will see is how to filter data based on date/time
+ranges. This is done using the `filter()` function.
+
+Let’s say we want to filter the `flights` dataset to only include
+flights that were scheduled between May 15 and May 20, 2013.
+
+``` r
+# Create the lower date
+lower_date <- ymd("2013-05-15")
+# Create the upper date
+upper_date <- ymd("2013-05-20")
+# Filter the data
+filtered_flights <- filter(flights, my_date4 >= lower_date & my_date4 <= upper_date)
+```
+
+Now, we want to filter flights that were scheduled between 8:00 AM on
+May 15 and 10:00 AM on May 20.
+
+``` r
+# Create the lower datetime
+lower_date <- ymd_hms("2013-05-15 08:00:00")
+# Create the upper datetime
+upper_date <- ymd_hms("2013-05-20 10:00:00")
+# Filter the data
+filtered_flights <- filter(flights, my_date4 >= lower_date & my_date4 <= upper_date)
+```
+
+**Note that this last operation uses the UTC time.**
+
 ## Reorganizing data
+
+Now, we will cover how to reorganize data. This is often necessary when
+you want to summarize data or when you want to plot data. This is often
+the final step before running the actual analysis.
 
 ### Loading some data
 
@@ -988,6 +1351,11 @@ dim(summaries1)
 
     ## [1] 81  3
 
+Note: The message
+`` summarise()` has grouped output by 'type'. You can override using the `.groups` argument. ``
+just reminds us we grouped the data and the the summary statistics are
+calculated for each group – which is exactly what we wanted.
+
 However, this behavior can be changed using the `.drop = FALSE` argument
 (and converting the variables to factors)
 
@@ -1015,10 +1383,22 @@ look at the data. Here is a quick visual:
 
 ![](images/pivot_wider_new.png)
 
-- **`names_from`: the variable you wish to appear as columns**
-- **`values_from`: the variable you wish to use to fill the fill the
-  table**
-- **`id_cols`: the variables you wish to use as row identifiers**
+- **names_from: The variable whose values will become the new column
+  names.**
+
+Example: If you have a month column, each unique month value (e.g.,
+“January”, “February”) will become a new column.
+
+- **values_from: The variable whose values will populate the cells of
+  the new columns.**
+
+Example: If you have a sales column, the values from this column will
+fill the corresponding cells in the new columns.
+
+- **id_cols: The variables used as row identifiers.**
+
+Example: If you have a store column, each row will correspond to a
+unique store
 
 The function also takes other arguments to handle more complex cases,
 see <https://tidyr.tidyverse.org/reference/pivot_wider.html>
@@ -1055,7 +1435,7 @@ titanic <-read_csv('data/Titanic.csv', na='*')
 
 ``` r
 grouped <- group_by(titanic, PClass, Sex)
-survival <- summarise(grouped, proportion = mean(Survived), survived = sum(Survived), total = length(Survived))
+survival <- summarise(grouped, proportion = mean(Survived), survivors = sum(Survived), total = length(Survived))
 ```
 
     ## `summarise()` has grouped output by 'PClass'. You can override using the
@@ -1067,15 +1447,15 @@ survival
 
     ## # A tibble: 7 × 5
     ## # Groups:   PClass [4]
-    ##   PClass Sex    proportion survived total
-    ##   <chr>  <chr>       <dbl>    <dbl> <int>
-    ## 1 1st    female      0.937      134   143
-    ## 2 1st    male        0.330       59   179
-    ## 3 2nd    female      0.879       94   107
-    ## 4 2nd    male        0.145       25   172
-    ## 5 3rd    female      0.377       80   212
-    ## 6 3rd    male        0.116       58   499
-    ## 7 <NA>   male        0            0     1
+    ##   PClass Sex    proportion survivors total
+    ##   <chr>  <chr>       <dbl>     <dbl> <int>
+    ## 1 1st    female      0.937       134   143
+    ## 2 1st    male        0.330        59   179
+    ## 3 2nd    female      0.879        94   107
+    ## 4 2nd    male        0.145        25   172
+    ## 5 3rd    female      0.377        80   212
+    ## 6 3rd    male        0.116        58   499
+    ## 7 <NA>   male        0             0     1
 
 You could make the result into a wide table.
 
@@ -1133,7 +1513,26 @@ head(new, 5)
     ## 4 Agnostic $30-40k    81
     ## 5 Agnostic $40-50k    76
 
+- **`cols`**: The columns you want to pivot from **wide to long**.
+  - *Example*: If you have columns like `"January"`, `"February"`, and
+    `"March"`, you would list these here to combine them into one.
+- **`names_to`**: The name of the **new column** that will store the
+  names of the original columns.
+  - *Example*: If your original columns represent months, the new column
+    could be called `"month"`.
+- **`values_to`**: The name of the **new column** that will store the
+  values from the original columns.
+  - *Example*: If the original columns contain sales data, this new
+    column could be called `"sales"`.
+
 ## Merging data
+
+Merging is required if your data is spread across different tibbles.
+This might be the case if you have different data sources or if you have
+data that is split into different files. However, it might also arise
+when you’ve split an existing data set in different tibbles for
+preprocessing and analysis and then you want to merge the results back
+together.
 
 Here, we will use National Health and Nutrition Examination Survey data.
 This is the [data
@@ -1453,7 +1852,7 @@ data_2012 <- filter(long_again, Year == 2012)
 ggplot(data_2012) + aes(x=date, y = Count, group=Source, color=Source) + geom_line()
 ```
 
-![](3-Cleaning-Data_files/figure-gfm/unnamed-chunk-58-1.png)<!-- -->
+![](3-Cleaning-Data_files/figure-gfm/unnamed-chunk-75-1.png)<!-- -->
 
 ``` r
 ggplot(long_again) + aes(x=Month, y = Count, group=Source, color=Source) + geom_line() + facet_grid(~Year)
@@ -1462,7 +1861,7 @@ ggplot(long_again) + aes(x=Month, y = Count, group=Source, color=Source) + geom_
     ## Warning: Removed 2 rows containing missing values or values outside the scale range
     ## (`geom_line()`).
 
-![](3-Cleaning-Data_files/figure-gfm/unnamed-chunk-59-1.png)<!-- -->
+![](3-Cleaning-Data_files/figure-gfm/unnamed-chunk-76-1.png)<!-- -->
 
 ## Example: Coal data
 
