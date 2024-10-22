@@ -1,0 +1,5 @@
+library(tidyverse)
+depression_data <- read_tsv('data/raw_depression.csv')
+patient_data <-read_tsv('data/inpatient.tsv')
+colnames(patient_data) <- make.names(colnames(patient_data))
+test <- separate(patient_data, Hospital.Referral.Region.Description, into=c('State', 'City'), sep=' - ', remove = FALSE)

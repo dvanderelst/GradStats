@@ -219,6 +219,32 @@ Read in the `Titanic.csv` data and perform the following operations:
 -   How many first class passengers were female?
 -   How many female passengers survived?
 
+### Solution
+
+```{r}
+# This set uses two different codes for missing values
+titanic_data <- read_csv("data/Titanic.csv", na = c("*", "NA"))
+
+# Count the number of male survivors that were older than 25.
+# Approach 1
+titanic_data_a <- filter(titanic_data, Sex == 'male', Age > 25, Survived == 1)
+# Approach 2
+titanic_data_b <- filter(titanic_data, Sex == 'male' & Age > 25 & Survived == 1)
+
+
+# How many first class passengers were female?
+# Approach 1
+titanic_data_c <- filter(titanic_data, PClass == '1st', Sex == 'female')
+# Approach 2
+titanic_data_d <- filter(titanic_data, PClass == '1st' & Sex == 'female')
+
+# How many female passengers survived?
+# Approach 1
+titanic_data_e <- filter(titanic_data, Sex == 'female', Survived == 1)
+# Approach 2
+titanic_data_f <- filter(titanic_data, Sex == 'female' & Survived == 1)
+```
+
 ### Exercise: Car data
 
 Read in the `cars.txt` data and perform the following operations:
@@ -231,6 +257,21 @@ The data file contains variables describing a number of cars.
 -   Which cars use over 50% more fuel on the city than they do in the highway?
 -   Which cars have an action radius of over 400 miles on the highway?
 
+
+### Solution
+
+```{r}
+car_data <- read_delim("data/cars.txt", delim = " ")
+selection_a <- filter(car_data, mpg_city >= 25)
+selection_b <- filter(car_data, make == 'BMW')
+selection_c <- filter(car_data, mpg_city >= 25, type=='Large')
+
+selection_d <- filter(car_data, mpg_city > 1.5*mpg_hgw)
+
+car_data <- mutate(car_data, action_radius = tank * mpg_hgw)
+selection_e <- filter(car_data, action_radius > 400)
+```
+
 ### Exercise: Film data
 
 Use the following data file: `films.dat` (in the data folder). This file lists the title, year of release, length in minutes, number of cast members listed, rating, and number of lines of description are recorded for a simple random sample of 100 movies.
@@ -242,3 +283,31 @@ Use the following data file: `films.dat` (in the data folder). This file lists t
 -   Write a short script that allows selecting all movies that were made in the five years before a given date. The script starts by assigning a value (year) to a variable. The script selects all movies made in the 5 years preceding the year assigned to the variable and prints the selected data to the screen. The earliest film in the data was made in 1924. Therefore, if the year assigned to the variable is before 1930, the script should print the message `No movies found`.
 
 -   Write code that adds a new variable `ratio` to the data. This variable is obtained by dividing the number of actors (`Cast`) by the length of the movie (`Length`). Next, select the movies for which the ratio Cast/Length is at least 0.1. Print the selected movies to the screen.
+
+### Solution
+
+```{r}
+# The data uses a tab as a delimiter
+film_data <- read_delim("data/films.dat", delim = "\t")
+# select all films from 1980 to 1990 (including both 1980 and 1990)
+selection_a <- filter(film_data, Year >= 1980 & Year <= 1990)
+
+# select all films with a rating of 1
+selection_b <- filter(film_data, Rating == 1)
+
+# Select films made in the five years before a given date
+selected_year <- 1980
+film_data <- mutate(film_data, too_old = Year - selected_year < -5)
+film_data <- mutate(film_data, too_new = Year - selected_year > 0)
+selected_films <- filter(film_data, !too_old & !too_new)
+nr_selected <- dim(selected_films)[1]
+if (nr_selected == 0) {
+  print("No movies found")
+} else {
+  print(paste("Number of movies found:", nr_selected))
+}
+
+# Add a new variable ratio to the data
+film_data <- mutate(film_data, ratio = Cast / Length)
+selection_c <- filter(film_data, ratio >= 0.1)
+```

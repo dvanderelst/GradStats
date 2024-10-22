@@ -45,5 +45,7 @@ This page contains links to all class notes and R scripts organized by section.
 
 **R Scripts:**
 - [`Selecting_Filtering.R`](https://github.com/dvanderelst/GradStats/blob/Fall2024/100 Class Code/Selecting_Filtering.R)
+- [`data_cleaning.R`](https://github.com/dvanderelst/GradStats/blob/Fall2024/100 Class Code/data_cleaning.R)
+- [`reorganizing_data.R`](https://github.com/dvanderelst/GradStats/blob/Fall2024/100 Class Code/reorganizing_data.R)
 - [`script01.R`](https://github.com/dvanderelst/GradStats/blob/Fall2024/100 Class Code/script01.R)
 

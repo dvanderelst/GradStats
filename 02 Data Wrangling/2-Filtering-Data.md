@@ -1,6 +1,6 @@
 Filtering Data
 ================
-Last Updated: 15, October, 2024 at 09:17
+Last Updated: 22, October, 2024 at 11:32
 
 - [Before we begin…](#before-we-begin)
 - [dplyr: Selecting rows and columns](#dplyr-selecting-rows-and-columns)
@@ -10,8 +10,11 @@ Last Updated: 15, October, 2024 at 09:17
   - [Ordering rows](#ordering-rows)
 - [Exercises](#exercises)
   - [Exercise: Titanic Data](#exercise-titanic-data)
+  - [Solution](#solution)
   - [Exercise: Car data](#exercise-car-data)
+  - [Solution](#solution-1)
   - [Exercise: Film data](#exercise-film-data)
+  - [Solution](#solution-2)
 
 ## Before we begin…
 
@@ -32,7 +35,7 @@ library(tidyverse)
 ```
 
     ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
-    ## ✔ ggplot2 3.4.0      ✔ purrr   0.3.5 
+    ## ✔ ggplot2 3.4.0      ✔ purrr   1.0.2 
     ## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
     ## ✔ tidyr   1.2.1      ✔ stringr 1.4.1 
     ## ✔ readr   2.1.3      ✔ forcats 0.5.2 
@@ -858,6 +861,43 @@ Read in the `Titanic.csv` data and perform the following operations:
 - How many first class passengers were female?
 - How many female passengers survived?
 
+### Solution
+
+``` r
+# This set uses two different codes for missing values
+titanic_data <- read_csv("data/Titanic.csv", na = c("*", "NA"))
+```
+
+    ## New names:
+    ## Rows: 1313 Columns: 7
+    ## ── Column specification
+    ## ──────────────────────────────────────────────────────── Delimiter: "," chr
+    ## (3): Name, PClass, Sex dbl (4): ...1, Age, Survived, SexCode
+    ## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+    ## Specify the column types or set `show_col_types = FALSE` to quiet this message.
+    ## • `` -> `...1`
+
+``` r
+# Count the number of male survivors that were older than 25.
+# Approach 1
+titanic_data_a <- filter(titanic_data, Sex == 'male', Age > 25, Survived == 1)
+# Approach 2
+titanic_data_b <- filter(titanic_data, Sex == 'male' & Age > 25 & Survived == 1)
+
+
+# How many first class passengers were female?
+# Approach 1
+titanic_data_c <- filter(titanic_data, PClass == '1st', Sex == 'female')
+# Approach 2
+titanic_data_d <- filter(titanic_data, PClass == '1st' & Sex == 'female')
+
+# How many female passengers survived?
+# Approach 1
+titanic_data_e <- filter(titanic_data, Sex == 'female', Survived == 1)
+# Approach 2
+titanic_data_f <- filter(titanic_data, Sex == 'female' & Survived == 1)
+```
+
 ### Exercise: Car data
 
 Read in the `cars.txt` data and perform the following operations:
@@ -870,6 +910,32 @@ The data file contains variables describing a number of cars.
 - Which cars use over 50% more fuel on the city than they do in the
   highway?
 - Which cars have an action radius of over 400 miles on the highway?
+
+### Solution
+
+``` r
+car_data <- read_delim("data/cars.txt", delim = " ")
+```
+
+    ## Rows: 93 Columns: 26
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: " "
+    ## chr  (6): make, model, type, cylinders, rearseat, luggage
+    ## dbl (20): min_price, mid_price, max_price, mpg_city, mpg_hgw, airbag, drive,...
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+``` r
+selection_a <- filter(car_data, mpg_city >= 25)
+selection_b <- filter(car_data, make == 'BMW')
+selection_c <- filter(car_data, mpg_city >= 25, type=='Large')
+
+selection_d <- filter(car_data, mpg_city > 1.5*mpg_hgw)
+
+car_data <- mutate(car_data, action_radius = tank * mpg_hgw)
+selection_e <- filter(car_data, action_radius > 400)
+```
 
 ### Exercise: Film data
 
@@ -895,3 +961,47 @@ for a simple random sample of 100 movies.
   is obtained by dividing the number of actors (`Cast`) by the length of
   the movie (`Length`). Next, select the movies for which the ratio
   Cast/Length is at least 0.1. Print the selected movies to the screen.
+
+### Solution
+
+``` r
+# The data uses a tab as a delimiter
+film_data <- read_delim("data/films.dat", delim = "\t")
+```
+
+    ## Rows: 100 Columns: 6
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: "\t"
+    ## chr (1): Title
+    ## dbl (5): Year, Length, Cast, Rating, Description
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+``` r
+# select all films from 1980 to 1990 (including both 1980 and 1990)
+selection_a <- filter(film_data, Year >= 1980 & Year <= 1990)
+
+# select all films with a rating of 1
+selection_b <- filter(film_data, Rating == 1)
+
+# Select films made in the five years before a given date
+selected_year <- 1980
+film_data <- mutate(film_data, too_old = Year - selected_year < -5)
+film_data <- mutate(film_data, too_new = Year - selected_year > 0)
+selected_films <- filter(film_data, !too_old & !too_new)
+nr_selected <- dim(selected_films)[1]
+if (nr_selected == 0) {
+  print("No movies found")
+} else {
+  print(paste("Number of movies found:", nr_selected))
+}
+```
+
+    ## [1] "Number of movies found: 12"
+
+``` r
+# Add a new variable ratio to the data
+film_data <- mutate(film_data, ratio = Cast / Length)
+selection_c <- filter(film_data, ratio >= 0.1)
+```
