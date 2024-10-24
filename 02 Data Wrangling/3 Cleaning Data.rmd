@@ -548,6 +548,8 @@ dim(summaries2)
 
 ### Converting to wide format
 
+Note: There is an alternative function to `pivot_wider()` called `spread()`. However, `spread()` is deprecated and will be removed in the future. We will use `pivot_wider()` instead.
+
 The result can be reshaped into a wide format. *While this format is often not suited for plotting or analysis*, it might make it easier to look at the data. Here is a quick visual:
 
 ![](images/pivot_wider_new.png) 
@@ -565,6 +567,8 @@ Example: If you have a sales column, the values from this column will fill the c
 Example: If you have a store column, each row will correspond to a unique store
 
 The function also takes other arguments to handle more complex cases, see <https://tidyr.tidyverse.org/reference/pivot_wider.html>
+
+There is also a cheat sheet which you might find useful: <https://github.com/rstudio/cheatsheets/blob/main/tidyr.pdf>
 
 ```{r}
 wide <- pivot_wider(summaries, id_cols = make, names_from  = type, values_from = mean.length)
@@ -589,6 +593,8 @@ survival_wide
 
 
 ### Making data longer (melting data)
+
+Note: There is an alternative function (`gather()`). However, the `pivot_longer()` function is more powerful and easier to use and `gather()` is deprecated.
 
 Here is a quick graphic:
 
@@ -616,6 +622,7 @@ head(new, 5)
 + **`values_to`**: The name of the **new column** that will store the values from the original columns.  
    - *Example*: If the original columns contain sales data, this new column could be called `"sales"`.
 
+There is also a cheat sheet which you might find useful: <https://github.com/rstudio/cheatsheets/blob/main/tidyr.pdf>
 
 ## Merging data
 

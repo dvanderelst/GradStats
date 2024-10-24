@@ -316,6 +316,8 @@ data <- read_csv(url)
 
 ### Mathematical Operations on Existing Columns
 
+Here are number of slides (not by me) that also explain this: <https://tinyurl.com/4a6hek9f>
+
 Let's create a new column giving the surface area of each column.
 
 ```{r}

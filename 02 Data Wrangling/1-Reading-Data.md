@@ -1,6 +1,6 @@
 Reading Data
 ================
-Last Updated: 14, October, 2024 at 14:22
+Last Updated: 24, October, 2024 at 08:58
 
 - [Before we begin…](#before-we-begin)
 - [Using the tidyverse vs built-in data reading
@@ -55,7 +55,7 @@ library(tidyverse)
 ```
 
     ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
-    ## ✔ ggplot2 3.4.0      ✔ purrr   0.3.5 
+    ## ✔ ggplot2 3.4.0      ✔ purrr   1.0.2 
     ## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
     ## ✔ tidyr   1.2.1      ✔ stringr 1.4.1 
     ## ✔ readr   2.1.3      ✔ forcats 0.5.2 
@@ -767,6 +767,9 @@ data <- read_csv(url)
     ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
 ### Mathematical Operations on Existing Columns
+
+Here are number of slides (not by me) that also explain this:
+<https://tinyurl.com/4a6hek9f>
 
 Let’s create a new column giving the surface area of each column.
 

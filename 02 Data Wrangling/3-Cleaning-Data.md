@@ -1,6 +1,6 @@
 Cleaning Data
 ================
-Last Updated: 16, October, 2024 at 20:28
+Last Updated: 24, October, 2024 at 08:45
 
 - [Before we start…](#before-we-start)
 - [Loading the tidyverse](#loading-the-tidyverse)
@@ -77,16 +77,14 @@ Let’s load the tidyverse…
 library(tidyverse)
 ```
 
-    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-    ## ✔ dplyr     1.1.4     ✔ readr     2.1.5
-    ## ✔ forcats   1.0.0     ✔ stringr   1.5.1
-    ## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
-    ## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
-    ## ✔ purrr     1.0.2     
+    ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
+    ## ✔ ggplot2 3.4.0      ✔ purrr   1.0.2 
+    ## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
+    ## ✔ tidyr   1.2.1      ✔ stringr 1.4.1 
+    ## ✔ readr   2.1.3      ✔ forcats 0.5.2 
     ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
-    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
 
 ``` r
 library(skimr)
@@ -239,56 +237,56 @@ head(result, 50)
 ```
 
     ##                          depression_data$major  n      percent valid_percent
+    ##                                              _  1 2.514142e-05  3.513827e-05
+    ##                                              - 34 8.548083e-04  1.194701e-03
+    ##                                             --  1 2.514142e-05  3.513827e-05
+    ##                                            ---  1 2.514142e-05  3.513827e-05
+    ##                                          -nil-  1 2.514142e-05  3.513827e-05
+    ##                                            ???  1 2.514142e-05  3.513827e-05
+    ##                                              .  1 2.514142e-05  3.513827e-05
+    ##                                              /  2 5.028284e-05  7.027654e-05
     ##  &#1055;&#1089;&#1080;&#1093;&#1086;&#1083;&#1  1 2.514142e-05  3.513827e-05
     ##    &#1593;&#1604;&#1605; &#1606;&#1601;&#1587;  1 2.514142e-05  3.513827e-05
     ##       &#22810;&#23186;&#39636;&#35373;&#35336;  1 2.514142e-05  3.513827e-05
     ##                               &#28888;&#22521;  1 2.514142e-05  3.513827e-05
     ##                                  &#304;lahiyat  1 2.514142e-05  3.513827e-05
-    ##                                              - 34 8.548083e-04  1.194701e-03
-    ##                                             --  1 2.514142e-05  3.513827e-05
-    ##                                            ---  1 2.514142e-05  3.513827e-05
-    ##                                          -nil-  1 2.514142e-05  3.513827e-05
-    ##                                              .  1 2.514142e-05  3.513827e-05
-    ##                                              /  2 5.028284e-05  7.027654e-05
     ##                                              0  2 5.028284e-05  7.027654e-05
     ##                         1. Social work, 2. Law  1 2.514142e-05  3.513827e-05
     ##                                      12th arts  1 2.514142e-05  3.513827e-05
     ##                                             18  1 2.514142e-05  3.513827e-05
     ##                                             19  1 2.514142e-05  3.513827e-05
     ##  2 majors: Computer science and industrial eng  1 2.514142e-05  3.513827e-05
-    ##                                         2D Art  1 2.514142e-05  3.513827e-05
     ##                                   2D animation  1 2.514142e-05  3.513827e-05
+    ##                                         2D Art  1 2.514142e-05  3.513827e-05
     ##                                   3D Animation  1 2.514142e-05  3.513827e-05
     ##                     3d animation, architecture  1 2.514142e-05  3.513827e-05
     ##                                             75  1 2.514142e-05  3.513827e-05
-    ##                                            ???  1 2.514142e-05  3.513827e-05
+    ##                                        a level  1 2.514142e-05  3.513827e-05
     ##                                      A Teacher  1 2.514142e-05  3.513827e-05
     ##                                             AA  1 2.514142e-05  3.513827e-05
     ##                                           AADT  1 2.514142e-05  3.513827e-05
-    ##                                           ACCA  2 5.028284e-05  7.027654e-05
-    ##     ACCA Professional Accounting Qualification  1 2.514142e-05  3.513827e-05
-    ##                                        ACCOUNT  1 2.514142e-05  3.513827e-05
-    ##                                    ACCOUNTANCY  3 7.542426e-05  1.054148e-04
-    ##                                     ACCOUNTANT  2 5.028284e-05  7.027654e-05
-    ##                                     ACCOUNTING  9 2.262728e-04  3.162444e-04
-    ##                                       ACCOUNTS  1 2.514142e-05  3.513827e-05
-    ##                             ACTUARIAL SCIENCES  1 2.514142e-05  3.513827e-05
-    ##                                          ADMIN  1 2.514142e-05  3.513827e-05
-    ##                                 ADMINISTRATION  3 7.542426e-05  1.054148e-04
-    ##                                 ADMINISTRATIVE  1 2.514142e-05  3.513827e-05
-    ##                                   AGRICULTURAL  1 2.514142e-05  3.513827e-05
-    ##                                    AGRICULTURE  2 5.028284e-05  7.027654e-05
-    ##                        ALAM marine engineering  1 2.514142e-05  3.513827e-05
-    ##  AMERICAN SIGN LANGUAGE INTERPRETING, COMMUNIT  1 2.514142e-05  3.513827e-05
-    ##                                 ANIMAL SCIENCE  1 2.514142e-05  3.513827e-05
-    ##                                   ARCHITECTURE  4 1.005657e-04  1.405531e-04
-    ##                                            ART  2 5.028284e-05  7.027654e-05
-    ##                                   ART & DESIGN  1 2.514142e-05  3.513827e-05
-    ##                                           ARTS  1 2.514142e-05  3.513827e-05
-    ##                                ARTS MANAGEMENT  1 2.514142e-05  3.513827e-05
+    ##                                       academic  1 2.514142e-05  3.513827e-05
     ##                                            Acc  1 2.514142e-05  3.513827e-05
     ##                                      Acc maybe  1 2.514142e-05  3.513827e-05
+    ##                                           acca  1 2.514142e-05  3.513827e-05
     ##                                           Acca  2 5.028284e-05  7.027654e-05
+    ##                                           ACCA  2 5.028284e-05  7.027654e-05
+    ##     ACCA Professional Accounting Qualification  1 2.514142e-05  3.513827e-05
+    ##                                    Accaountant  1 2.514142e-05  3.513827e-05
+    ##                                     accauntant  1 2.514142e-05  3.513827e-05
+    ##                                     Accontancy  1 2.514142e-05  3.513827e-05
+    ##                                      accontant  1 2.514142e-05  3.513827e-05
+    ##                               Acconting degree  1 2.514142e-05  3.513827e-05
+    ##                                        Accoung  1 2.514142e-05  3.513827e-05
+    ##                                     Accounring  1 2.514142e-05  3.513827e-05
+    ##                                        account 22 5.531113e-04  7.730419e-04
+    ##                                        Account 78 1.961031e-03  2.740785e-03
+    ##                                        ACCOUNT  1 2.514142e-05  3.513827e-05
+    ##                            account and finance  1 2.514142e-05  3.513827e-05
+    ##                            Account and finance  2 5.028284e-05  7.027654e-05
+    ##                                    Account ing  1 2.514142e-05  3.513827e-05
+    ##                                     Accountacy  1 2.514142e-05  3.513827e-05
+    ##                                      accountan  2 5.028284e-05  7.027654e-05
 
 Cleaning this would be more laborious and will require text processing.
 We will cover some of this later.
@@ -408,18 +406,19 @@ head(patient_data, 5)
 ```
 
     ## # A tibble: 5 × 12
-    ##   DRG.Definition  Provider.Id Provider.Name Provider.Street.Addr…¹ Provider.City
-    ##   <chr>                 <dbl> <chr>         <chr>                  <chr>        
-    ## 1 039 - EXTRACRA…       10001 SOUTHEAST AL… 1108 ROSS CLARK CIRCLE DOTHAN       
-    ## 2 039 - EXTRACRA…       10005 MARSHALL MED… 2505 U S HIGHWAY 431 … BOAZ         
-    ## 3 039 - EXTRACRA…       10006 ELIZA COFFEE… 205 MARENGO STREET     FLORENCE     
-    ## 4 039 - EXTRACRA…       10011 ST VINCENT'S… 50 MEDICAL PARK EAST … BIRMINGHAM   
-    ## 5 039 - EXTRACRA…       10016 SHELBY BAPTI… 1000 FIRST STREET NOR… ALABASTER    
-    ## # ℹ abbreviated name: ¹​Provider.Street.Address
-    ## # ℹ 7 more variables: Provider.State <chr>, Provider.Zip.Code <chr>,
-    ## #   Hospital.Referral.Region.Description <chr>, Total.Discharges <dbl>,
-    ## #   Average.Covered.Charges <chr>, Average.Total.Payments <chr>,
-    ## #   Average.Medicare.Payments <chr>
+    ##   DRG.Definition Provi…¹ Provi…² Provi…³ Provi…⁴ Provi…⁵ Provi…⁶ Hospi…⁷ Total…⁸
+    ##   <chr>            <dbl> <chr>   <chr>   <chr>   <chr>   <chr>   <chr>     <dbl>
+    ## 1 039 - EXTRACR…   10001 SOUTHE… 1108 R… DOTHAN  AL      36301   AL - D…      91
+    ## 2 039 - EXTRACR…   10005 MARSHA… 2505 U… BOAZ    AL      35957   AL - B…      14
+    ## 3 039 - EXTRACR…   10006 ELIZA … 205 MA… FLOREN… AL      35631   AL - B…      24
+    ## 4 039 - EXTRACR…   10011 ST VIN… 50 MED… BIRMIN… AL      35235   AL - B…      25
+    ## 5 039 - EXTRACR…   10016 SHELBY… 1000 F… ALABAS… AL      35007   AL - B…      18
+    ## # … with 3 more variables: Average.Covered.Charges <chr>,
+    ## #   Average.Total.Payments <chr>, Average.Medicare.Payments <chr>, and
+    ## #   abbreviated variable names ¹​Provider.Id, ²​Provider.Name,
+    ## #   ³​Provider.Street.Address, ⁴​Provider.City, ⁵​Provider.State,
+    ## #   ⁶​Provider.Zip.Code, ⁷​Hospital.Referral.Region.Description,
+    ## #   ⁸​Total.Discharges
 
 ``` r
 result <- tabyl(patient_data$Hospital.Referral.Region.Description)
@@ -439,9 +438,9 @@ Let’s separate this column into two columns.
 test <- separate(patient_data, Hospital.Referral.Region.Description, into=c('state', 'city'), sep='-')
 ```
 
-    ## Warning: Expected 2 pieces. Additional pieces discarded in 791 rows [710, 711, 718, 830,
-    ## 853, 1918, 1921, 1927, 1930, 1940, 2055, 2086, 3398, 3401, 3411, 3415, 3594,
-    ## 3630, 5424, 5425, ...].
+    ## Warning: Expected 2 pieces. Additional pieces discarded in 791 rows [710, 711,
+    ## 718, 830, 853, 1918, 1921, 1927, 1930, 1940, 2055, 2086, 3398, 3401, 3411, 3415,
+    ## 3594, 3630, 5424, 5425, ...].
 
 This resulted in some warnings in certain rows. Let’s look at some of
 those rows.
@@ -656,10 +655,10 @@ tabyl(bio_students$major)
     ##                                 biology, music   1 0.0009615385
     ##                             biology, sociology   1 0.0009615385
     ##                               biology, spanish   1 0.0009615385
+    ##                               biology: pre-med   1 0.0009615385
     ##                        biology/ health science   1 0.0009615385
     ##                                biology/ premed   1 0.0009615385
     ##                    biology/business management   1 0.0009615385
-    ##                               biology: pre-med   1 0.0009615385
     ##                                      biologyst   1 0.0009615385
     ##                                       biologyy   1 0.0009615385
     ##                                         biomed   2 0.0019230769
@@ -868,7 +867,18 @@ dates, and much more. We will cover some basic operations here.
 ``` r
 library(nycflights13)
 library(lubridate)
+```
 
+    ## Loading required package: timechange
+
+    ## 
+    ## Attaching package: 'lubridate'
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     date, intersect, setdiff, union
+
+``` r
 # Load the flights dataset
 data("flights")
 # Inspect the structure
@@ -903,17 +913,18 @@ head(flights)
 ```
 
     ## # A tibble: 6 × 19
-    ##    year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
-    ##   <int> <int> <int>    <int>          <int>     <dbl>    <int>          <int>
-    ## 1  2013     1     1      517            515         2      830            819
-    ## 2  2013     1     1      533            529         4      850            830
-    ## 3  2013     1     1      542            540         2      923            850
-    ## 4  2013     1     1      544            545        -1     1004           1022
-    ## 5  2013     1     1      554            600        -6      812            837
-    ## 6  2013     1     1      554            558        -4      740            728
-    ## # ℹ 11 more variables: arr_delay <dbl>, carrier <chr>, flight <int>,
-    ## #   tailnum <chr>, origin <chr>, dest <chr>, air_time <dbl>, distance <dbl>,
-    ## #   hour <dbl>, minute <dbl>, time_hour <dttm>
+    ##    year month   day dep_time sched_dep…¹ dep_d…² arr_t…³ sched…⁴ arr_d…⁵ carrier
+    ##   <int> <int> <int>    <int>       <int>   <dbl>   <int>   <int>   <dbl> <chr>  
+    ## 1  2013     1     1      517         515       2     830     819      11 UA     
+    ## 2  2013     1     1      533         529       4     850     830      20 UA     
+    ## 3  2013     1     1      542         540       2     923     850      33 AA     
+    ## 4  2013     1     1      544         545      -1    1004    1022     -18 B6     
+    ## 5  2013     1     1      554         600      -6     812     837     -25 DL     
+    ## 6  2013     1     1      554         558      -4     740     728      12 UA     
+    ## # … with 9 more variables: flight <int>, tailnum <chr>, origin <chr>,
+    ## #   dest <chr>, air_time <dbl>, distance <dbl>, hour <dbl>, minute <dbl>,
+    ## #   time_hour <dttm>, and abbreviated variable names ¹​sched_dep_time,
+    ## #   ²​dep_delay, ³​arr_time, ⁴​sched_arr_time, ⁵​arr_delay
 
 This is the contents of the data:
 
@@ -1279,7 +1290,7 @@ summaries
     ##  8 Compact Mercedes-Benz         175
     ##  9 Compact Nissan                181
     ## 10 Compact Oldsmobile            188
-    ## # ℹ 71 more rows
+    ## # … with 71 more rows
 
 You can ask for more than one summary statistic.
 
@@ -1308,7 +1319,7 @@ summaries
     ##  8 Compact Mercedes-Benz         175        175      NA
     ##  9 Compact Nissan                181        181      NA
     ## 10 Compact Oldsmobile            188        188      NA
-    ## # ℹ 71 more rows
+    ## # … with 71 more rows
 
 ### Further processing
 
@@ -1377,6 +1388,10 @@ dim(summaries2)
 
 ### Converting to wide format
 
+Note: There is an alternative function to `pivot_wider()` called
+`spread()`. However, `spread()` is deprecated and will be removed in the
+future. We will use `pivot_wider()` instead.
+
 The result can be reshaped into a wide format. *While this format is
 often not suited for plotting or analysis*, it might make it easier to
 look at the data. Here is a quick visual:
@@ -1402,6 +1417,9 @@ unique store
 
 The function also takes other arguments to handle more complex cases,
 see <https://tidyr.tidyverse.org/reference/pivot_wider.html>
+
+There is also a cheat sheet which you might find useful:
+<https://github.com/rstudio/cheatsheets/blob/main/tidyr.pdf>
 
 ``` r
 wide <- pivot_wider(summaries, id_cols = make, names_from  = type, values_from = mean.length)
@@ -1475,6 +1493,10 @@ survival_wide
 
 ### Making data longer (melting data)
 
+Note: There is an alternative function (`gather()`). However, the
+`pivot_longer()` function is more powerful and easier to use and
+`gather()` is deprecated.
+
 Here is a quick graphic:
 
 ![](images/pivot_longer_new.png)
@@ -1486,15 +1508,16 @@ head(relig_income, 5)
 ```
 
     ## # A tibble: 5 × 11
-    ##   religion  `<$10k` `$10-20k` `$20-30k` `$30-40k` `$40-50k` `$50-75k` `$75-100k`
-    ##   <chr>       <dbl>     <dbl>     <dbl>     <dbl>     <dbl>     <dbl>      <dbl>
-    ## 1 Agnostic       27        34        60        81        76       137        122
-    ## 2 Atheist        12        27        37        52        35        70         73
-    ## 3 Buddhist       27        21        30        34        33        58         62
-    ## 4 Catholic      418       617       732       670       638      1116        949
-    ## 5 Don’t kn…      15        14        15        11        10        35         21
-    ## # ℹ 3 more variables: `$100-150k` <dbl>, `>150k` <dbl>,
-    ## #   `Don't know/refused` <dbl>
+    ##   religion       `<$10k` $10-2…¹ $20-3…² $30-4…³ $40-5…⁴ $50-7…⁵ $75-1…⁶ $100-…⁷
+    ##   <chr>            <dbl>   <dbl>   <dbl>   <dbl>   <dbl>   <dbl>   <dbl>   <dbl>
+    ## 1 Agnostic            27      34      60      81      76     137     122     109
+    ## 2 Atheist             12      27      37      52      35      70      73      59
+    ## 3 Buddhist            27      21      30      34      33      58      62      39
+    ## 4 Catholic           418     617     732     670     638    1116     949     792
+    ## 5 Don’t know/re…      15      14      15      11      10      35      21      17
+    ## # … with 2 more variables: `>150k` <dbl>, `Don't know/refused` <dbl>, and
+    ## #   abbreviated variable names ¹​`$10-20k`, ²​`$20-30k`, ³​`$30-40k`, ⁴​`$40-50k`,
+    ## #   ⁵​`$50-75k`, ⁶​`$75-100k`, ⁷​`$100-150k`
 
 This data is in a wider format. But we can easily melt it to a long
 format.
@@ -1524,6 +1547,9 @@ head(new, 5)
   values from the original columns.
   - *Example*: If the original columns contain sales data, this new
     column could be called `"sales"`.
+
+There is also a cheat sheet which you might find useful:
+<https://github.com/rstudio/cheatsheets/blob/main/tidyr.pdf>
 
 ## Merging data
 
@@ -1661,7 +1687,7 @@ summaries
     ##  8 Africa     1987         53.3
     ##  9 Africa     1992         53.6
     ## 10 Africa     1997         53.6
-    ## # ℹ 50 more rows
+    ## # … with 50 more rows
 
 ``` r
 merged <- full_join(gap_data, summaries, by=c('continent', 'year'))
@@ -1858,8 +1884,7 @@ ggplot(data_2012) + aes(x=date, y = Count, group=Source, color=Source) + geom_li
 ggplot(long_again) + aes(x=Month, y = Count, group=Source, color=Source) + geom_line() + facet_grid(~Year)
 ```
 
-    ## Warning: Removed 2 rows containing missing values or values outside the scale range
-    ## (`geom_line()`).
+    ## Warning: Removed 2 rows containing missing values (`geom_line()`).
 
 ![](3-Cleaning-Data_files/figure-gfm/unnamed-chunk-76-1.png)<!-- -->
 
@@ -1895,11 +1920,11 @@ head(coal_data)
     ## 4 Greenland  5   e-5 5   e-5 3   e-5 3   e-5 3   e-5  0      0      0      0    
     ## 5 Mexico     1.02e-1 1.06e-1 1.20e-1 1.29e-1 1.31e-1  0.146  0.156  0.170  0.160
     ## 6 Saint Pie… 0       0       0       0       0        0      0      0      0    
-    ## # ℹ 21 more variables: `1989` <dbl>, `1990` <dbl>, `1991` <dbl>, `1992` <dbl>,
-    ## #   `1993` <dbl>, `1994` <dbl>, `1995` <dbl>, `1996` <dbl>, `1997` <dbl>,
-    ## #   `1998` <dbl>, `1999` <dbl>, `2000` <dbl>, `2001` <dbl>, `2002` <dbl>,
-    ## #   `2003` <dbl>, `2004` <dbl>, `2005` <dbl>, `2006` <dbl>, `2007` <dbl>,
-    ## #   `2008` <dbl>, `2009` <dbl>
+    ## # … with 21 more variables: `1989` <dbl>, `1990` <dbl>, `1991` <dbl>,
+    ## #   `1992` <dbl>, `1993` <dbl>, `1994` <dbl>, `1995` <dbl>, `1996` <dbl>,
+    ## #   `1997` <dbl>, `1998` <dbl>, `1999` <dbl>, `2000` <dbl>, `2001` <dbl>,
+    ## #   `2002` <dbl>, `2003` <dbl>, `2004` <dbl>, `2005` <dbl>, `2006` <dbl>,
+    ## #   `2007` <dbl>, `2008` <dbl>, `2009` <dbl>
 
 **Take some time to think how you would convert this data to a tidy data
 set.**
